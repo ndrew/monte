@@ -6,7 +6,10 @@
 ; todo: add some css
 (defpartial layout [& content]
   (html5 
-    [:head [:title "Monte"]]
+    [:head 
+      [:title "Monte"]
+      (include-css "/css/monte.css")
+    ]
     [:body content ]
     (include-js "/js/cljs.js")
   )
