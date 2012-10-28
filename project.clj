@@ -4,15 +4,24 @@
   :url "https://github.com/ndrew/monte"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
+  
   :dependencies [[org.clojure/clojure "1.4.0"]
-                 [fs "1.2.0"]
-                 [noir "1.3.0-beta1"]
-                 [fetch "0.1.0-alpha2"]
-                 [crate "0.2.1"]
-                 [jayq "0.1.0-alpha4"]
+                 [fs                  "1.2.0"]
+                 [noir                "1.3.0-beta3" 
+                    :exclusions [org.clojure/clojure]]
+                 ; <?> why we need this?
+                 [crate               "0.2.1"]
+                 [jayq                "0.1.0-alpha4"]
+                 ; <?> why we need this?
+                 [shoreleave          "0.2.2"]
+                 [shoreleave/shoreleave-remote-noir "0.2.2"]
+                 ; <?> why we need compojure?
+                 [compojure           "1.0.4"]
                  ]
-  :plugins [[lein-cljsbuild "0.2.9"]]
+  :plugins [[lein-cljsbuild   "0.2.9"]
+            [lein-ring        "0.7.1"]]
   :hooks [leiningen.cljsbuild]
+  
   :cljsbuild {
     :builds [{
         :jar true
@@ -23,13 +32,17 @@
             :pretty-print true}
     }]}
 
-
-
-:repl-options { 
+  :repl-options { 
     :init-ns monte.launcher 
     :init (do
-      ;; todo: add some hacks later
+      ;; <!> add some hacks later
     )}
 
+  :ring         {:handler monte.backend.server/handler}
 
-  :main monte.launcher)
+  :main monte.launcher
+
+  :profiles {
+    :dev { :main ^{:skip-aot true} monte.launcher}
+    :deploy {:main ^{:skip-aot false} monte.launcher :aot [monte.launcher]}}
+)

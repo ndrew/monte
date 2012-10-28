@@ -2,7 +2,7 @@
   "Launcher and updater for Monte"
   (:gen-class :main true)
   (:require 
-    [monte.server :as server]
+    [monte.backend.server :as server]
     [fs.core :as fs]))
 
 (def default-settings {
@@ -10,10 +10,8 @@
   :port 8899
 }) 
 
-(def settings (atom default-settings))
-
-(def home (str (System/getProperty "user.home") "/.monte"))
-
+(def settings     (atom default-settings))
+(def home         (str (System/getProperty "user.home") "/.monte"))
 (def settings-loc (str home "/settings.clj"))
 
 (defn init []
@@ -46,7 +44,6 @@
   )
   (def server_instance (server/start (:port @settings)))
   (println "Press Enter to stop Monte!")
-  (read-line)
+  (read-line) ; todo: find out why this doesn't work from console
   (server/stop server_instance)
-  (println "Bye")
-)
+  (println "Bye"))
