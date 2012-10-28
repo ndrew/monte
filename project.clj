@@ -15,8 +15,6 @@
                  ; <?> why we need this?
                  [shoreleave          "0.2.2"]
                  [shoreleave/shoreleave-remote-noir "0.2.2"]
-                 ; <?> why we need compojure?
-                 [compojure           "1.0.4"]
                  ]
   :plugins [[lein-cljsbuild   "0.2.9"]
             [lein-ring        "0.7.1"]]
