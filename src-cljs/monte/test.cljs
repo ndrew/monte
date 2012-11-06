@@ -1,4 +1,6 @@
-(ns monte.test)
+(ns monte.test
+	(:require [fetch.remotes :as remotes])
+  	(:require-macros [fetch.macros :as fm]))
 
 ;	(:require [fetch.remotes :as remotes]
 ;            [crate.core :as crate]
@@ -8,3 +10,6 @@
 
 
 (js/alert "Hello world!") 
+
+(fm/remote (foo) [result]
+	(js/alert result))

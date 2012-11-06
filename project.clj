@@ -9,6 +9,7 @@
                  [fs                  "1.2.0"]
                  [noir                "1.2.1" 
                     :exclusions [org.clojure/clojure]]
+                 [fetch               "0.1.0-alpha2"]
                  ; <?> why we need this?
                  [crate               "0.2.1"]
                  [jayq                "0.1.0-alpha4"]
