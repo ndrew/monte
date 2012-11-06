@@ -2,6 +2,13 @@
 
 A software visualization tool written in clojure for my master's degree thesis
 
+## TODO:
+	- data mining via "miners": as plugins
+	- versioning data
+	- "connecting" data sets from "miners"
+	- defining views
+	- capturing dynamic data
+
 ## Usage
 
 TDB
