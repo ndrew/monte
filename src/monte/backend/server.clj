@@ -2,16 +2,14 @@
 	"Monte noir server"
 	(:use noir.core)
   	(:require [noir.server :as server]
-  			  [noir.shoreleave.rpc :as rpc]))
-
-
-;<?> figure how this works
-;
-;(rpc/activate-remotes!)
-;(rpc/remote-ns 'monte.api :as "api")
+  			  [noir.shoreleave.rpc :as rpc]
+  			  [monte.backend.api]))
 
 
 (server/load-views "src/monte/views/")
+
+(rpc/activate-remotes!)
+(rpc/remote-ns 'monte.backend.api :as "api")
 
 (defn start [port]
 	(server/start port))

@@ -4,6 +4,7 @@
         [hiccup.page-helpers :only [include-css include-js html5]]))
 
 
+
 (defn template [& content]
   (html5 
     [:head 
@@ -15,8 +16,12 @@
       (include-css "/css/monte.css")
     ]
     [:body content ]
+
+    ; TODO: no clojure deps 
+    ;
+
     (include-js "/js/cljs.js")))
 
+
 (defpartial layout [& content]
-  (template content)
-)
+  (template content))
