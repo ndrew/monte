@@ -7,9 +7,8 @@
   
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [fs                  "1.2.0"]
-                 [noir                "1.3.0-beta1" 
+                 [noir                "1.2.1" 
                     :exclusions [org.clojure/clojure]]
-                 [hiccup              "1.0.1"]
                  ; <?> why we need this?
                  [crate               "0.2.1"]
                  [jayq                "0.1.0-alpha4"]
