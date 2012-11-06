@@ -1,7 +1,7 @@
 (ns monte.api
 	"Monte Remote Call API")
 
-(defremote foo[]
-	(do 
-		(println "FFFUUUU!")
-		"bar"))
+;(defremote foo[]
+;	(do 
+;		(println "FFFUUUU!")
+;		"bar"))
