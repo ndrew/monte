@@ -4,9 +4,12 @@
   (:use [clojure.tools.cli :only [cli]])
   (:require 
     [monte.backend.server :as server]
+    [monte.runtime :as runtime]
+    [monte.core :as core]
     [clojure.tools.cli :as cli]
     [fs.core :as fs]
-    [clojure.java.browse :as browser]))
+    [clojure.java.browse :as browser]
+    ))
 
 (def default-settings {
   :version 0.0
@@ -52,12 +55,8 @@
       )
 
       (if args
-        (let [path (first args)]
-
-          (if (and (fs/exists? path) (fs/directory? path))
-              (println (str "parsing " path)) 
-          )
-        )) 
+        (if (every? (fn [path] (and (fs/exists? path) (fs/directory? path))) args)
+            (reset! runtime/workspace (core/super_repo args) ))) 
       
       (def server_instance (server/start (:port @settings)))
       (if (:auto-open @settings)

@@ -1,6 +1,6 @@
 (ns monte.core
 	"Monte core stuff"
-	(:use [clojure.contrib.generic.functor] ))
+	(:use [clojure.contrib.generic.functor]))
 
 (defn repo "Constructs repository by directory"
 	([dir] ; TODO: loading configuration
