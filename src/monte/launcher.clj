@@ -1,23 +1,25 @@
 (ns monte.launcher
   "Launcher and updater for Monte"
   (:gen-class :main true)
+  (:use [clojure.tools.cli :only [cli]])
   (:require 
     [monte.backend.server :as server]
-    [fs.core :as fs]))
+    [clojure.tools.cli :as cli]
+    [fs.core :as fs]
+    [clojure.java.browse :as browser]))
 
 (def default-settings {
   :version 0.0
-  :port 8899
 }) 
 
 (def settings     (atom default-settings))
 (def home         (str (System/getProperty "user.home") "/.monte"))
 (def settings-loc (str home "/settings.clj"))
 
-(defn init []
+(defn init [options]
     (cond 
       (fs/exists? home) (
-        reset! settings (merge default-settings (read-string (slurp settings-loc))))
+        reset! settings (merge (merge default-settings options) (read-string (slurp settings-loc))))
       :else (do(
         (fs/mkdirs home)
         (spit settings-loc (pr-str @settings))
@@ -37,13 +39,33 @@
 ;    )
 ;)
 
-(defn -main []
-  (init)
-  (when-not (= 0.0 (:version @settings))
-    (throw (Exception. "Fetching from server not implemented yet!")) ; todo: fetch new version from server
+(defn -main [& args]
+  
+   (let [[options args banner]
+        (cli args
+          ["-p" "--port" "Port to listen on" :default 8899]
+          ["-a" "--[no-]auto-open" :default true]
+          )]
+      (init options)
+      (when-not (= 0.0 (:version @settings))
+        (throw (Exception. "Fetching from server not implemented yet!")) ; todo: fetch new version from server
+      )
+
+      (if args
+        (let [path (first args)]
+
+          (if (and (fs/exists? path) (fs/directory? path))
+              (println (str "parsing " path)) 
+          )
+        )) 
+      
+      (def server_instance (server/start (:port @settings)))
+      (if (:auto-open @settings)
+        (browser/browse-url (str "http://localhost:" (:port @settings))))
+
+      (println "Press Cmd^C or Control^C to stop Monte! Or type some crap")
+      (read-line) ; todo: find out why this doesn't work from console
+      (server/stop server_instance)
+      (println "Bye")
+    )
   )
-  (def server_instance (server/start (:port @settings)))
-  (println "Press Enter to stop Monte!")
-  (read-line) ; todo: find out why this doesn't work from console
-  (server/stop server_instance)
-  (println "Bye"))

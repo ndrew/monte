@@ -6,9 +6,11 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   
   :dependencies [[org.clojure/clojure "1.4.0"]
+                 [org.clojure/clojure-contrib "1.2.0"]
                  [fs                  "1.2.0"]
                  [noir                "1.2.1" 
                     :exclusions [org.clojure/clojure]]
+                 [org.clojure/tools.cli "0.2.2"]
                  [fetch               "0.1.0-alpha2"]
                  ; <?> why we need this?
                  [crate               "0.2.1"]
