@@ -14,6 +14,7 @@
 
       [:title "Monte"]
       (include-css "/css/monte.css")
+      (include-js "/extern/jquery-1.7.2.min.js")
     ]
     [:body content ]
 

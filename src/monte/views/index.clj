@@ -4,4 +4,9 @@
 
 (defpage "/" []
          (common/layout
-           [:p "Hello World!"]))
+         	[:header 
+         		[:h3 "Monte"]
+         		[:ul
+         			[:li [:a {:href "#"}"піу!"]]]]
+           [:p "Hello World!"]
+           ))
