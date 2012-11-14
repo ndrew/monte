@@ -30,6 +30,7 @@
         :compiler {
             :output-to "resources/public/js/cljs.js"
             :optimizations :whitespace
+            :externs ["resources/public/extern/raphael-min.js"]
             :pretty-print true}
     }]}
 
