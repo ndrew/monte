@@ -5,8 +5,19 @@
 
 (defremote get-workspace[& last-changed] 
 	(do ; todo: diff
-		(println "get-workspace called ")
-		@monte.runtime/workspace))
+		(println "get-workspace " last-changed)
+		
+		(comment
+			(cond
+			(nil? last-changed) 
+			:else 
+				;@monte.runtime/workspace
+				@monte.runtime/workspace
+				(println "else")
+				)
+			)
+		nil
+	)
 ; todo
 
 ;(defn load)
