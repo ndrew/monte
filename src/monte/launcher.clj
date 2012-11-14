@@ -9,7 +9,6 @@
     [clojure.tools.cli :as cli]
     [fs.core :as fs]
     [clojure.java.browse :as browser]
-    [clojure.contrib.generic.functor :as f]
     ))
 
 (def default-settings {
@@ -55,17 +54,13 @@
         (throw (Exception. "Fetching from server not implemented yet!")) ; todo: fetch new version from server
       )
 
-    (println (f.fmap (fn [x] x)  args))
 
-;    (println (core/super-repo(apply vector args))
+      (println (seq args))
 
-    (System/exit 0)
-    (instance? args)
-    (class args)
 
-      (if args
+      (if (seq args)
         (if (every? (fn [path] (and (fs/exists? path) (fs/directory? path))) args)
-            (reset! runtime/workspace (core/super-repo args) ))) 
+            (reset! runtime/workspace (core/super-repo (apply vector args)) ))) 
       
       (def server_instance (server/start (:port @settings)))
       (if (:auto-open @settings)
