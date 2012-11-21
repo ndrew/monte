@@ -2,7 +2,8 @@
 	(:require 
 		[fetch.remotes :as remotes]
 		[jayq.core :as jq])
-	(:use [jayq.util :only [log wait]])
+	(:use [jayq.util :only [log wait clj->js]]
+		  [jayq.core :only [$]])
   	(:require-macros [fetch.macros :as fm]))
 
 
@@ -22,15 +23,19 @@
 
 (defn refresh[last-updated]
 	(log "tick")
-	(fm/remote (get-workspace last-updated) [super-repo] 
-			(log super-repo))
+	(fm/remote (get-workspace last-updated) [workspace] 
+			
+			(log workspace)
+			(if-not (nil? workspace) 
+				(do
+					(.text ($ :#workspace) (pr-str workspace))
+				)))
 		;(def last-updated (. (new js/Date) getTime)
 		;(log last-updated))
 	) 
 
 
-
-(defn repeat [ms func]
+(defn infinite-loop [ms func]
 	(js/setInterval 
 		(fn[] 
 			(cond 
@@ -39,12 +44,31 @@
 			) ms)
 )
 
+
+(defn init-directory-choosers [] 
+	(fm/remote (list-dirs) [dirs] 
+			;(log root-path)	
+
+		(log dirs)
+		(. ($ ".dir-chooser") val (first dirs))
+		; todo: on change
+
+		(. ($ ".dir-chooser") autocomplete 
+								(clj->js {:source ["test" "test2"]})
+	)))
+
 (jq/document-ready 
 	(fn [] 
-		(log "hello")
-		(reset! repeat-handle 
-				(repeat 1000 (fn [] 
-					(refresh (tick))
-				)))
-		;(js/alert @repeat-handle)
-		))
+
+		(init-directory-choosers)
+		
+
+		;(let [poll-interval 5000]
+		;(log "hello")
+		;(reset! repeat-handle 
+		;		(infinite-loop poll-interval (fn [] 
+		;			(refresh (tick))))))
+))
+
+
+;; todo: <input type="file" id="file_input" webkitdirectory directory />

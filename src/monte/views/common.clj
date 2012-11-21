@@ -12,8 +12,10 @@
       ;      [:link {:rel "shortcut icon" :href "/i/favicon.ico" :type "image/x-icon"}]
 
       [:title "Monte"]
+      (include-css "/css/jquery-ui.css")
       (include-css "/css/monte.css")
       (include-js "/extern/jquery-1.7.2.min.js")
+      (include-js "/extern/jquery-ui-1.9.1.js")
       (include-js "/extern/raphael-min.js")
     ]
     [:body content ]
