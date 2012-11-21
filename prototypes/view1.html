@@ -5,15 +5,50 @@
   <title>Monte</title>
   <meta name="description" content="Monte">
   <meta name="author" content="Andrew Sernyak">
+   <script type='text/javascript' src='http://code.jquery.com/jquery-1.5.2.js'></script>
+   <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+    
+  
+    
+      <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css">
+
   <style>
 
-  	header {
+  * {
+    line-height: 1.4em;
+    box-sizing: border-box;
+   -moz-box-sizing: border-box;
+  }
+
+  body {
+    font-size: 13px;
+    font-family: "Helvetica Neue", Arial;
+    margin: 0; padding: 0;
+    overflow-y: scroll;
+  }
+
+a, a:link, a:hover, a:visited, a:active {
+  text-decoration: none;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+a {
+  color: #2040a0;
+  border-bottom-color: #c8d0e8;
+}
+  
+    header {
+      margin-left: 6px;
+    }
+
+  	body header {
   		border-bottom: #ccc 1px solid;
   	}
 
   	header h3 {
   		display: inline-block;
-  	}
+    }
 
   	header ul {
   		display: inline;
@@ -24,18 +59,93 @@
   	}
 
   	header ul li a {
-	}
+	  
+    }
 
+    aside {
+      background-color: #facaca;
+      width: 33%;
+      float:left;
+    }
+
+    aside .sidebar {
+      border-right:2px solid #a7a7a7;
+    }
+
+  .sidebar{
+    position:relative;
+    height:100%;
+    overflow:hidden;
+    background-color: #ffffff;
+  }
   </style>
+
+
+<script type='text/javascript'>//<![CDATA[ 
+$(function(){
+  $(document).ready(function() {
+
+  // init
+  var leftPanel = $("body aside");
+
+  /*$(".sidebar", leftPanel)*/leftPanel.resizable({
+     minWidth: 10,
+     maxWidth: 500,
+      handles: 'e'        
+  });
+
+});
+});//]]>  
+
+</script>
+
 </head>
 <body>
 <header>
 	<h3>Monte</h3>
     <ul>
-        <li><a href="#">Load</a></li>
-        <li><a href="#">Refresh</a></li>
-        <li><a href="#">Quit</a></li>
+        <li><a href="#">Load workspace</a></li>
+        <li><a href="#">Save as version</a></li>
+        <li><a href="#">Global options</a></li>
     </ul>
 </header>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+<aside>
+  <div class="sidebar">
+  <section id="repo">
+    <!-- merge it to miners? -->
+    <header>Workspace</header>
+    <ul>
+      <li><label>Path 1</label>
+        <input class="dir-chooser ui-autocomplete-input" type="text" autocomplete="off">
+        <label>Include</label><input type="text">
+        <label>Exclude</label><input type="text">
+        <button>process</button>
+      </li></ul>
+    <ul>
+      <li><label>Path 2</label>
+        <input class="dir-chooser ui-autocomplete-input" type="text" autocomplete="off">
+        <label>Include</label><input type="text">
+        <label>Exclude</label><input type="text">
+        <button>process</button>
+      </li></ul>
+  </section>
+
+  <section>
+    <header>Miners</header>
+    <ul>
+      <li>Shell script miner: script=1.sh <button>run</button></li>
+      <li>File miner</li>
+      <li>etc</li>
+    </ul>
+    <!-- todo: -->
+  </section>
+
+  <section>
+    <header>Data</header>
+    <!-- tod-->
+  </section>
+  </div>
+</aside>
+content
 </body>
 </html>
