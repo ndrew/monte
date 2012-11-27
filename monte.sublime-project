@@ -1,0 +1,11 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/ndrw/monte",
+			"name": "Monte",
+			"folder_exclude_patterns": [".lein-cljsbuild-compiler-0"],
+			"file_exclude_patterns": [".gitignore"]
+		}
+	]
+}
