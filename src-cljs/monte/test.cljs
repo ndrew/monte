@@ -63,11 +63,11 @@
 		(init-directory-choosers)
 		
 
-		;(let [poll-interval 5000]
-		;(log "hello")
-		;(reset! repeat-handle 
-		;		(infinite-loop poll-interval (fn [] 
-		;			(refresh (tick))))))
+		(let [poll-interval 5000]
+		(log "hello")
+		(reset! repeat-handle 
+				(infinite-loop poll-interval (fn [] 
+					(refresh (tick))))))
 ))
 
 

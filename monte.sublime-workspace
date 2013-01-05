@@ -4,6 +4,54 @@
 		"selected_items":
 		[
 			[
+				"backgroun",
+				"background-color:   (property)"
+			],
+			[
+				"dis",
+				"display:   (property)"
+			],
+			[
+				"ta",
+				"table-column  (value)"
+			],
+			[
+				"in",
+				"inline-block  (value)"
+			],
+			[
+				"padd",
+				"padding-left"
+			],
+			[
+				"pad",
+				"padding"
+			],
+			[
+				"fon",
+				"font-style"
+			],
+			[
+				"li",
+				"list-style-position"
+			],
+			[
+				"i",
+				"inline-block"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"ma",
+				"margin-left"
+			],
+			[
+				"d",
+				"display"
+			],
+			[
 				"p",
 				"poll-interval"
 			],
@@ -16,20 +64,12 @@
 				"right"
 			],
 			[
-				"i",
-				"i-pos"
-			],
-			[
 				"handl",
 				"handle-default"
 			],
 			[
 				"re",
 				"repeat-handle"
-			],
-			[
-				"pad",
-				"padding-left"
 			],
 			[
 				"j",
@@ -58,10 +98,6 @@
 			[
 				"con",
 				"contrib"
-			],
-			[
-				"in",
-				"include-css"
 			],
 			[
 				"back",
@@ -200,10 +236,6 @@
 				"posts_path"
 			],
 			[
-				"ma",
-				"markdown_file"
-			],
-			[
 				"fil",
 				"file_written"
 			],
@@ -222,10 +254,6 @@
 			[
 				"ver",
 				"vertical-align"
-			],
-			[
-				"di",
-				"display	display: block"
 			],
 			[
 				"mar",
@@ -248,20 +276,8 @@
 				"background	background-color: hex"
 			],
 			[
-				"fon",
-				"font	font: style variant weight size/line-height font-family"
-			],
-			[
-				"d",
-				"display	display: inline"
-			],
-			[
 				"backr",
 				"background	background-image: none"
-			],
-			[
-				"padd",
-				"padding	padding: all"
 			],
 			[
 				"preg",
@@ -350,10 +366,6 @@
 			[
 				"пере",
 				"передзвонимо"
-			],
-			[
-				"dis",
-				"display	display: inline"
 			],
 			[
 				"text-",
@@ -502,18 +514,6 @@
 			[
 				"appe",
 				"append"
-			],
-			[
-				"text",
-				"textarea"
-			],
-			[
-				"l",
-				"lyrics"
-			],
-			[
-				"Song",
-				"SongUI"
 			]
 		]
 	},
@@ -523,19 +523,19 @@
 	"build_system": "Packages/LaTeXTools/LaTeX.sublime-build",
 	"command_palette":
 	{
-		"height": 67.0,
+		"height": 207.0,
 		"selected_items":
 		[
+			[
+				"Brow",
+				"Preferences: Browse Packages"
+			],
 			[
 				"Pa",
 				"Package Control: Install Package"
 			],
 			[
 				"Browse",
-				"Preferences: Browse Packages"
-			],
-			[
-				"Brow",
 				"Preferences: Browse Packages"
 			],
 			[
@@ -571,7 +571,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 449.0
+		"width": 602.0
 	},
 	"console":
 	{
@@ -588,6 +588,21 @@
 	},
 	"file_history":
 	[
+		"/Users/ndrw/Dropbox/todo.txt",
+		"/Users/ndrw/monte/prototypes/view1.html",
+		"/Users/ndrw/monte/prototypes/index.html",
+		"/Users/ndrw/monte/prototypes/data.html",
+		"/Users/ndrw/monte/prototypes/refine.html",
+		"/Users/ndrw/monte/prototypes/visualize.html",
+		"/Users/ndrw/monte/prototypes/style.css",
+		"/Users/ndrw/!/read.me",
+		"/Users/ndrw/Dropbox/diary_encoded.txt",
+		"/Users/ndrw/Desktop/yarrr.gif",
+		"/Users/ndrw/Desktop/0.gif",
+		"/Users/ndrw/SparkleShare/ShivaTheDestructor/Sabatuchi/lyrics.txt",
+		"/Users/ndrw/!/inbox/twitter.log",
+		"/Users/ndrw/monte/prototypes/basic.html",
+		"/Users/ndrw/monte/monte.sublime-project",
 		"/Users/ndrw/SparkleShare/DROPBOX/Diploma/ndrw/table_of_contents",
 		"/Users/ndrw/Downloads/jvmd.sql",
 		"/Users/ndrw/Desktop/dev/clojure/launcher/jayq/macros.clj",
@@ -608,7 +623,6 @@
 		"/Users/ndrw/Desktop/dev/clojure/tonsky/bloknote/project.clj",
 		"/Users/ndrw/tdd-elevator-training/clj-tetris/src/app/core.clj",
 		"/Users/ndrw/monte/src/monte/launcher.clj",
-		"/Users/ndrw/monte/prototypes/view1.html",
 		"/Users/ndrw/monte/resources/public/css/monte.css",
 		"/Users/ndrw/monte/src/monte/runtime.clj",
 		"/Users/ndrw/monte/src/monte/backend/api.clj",
@@ -701,21 +715,7 @@
 		"/Users/ndrw/Desktop/dev/viz/strathausen-dracula-a6a5fa7/examples/sixt.js",
 		"/Users/ndrw/Desktop/dev/viz/strathausen-dracula-a6a5fa7/examples/sixt.html",
 		"/Users/ndrw/Desktop/dev/site/stuff/bookmarklet.js",
-		"/Users/ndrw/Desktop/web_history.txt",
-		"/Users/ndrw/Desktop/links3.txt",
-		"/Users/ndrw/Desktop/dev/viz/strathausen-dracula-a6a5fa7/js/dracula_graph.js",
-		"/Users/ndrw/Desktop/dev/viz/strathausen-dracula-a6a5fa7/js/raphael-min.js",
-		"/Users/ndrw/Desktop/canadians",
-		"/Users/ndrw/Desktop/dev/site/index.html",
-		"/Users/ndrw/Desktop/dev/sixt/reports/report_2011_07_20___22_55_24/addonproduct_Test/test_logs.txt",
-		"/Users/ndrw/Desktop/dev/sixt/metro_ci/report_2011_07_20___22_55_25.html",
-		"/Users/ndrw/Desktop/test_report2.htm",
-		"/Users/ndrw/Desktop/test_report1.html",
-		"/Users/ndrw/Desktop/dev/stuff/index.html",
-		"/Users/ndrw/Desktop/dev/viz/metro_qa.dot",
-		"/Users/ndrw/Desktop/dev/sixt/1.sh",
-		"/Users/ndrw/Desktop/dev/closure/todo.txt",
-		"/Users/ndrw/Desktop/dev/wireshark_start.sh"
+		"/Users/ndrw/Desktop/web_history.txt"
 	],
 	"find":
 	{
@@ -743,6 +743,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			".\n",
+			"9654",
 			"&",
 			"$",
 			"jayq",
@@ -868,9 +870,7 @@
 			"iterate",
 			"children",
 			"childer",
-			"log",
-			"дщп",
-			"'x"
+			"log"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -918,7 +918,7 @@
 			"1em",
 			"TODO:"
 		],
-		"reverse": false,
+		"reverse": true,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,

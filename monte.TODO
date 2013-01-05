@@ -1,0 +1,26 @@
+UI:
+ ☐ intro screen, @P1
+   ☐ copy from prototype
+     ✔ layout @done (13-01-05 13:20), @P1
+     ☐ adding new project, @P3
+
+ ☐ help hints, @P5
+
+Projects:
+ ☐ listing of existing projects @P1
+   ☐ project structure
+   ☐ serialization/deserialization
+
+ ☐ adding new projects @P3, as for now we can create projects by hand
+
+Miners:
+ ☐ sample data miner, @P1
+ ☐ git miner, @P2
+   ☐ ?github api (via https://github.com/Raynes/clj-github)
+ ☐ class miner (for java/groovy/php), @P2
+   ☐ ?via regex
+ ☐ clojure miner, @P2
+   ☐ check how it is done in codeq
+ ☐ junit and other test results, @P2
+
+Visualizations:

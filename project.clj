@@ -40,7 +40,9 @@
       ;; <!> add some hacks later
     )}
 
-  :ring         {:handler monte.backend.server/handler}
+  :ring         {:handler monte.backend.server/handler
+                 :auto-reload? true
+                 :auto-refresh true}
 
   :main monte.launcher
 
