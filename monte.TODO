@@ -1,17 +1,24 @@
 UI:
  ☐ intro screen, @P1
    ☐ copy from prototype
-     ✔ layout @done (13-01-05 13:20), @P1
+     ✔ layout @done (13-01-05 13:20) @P1
+     ✔ listing projects @done (13-01-05 17:34)
      ☐ adding new project, @P3
+       ☐ directory listing
+
 
  ☐ help hints, @P5
 
 Projects:
  ☐ listing of existing projects @P1
    ☐ project structure
+     ✔ :name @done (13-01-05 17:35)
+     ☐ last modified
    ☐ serialization/deserialization
-
- ☐ adding new projects @P3, as for now we can create projects by hand
+     ☐ in user dir?
+     
+ ☐ adding new projects @P3
+   ✔ for now we can create projects by hand @done (13-01-05 17:35)
 
 Miners:
  ☐ sample data miner, @P1
@@ -24,3 +31,7 @@ Miners:
  ☐ junit and other test results, @P2
 
 Visualizations:
+
+Workspace:
+  ☐ diff
+  ☐ 

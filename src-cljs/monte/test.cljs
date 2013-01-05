@@ -14,37 +14,6 @@
 )
 
 
-(def error (atom false))
-(def repeat-handle (atom 0))
-
-
-(defn tick[]
-	(. (new js/Date) getTime))
-
-(defn refresh[last-updated]
-	(log "tick")
-	(fm/remote (get-workspace last-updated) [workspace] 
-			
-			(log workspace)
-			(if-not (nil? workspace) 
-				(do
-					(.text ($ :#workspace) (pr-str workspace))
-				)))
-		;(def last-updated (. (new js/Date) getTime)
-		;(log last-updated))
-	) 
-
-
-(defn infinite-loop [ms func]
-	(js/setInterval 
-		(fn[] 
-			(cond 
-				(= true @error) (js/clearInterval @repeat-handle))
-				:else (func)
-			) ms)
-)
-
-
 (defn init-directory-choosers [] 
 	(fm/remote (list-dirs) [dirs] 
 			;(log root-path)	
@@ -57,18 +26,6 @@
 								(clj->js {:source ["test" "test2"]})
 	)))
 
-(jq/document-ready 
-	(fn [] 
-
-		(init-directory-choosers)
-		
-
-		(let [poll-interval 5000]
-		(log "hello")
-		(reset! repeat-handle 
-				(infinite-loop poll-interval (fn [] 
-					(refresh (tick))))))
-))
 
 
 ;; todo: <input type="file" id="file_input" webkitdirectory directory />

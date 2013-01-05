@@ -1,7 +1,9 @@
 (ns monte.views.index "Monte '/' page"
   (:require 
-  	[monte.views.common :as common])
-  (:use [noir.core :only [defpage]]))
+  	[monte.views.common :as common]
+    [monte.runtime :as runtime])
+  (:use [noir.core :only [defpage]]
+        [hiccup.page-helpers :only [javascript-tag]]))
 
 (defpage "/" []
   (common/layout
@@ -12,23 +14,18 @@
       [:p "Please open existing project, or create a new one" 
           [:span {:class "hint"} "(?)"]]
       
-      [:ul
+      [:ul {:class "projects"}
         [:li {:class "new"} 
              [:a {:href "#"} "add new"]]]]
         
-            
-      ;[:header {:id "top"}
-         		;[:h3 "Monte"]
-         		;[:ul
-         		;	[:li [:a {:href "#"}"юх піу!"]]]]
-           ;[:p "Hello World!"]
-           ;[:hr]
-           [:div {:id "workspace"}]
-           ;[:hr]
-           [:section {:id "repo"}
-              [:ul
-                [:li 
-                  [:input {:type "text" :class "dir-chooser"}] 
-                  [:button "load"]]]]
-           ;"<input type='file' webkitdirectory directory multiple mozdirectory onChange='console.log(this.files)'>"
-           ))
+      ; just some info for debugging
+      [:pre {:id "debug"}]
+      (javascript-tag "monte.ui.list_projects()") ;; ?
+      ))
+
+
+(defpage "/project/:project" {:keys [project] }
+  (runtime/set-project project)
+  (common/layout 
+    [:h1 project]
+    (javascript-tag (str "monte.ui.project_details('" project "');" ))))

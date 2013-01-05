@@ -11,7 +11,6 @@
       [:meta {:name "description" :content "Monte: visualization tool"}]
       [:meta {:name "author"      :content "Andrew Sernyak"}]
       
-      
       ; favicon
       ;      [:link {:rel "shortcut icon" :href "/i/favicon.ico" :type "image/x-icon"}]
 
@@ -21,14 +20,10 @@
       (include-js "/extern/jquery-1.7.2.min.js")
       (include-js "/extern/jquery-ui-1.9.1.js")
       (include-js "/extern/raphael-min.js")
+    
+      (include-js "/js/cljs.js")
     ]
-    [:body [:div {:id "viewport"} content ]]
-
-    ; TODO: no clojure deps 
-    ;
-    ; (javascript-tag "goog.require('hello')")
-    (include-js "/js/cljs.js")))
-
+    [:body [:div {:id "viewport"} content ]]))
 
 (defpartial layout [& content]
   (template content))
