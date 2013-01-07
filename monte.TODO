@@ -13,6 +13,9 @@ UI:
 
  ☐ help hints, @P5
 
+Bugs:
+  ☐ 
+
 Cljs:
   ☐ ? use crossovers — https://github.com/emezeske/lein-cljsbuild/blob/0.2.10/doc/CROSSOVERS.md
 

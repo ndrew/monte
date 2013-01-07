@@ -9,7 +9,7 @@
         after  (select-keys b (keys a)) 
         ]
     (when-not (empty? before)
-      (println (str before " will be replaced with " after))))
+      (println (str before "(" a ") will be replaced with " after "( " b ")"))))
   (merge a b))
 
 
@@ -88,12 +88,6 @@
     ; assume for now that data contains single change-set
     (let [a (first data1)
           b (first data2)]
-    
-    (println (str 
-                  (select-keys a (keys b)) 
-                  " will be replaced with " 
-                  (select-keys b (keys a))))
-    
     [t2 (merge-data a b)]
   )))
 
