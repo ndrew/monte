@@ -35,9 +35,9 @@
          " 1. " [:a {:href "#" :id "miner"} "Miners"] 
          " 2. " [:a {:href "#" :id "refine"} "Refine data"] ; todo: better naming
          " 3. " [:a {:href "#" :id "visualization"} "Visualization"]]]
-      [:div {:id "miner_view" :style "display: none;"}]
-      [:div {:id "refine_view" :style "display: none;"}]
-      [:div {:id "visualization_view" :style "display: none;"}]
+      [:div {:id "miner_view" :style "display: none;"} "miners"]
+      [:div {:id "refine_view" :style "display: none;"} "refinements"]
+      [:div {:id "visualization_view" :style "display: none;"} "visualization"]
       
       
       

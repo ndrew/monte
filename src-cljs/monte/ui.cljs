@@ -92,9 +92,23 @@
     
   )
 
-(defn select-view [id] 
-  
-  )
+(defn select-view [link-id] 
+  (let [view-id (str link-id "_view")
+        links ($ "#viewport article a")
+        views ($ "#viewport div")]
+    (log (str "view selected " view-id))
+    
+    (.hide views)
+    (.attr links "href" "#")
+	(.click links  
+      (fn[e]
+        (let [el (.-srcElement e)
+              id (str "#" (.-id el))]
+          (when-not (clojure.string/blank? (.-href (.-srcElement e)))
+           	(select-view id)))))
+    
+    (.removeAttr ($ link-id) "href")
+    (.toggle ($ view-id))))
 
 (defn project-details [proj] 
   (jq/document-ready 
@@ -103,7 +117,8 @@
 	  (ui-init)
 
 	  ;(log ($ :#viewport :article :a))
-	  (.click ($ "#viewport article a")  (fn[e] (log e)))
+
+	  (select-view "#miner")
 
 	  (refresh (tick)) ; full refresh
 	  (let [poll-interval 2000]
