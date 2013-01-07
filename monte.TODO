@@ -7,11 +7,14 @@ UI:
        ☐ directory listing, @postponed
 
  ☐ miner screen, @P1
-    ☐ list miners
-    ☐ list vars
+    ☐ list miners, @P1
+    ☐ list vars, @P1
       ☐ adding vars
 
  ☐ help hints, @P5
+
+Cljs:
+  ☐ ? use crossovers — https://github.com/emezeske/lein-cljsbuild/blob/0.2.10/doc/CROSSOVERS.md
 
 Projects:
  ☐ listing of existing projects @P1
