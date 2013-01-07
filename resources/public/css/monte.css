@@ -74,11 +74,24 @@ ul li:hover {
   color: red; }
 
 
+.view {
+  display: none;}
+
+.list {
+  display: inline-block; 
+  vertical-align: top;
+  margin-right: 0.5em;}
+
+.list table {
+  background-color: #fff; padding: 1em;}
+
 #viewport {
   padding-left: 1em;
   min-height: 100%; height: 100%;
 /*FIXME:*/
   border: 1px solid #ccc;}
+
+
 
 #debug:before {
   content: "Debug: ";}

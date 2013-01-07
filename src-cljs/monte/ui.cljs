@@ -6,14 +6,26 @@
 	[jayq.core :only [$ append]])
   (:require-macros [fetch.macros :as fm]))
 
-(defn ui-init []
-  ; nothing here. yet
-  )
+
+(defn tick
+  "return current timespamp"
+  []
+  (. (new js/Date) getTime))
+
+
+;;;;;; refactoring ;;;;;;;
+
+
+; <!> HACK:
+; 	these variables will be set on server while page will be generated
+(def intro-view false)
+(def project-view false)
+(def project-hash 0) ; project-hash
+
+; timestamp of latest update
+(def latest-update (atom 0))
 
 (defn load-projects [projects]
-  
-  ;(log ($ "ul.projects"))
-  
   (.empty ($ "ul.projects"))
   (doseq [p projects] 
     (do
@@ -21,7 +33,7 @@
       
       (.append ($ "ul.projects") 
                (str "<li>"
-                    "<a href='/project/" (:name p) "'>" 
+                    "<a href='/project/" (:hash p) "'>" 
                     	(:name p) 
                     "</a>"
                     "<span></span>"
@@ -39,11 +51,17 @@
 (defn workspace-updated [workspace]
   (log (pr-str workspace))
   (.text ($ :#debug) (pr-str workspace))
-    
-  (if (not (nil? (:projects workspace)))
-    (load-projects (:projects workspace))
-    )) 
   
+  (reset! latest-update (tick))
+  
+  (when (and intro-view 
+             (not (nil? (:projects workspace)))
+    (load-projects (:projects workspace))))
+  
+  (when(and project-view 
+            (not (nil? (:current workspace))))
+    ; todo:
+)) 
 
 ;;;
 
@@ -53,15 +71,15 @@
 
 (def repeat-handle (atom 0))
 
-(defn tick[]
-  (. (new js/Date) getTime))
 
 
 (defn refresh[& last-updated]
-  (fm/remote (get-workspace last-updated) [workspace] 
+  (fm/remote (get-workspace (first last-updated)) [workspace] 
 	(when-not 
       (nil? workspace)
-	  (workspace-updated workspace))))
+	  (workspace-updated workspace)))
+  
+  )
 
 
 (defn infinite-loop [ms func]
@@ -73,57 +91,46 @@
 			) ms))
 
 
-;;;;;;;;;;;;;;;;;;;
-;; main
 
-(defn list-projects[] 
-
-  (jq/document-ready 
-  (fn [] 
-	;(init-directory-choosers)
-	  (ui-init)
-	  (refresh) ; full refresh
-		
-	  (let [poll-interval 2000]
-	  (reset! repeat-handle 
-	          (infinite-loop poll-interval 
-                            (fn [] 
-					            (refresh (tick))))))))
-    
-  )
-
-(defn select-view [link-id] 
+(defn select-project-view [link-id] 
   (let [view-id (str link-id "_view")
         links ($ "#viewport article a")
-        views ($ "#viewport div")]
+        views ($ "#viewport article .view")]
     (log (str "view selected " view-id))
     
-    (.hide views)
     (.attr links "href" "#")
 	(.click links  
       (fn[e]
         (let [el (.-srcElement e)
               id (str "#" (.-id el))]
           (when-not (clojure.string/blank? (.-href (.-srcElement e)))
-           	(select-view id)))))
-    
+           	(select-project-view id)))))
+
+    (.hide views)
+
     (.removeAttr ($ link-id) "href")
     (.toggle ($ view-id))))
 
-(defn project-details [proj] 
-  (jq/document-ready 
+
+(defn ui-init []
+  
+  (when project-view 
+    (fm/remote (set-project project-hash) [project]
+        (log project)
+        (.text ($ "#viewport article h1") (:name project))
+        (select-project-view "#miner")
+        ))
+
+)
+
+;;;;;;;;;;;;;;;;;;;
+;; main
+(jq/document-ready 
   (fn [] 
-	;(init-directory-choosers)
-	  (ui-init)
-
-	  ;(log ($ :#viewport :article :a))
-
-	  (select-view "#miner")
-
-	  (refresh (tick)) ; full refresh
+      (ui-init)
+	  (refresh) ; full refresh
 	  (let [poll-interval 2000]
 	  (reset! repeat-handle 
 	          (infinite-loop poll-interval 
                             (fn [] 
-					            (refresh (tick))))))))
-  )
+					            (refresh @latest-update)))))))

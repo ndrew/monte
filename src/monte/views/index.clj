@@ -7,6 +7,7 @@
 
 
 (defpage "/" []
+  (runtime/to-initial-state) 
   (common/layout
     [:article {:id "intro"
                :style "background-color: rgba(255,255,128,0.5);"}
@@ -21,16 +22,16 @@
         
     ; just some info for debugging
     [:pre {:id "debug"}]
-    (javascript-tag "monte.ui.list_projects()")))
+    (javascript-tag "monte.ui.intro_view = true;")
+  ))
 
 
 (defpage "/project/:project" {:keys [project] }
-  (runtime/set-project project)
   (common/layout 
     [:article {:id "project"
                :style "background-color: rgba(255,255,128,0.5);"}
     
-      [:h1 {:style "display: block;"} project] 
+      [:h1 {:style "display: block;"} "Opening..."] 
       [:h2 {:style "display: block; padding-left: 1.5em;"}
          " 1. " [:a {:href "#" :id "miner"} "Miners"] 
          " 2. " [:a {:href "#" :id "refine"} "Refine data"] ; todo: better naming
@@ -42,18 +43,15 @@
             
             [:div {:class "list"}
                   [:h4 "Miners"]
-                  [:table
+                  [:table {:id "miner_table"}
                          [:tr [:td {:class="new" :colspan="3"}
-                                   [:a {:href "#"} "add new"]]]]]
+                                   [:a {:href "#" :id "new_miner"} "add new"]]]]]
 
             [:div {:class "list"}
                   [:h4 "Variables"]
-                  [:table
+                  [:table {:id "var_table"}
                          [:tr [:td {:class="new" :colspan="3"}
-                                   [:a {:href "#"} "add new"]]]]]
-
-                        
-                  
+                                   [:a {:href "#" :id "new_var"} "add new"]]]]]
       ]
       
     
@@ -70,4 +68,8 @@
       
     ; just some info for debugging
     [:pre {:id "debug"}]
-    (javascript-tag (str "monte.ui.project_details('" project "');" ))))
+    ; todo: find a better way to do this
+    (javascript-tag (str
+                      "monte.ui.project_view = true;" 
+                      "monte.ui.project_hash = " project ";"))
+    ))

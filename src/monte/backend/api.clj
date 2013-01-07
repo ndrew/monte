@@ -6,6 +6,21 @@
 
 
 
+(defremote get-workspace [last-changed] 
+  (cond (nil? last-changed) 
+        (runtime/full-refresh)
+  :else (runtime/partial-refresh last-changed)))
+
+
+
+; actions
+
+(defremote set-project [project-hash]
+	(runtime/set-project project-hash)           
+)
+
+
+
 ;; TODO: move to ioutils, or smth like that
 
 (defn child-directories [path]
@@ -22,10 +37,3 @@
 			)
 		:else 
 			(child-directories (first root-path))))
-
-
-
-(defremote get-workspace [& last-changed] 
-  (cond (or (nil? last-changed) (nil? (first last-changed))) 
-        (runtime/full-refresh)
-  :else (runtime/partial-refresh (first last-changed))))
