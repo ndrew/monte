@@ -6,7 +6,6 @@ UI:
      ☐ adding new project, @P3
        ☐ directory listing
 
-
  ☐ help hints, @P5
 
 Projects:
@@ -16,7 +15,7 @@ Projects:
      ☐ last modified
    ☐ serialization/deserialization
      ☐ in user dir?
-     
+
  ☐ adding new projects @P3
    ✔ for now we can create projects by hand @done (13-01-05 17:35)
 
@@ -30,8 +29,52 @@ Miners:
    ☐ check how it is done in codeq
  ☐ junit and other test results, @P2
 
+ ☐ data cleaning
+   ☐ take some ideas from — http://vis.stanford.edu/wrangler/ (data cleaning and transformation)
+   ☐ http://code.google.com/p/google-refine/ (https://github.com/OpenRefine/OpenRefine)
+
+ ☐ text mining
+   ☐ Word Tree — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Word_Tree.html
+   ☐ Tag Cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
+   ☐ Word Cloud Generator — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Word_Cloud_Generator.html
+
 Visualizations:
+ ☐ d3 js — https://github.com/mbostock/d3/wiki/Gallery
+   ☐ treemaps — http://bl.ocks.org/4063582
+   ☐ buble charts — http://bl.ocks.org/4063269
+   ☐ chord diagram — http://bl.ocks.org/4062006 [show directed relationships among a group of entities]
+   ☐ dendrogram — http://bl.ocks.org/4063570
+   and much more — https://github.com/mbostock/d3/wiki/Gallery
+ ☐ ? http://sigmajs.org/examples/parse_data.html
+ ☐ some kind of timeline
+    ☐ ? https://github.com/VeriteCo/TimelineJS
+    ☐ ? cubism — http://square.github.com/cubism/
+
+ ☐ ? google chart tools — https://google-developers.appspot.com/chart/
+
+ ☐ ? tableau
+
+ ☐ CHARTS:
+   See relationships among data points:
+     ☐ scatterplot — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Scatterplot.html
+     ☐ matrix charts — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Matrix_Chart.html
+     ☐ network diagram — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Network_Diagram.html
+  Compare a set of values:
+     ☐ bar chart — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Bar_Chart.html
+     ☐ block histogram — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Block_Histogram.html
+     ☐ !bubble chart — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Bubble_Chart.html
+   Track rises and falls over time:
+     ☐ line graph — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Line_Graph.html
+     ☐ stock graph — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Stack_Graph.html
+     ☐ stock graph for categories — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Stack_Graph_for_Categories.html
+   See the parts of a whole:
+     ☐ pie charts — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Pie_Chart.html
+     ☐ treemap — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap.html
+     ☐ ?treemap for comparison — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap_for_Comparisons.html
+    Analyze text:
+     ☐ word tree — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap_for_Comparisons.html
+     ☐ tag cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
 
 Workspace:
   ☐ diff
-  ☐ 
+  ☐ save history of operations, @P3
