@@ -1,10 +1,15 @@
 UI:
- ☐ intro screen, @P1
-   ☐ copy from prototype
+ ✔ intro screen, @P1 @done (13-01-07 14:22)
+     ✔ copy from prototype @done (13-01-07 14:22)
      ✔ layout @done (13-01-05 13:20) @P1
      ✔ listing projects @done (13-01-05 17:34)
-     ☐ adding new project, @P3
-       ☐ directory listing
+     ☐ adding new project, @P3, @postponed
+       ☐ directory listing, @postponed
+
+ ☐ miner screen, @P1
+    ☐ list miners
+    ☐ list vars
+      ☐ adding vars
 
  ☐ help hints, @P5
 

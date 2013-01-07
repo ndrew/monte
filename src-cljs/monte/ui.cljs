@@ -92,11 +92,19 @@
     
   )
 
+(defn select-view [id] 
+  
+  )
+
 (defn project-details [proj] 
   (jq/document-ready 
   (fn [] 
 	;(init-directory-choosers)
 	  (ui-init)
+
+	  ;(log ($ :#viewport :article :a))
+	  (.click ($ "#viewport article a")  (fn[e] (log e)))
+
 	  (refresh (tick)) ; full refresh
 	  (let [poll-interval 2000]
 	  (reset! repeat-handle 
