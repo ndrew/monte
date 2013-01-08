@@ -12,8 +12,7 @@
                     :exclusions [org.clojure/clojure]]
                  [org.clojure/tools.cli "0.2.2"]
                  [fetch               "0.1.0-alpha2"]
-                 ; <?> why we need this?
-                 [crate               "0.2.1"]
+                 [crate               "0.2.3"]
                  [jayq                "0.1.0-alpha4"]
                  ; <?> why we need this?
                  [shoreleave          "0.2.2"]
