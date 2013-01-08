@@ -31,7 +31,8 @@ Projects:
    ✔ for now we can create projects by hand @done (13-01-05 17:35)
 
 Miners:
- ☐ sample data miner, @P1
+ ✔ miner infrastructure @done (13-01-08 18:44)
+ ☐ sample data miner, @P1, @in-progress
  ☐ git miner, @P2
    ☐ ?github api (via https://github.com/Raynes/clj-github)
  ☐ class miner (for java/groovy/php), @P2
@@ -89,3 +90,8 @@ Visualizations:
 Workspace:
   ☐ diff
   ☐ save history of operations, @P3
+  ☐ use datalog, @P1
+    ☐ check ttt.search.core for querying upon core.logic, @P0
+    ☐ http://clojuredocs.org/clojure_contrib/1.2.0/clojure.contrib.datalog.database/make-database
+    ☐ 
+  ☐ 
