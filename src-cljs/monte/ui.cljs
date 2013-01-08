@@ -1,20 +1,14 @@
 (ns monte.ui
-  (:require 
-    [fetch.remotes :as remotes]
-	[jayq.core :as jq])
+  
+  (:require [fetch.remotes :as remotes]
+	          [jayq.core :as jq])
   (:use [jayq.util :only [log wait clj->js]]
-	[jayq.core :only [$ append]])
+        [jayq.core :only [$ append]]
+        [crate.core :only [html]])
   (:require-macros [fetch.macros :as fm]))
 
 
-(defn tick
-  "return current timespamp"
-  []
-  (. (new js/Date) getTime))
-
-
-;;;;;; refactoring ;;;;;;;
-
+(def error (atom false)) ; todo: make use of it
 
 ; <!> HACK:
 ; 	these variables will be set on server while page will be generated
@@ -25,26 +19,86 @@
 ; timestamp of latest update
 (def latest-update (atom 0))
 
-(defn load-projects [projects]
-  (.empty ($ "ul.projects"))
+; todo: move here all jquery selectors
+(def dom-projects "ul.projects")
+(def dom-miners "#miner_table tbody")
+
+(def lbl-add "add new")
+
+
+(defn tick
+  "return current timespamp"
+  []
+  (. (new js/Date) getTime))
+
+
+(defn list-projects [projects]
+  (.empty ($ dom-projects))
   (doseq [p projects] 
-    (do
-      ; (log ($ :#projects))
+    (do 
+      (.append ($ dom-projects) 
+        (html [:li 
+              [:a {:href (str "/project/" (:hash p))}
+                  (:name p)]
+              [:span "..."]]))
       
-      (.append ($ "ul.projects") 
-               (str "<li>"
-                    "<a href='/project/" (:hash p) "'>" 
-                    	(:name p) 
-                    "</a>"
-                    "<span></span>"
-                    "</li>"))
-      
-      (log (pr-str p)
-       
-         )))
-  	(.append ($ "ul.projects") "<li class='new'><a href='#'>add new</a></li>")
-  )
+      (log (pr-str p))))
+  
+  	(.append ($ dom-projects) 
+             (html [:li {:class "new"} [:a {:href "#"} lbl-add]])))
 	
+
+(defn list-miners[miners]
+  (.empty ($ dom-miners))
+  
+  (doseq [m miners]
+    (let [[name id cfg] m]
+      (.append ($ dom-miners) 
+               (html
+                 [:tr [:td name] ; todo: name editing
+                      [:td id]   ; todo: miner type displaying
+                      ; todo: implement toggling
+                      [:td (.htmlToDocumentFragment goog.dom "&#9660;")] ; dark magic to get unicode chars work
+                    ]))))
+  
+  ; todo: add miner functionality
+  (.append ($ dom-miners) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
+
+
+(defn list-vars[vars]
+  ; todo:
+  )
+
+
+(defn select-project-view [link-id] 
+  (let [view-id (str link-id "_view")
+        links ($ "#viewport article a")
+        views ($ "#viewport article .view")]
+    (log (str "view selected " view-id))
+    
+    (.attr links "href" "#")
+  (.click links  
+      (fn[e]
+        (let [el (.-srcElement e)
+              id (str "#" (.-id el))]
+          (when-not (clojure.string/blank? (.-href (.-srcElement e)))
+            (select-project-view id)))))
+
+    (.hide views)
+
+    (.removeAttr ($ link-id) "href")
+    (.toggle ($ view-id))))
+
+
+
+(defn load-project [proj]
+  (log "got project with workspace")
+  (log (pr-str proj))
+    
+  (.text ($ "#viewport article h1") (:name proj))
+  (list-miners (:miners proj))
+
+  (select-project-view "#miner"))
 
 ;;; ui-update stuff
 
@@ -56,30 +110,24 @@
   
   (when (and intro-view 
              (not (nil? (:projects workspace)))
-    (load-projects (:projects workspace))))
+    (list-projects (:projects workspace))))
   
   (when(and project-view 
-            (not (nil? (:current workspace))))
-    ; todo:
+            (not (nil? (:current workspace)))
+               ; todo: updating project
+            )
+   
 )) 
 
-;;;
-
-(def error (atom false))
 
 ;;;; looping stuff ;;;;
-
 (def repeat-handle (atom 0))
-
-
 
 (defn refresh[& last-updated]
   (fm/remote (get-workspace (first last-updated)) [workspace] 
 	(when-not 
       (nil? workspace)
-	  (workspace-updated workspace)))
-  
-  )
+	  (workspace-updated workspace))))
 
 
 (defn infinite-loop [ms func]
@@ -91,37 +139,10 @@
 			) ms))
 
 
-
-(defn select-project-view [link-id] 
-  (let [view-id (str link-id "_view")
-        links ($ "#viewport article a")
-        views ($ "#viewport article .view")]
-    (log (str "view selected " view-id))
-    
-    (.attr links "href" "#")
-	(.click links  
-      (fn[e]
-        (let [el (.-srcElement e)
-              id (str "#" (.-id el))]
-          (when-not (clojure.string/blank? (.-href (.-srcElement e)))
-           	(select-project-view id)))))
-
-    (.hide views)
-
-    (.removeAttr ($ link-id) "href")
-    (.toggle ($ view-id))))
-
-
 (defn ui-init []
-  
   (when project-view 
-    (fm/remote (set-project project-hash) [project]
-        (log project)
-        (.text ($ "#viewport article h1") (:name project))
-        (select-project-view "#miner")
-        ))
-
-)
+    (fm/remote (set-project project-hash) [proj]
+        (load-project proj))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; main

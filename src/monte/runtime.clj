@@ -1,6 +1,8 @@
 (ns monte.runtime
   "Monte runtime engine — holds session and a list of workspace changes"
-  (:use [clojure.data :only [diff]])
+  (:use [clojure.data :only [diff]]
+        [monte.miners.core])
+  
   )
 
 ; wrapper around merge
@@ -38,11 +40,17 @@
 
 
 (defn list-projects []
-  [{:name "Monte" :hash (hash "Monte")}
-   {:name "MyFolder" :hash (hash "MyFolder")}
-   {:name "Metropolis" :hash (hash "Metropolis")}
-   {:name "KMC Booking" :hash (hash "KMC Booking")}
-   {:name "Diploma" :hash (hash "Diploma")}
+  ; todo: use auto hashing
+  [{
+    :name "Monte"
+    :hash (hash "Monte")
+    ; todo: miner retrieval
+    :miners [["dummy_miner" :dummy-miner {:dummies ["testo" "pesto" "festo"]}]]
+  }
+    {:name "MyFolder" :hash (hash "MyFolder")}
+    {:name "Metropolis" :hash (hash "Metropolis")}
+    {:name "KMC Booking" :hash (hash "KMC Booking")}
+    {:name "Diploma" :hash (hash "Diploma")}
    ])
 
 
