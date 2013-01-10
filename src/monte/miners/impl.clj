@@ -5,8 +5,7 @@
 (deftype DummyMiner [config]
   Miner
   (get-schema[this]
-    {:name ""
-     :data :everything})
+    {:data :everything})
   
   (f [this]
      ;(:data config)
@@ -18,8 +17,7 @@
 (deftype GitMiner [config]
   Miner
   (get-schema[this]
-    {:name ""
-     :git-url :path})
+    {:git-url :path})
   
   (f [this]
      ;nil

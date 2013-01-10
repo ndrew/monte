@@ -53,19 +53,31 @@
 
 (defn list-miners[miners]
   (.empty ($ dom-miners))
-  (log (pr-str miners))
+  (log (str "MINERS:" (pr-str miners)))
   (doseq [m miners]
     (let [[name id cfg] m]
-      
-      (comment(.append ($ dom-miners) 
-               (html
-                 [:tr [:td name] ; todo: name editing
-                      [:td id]   ; todo: miner type displaying
-                      ; todo: implement toggling
-                      [:td (.htmlToDocumentFragment goog.dom "&#9660;")] ; dark magic to get unicode chars work
-                    ]))))
-      
-      )
+      (.append ($ dom-miners) (html
+        [:tr [:td name] ; todo: name editing
+             [:td id]   ; todo: miner type displaying
+              ;  dark magic to get unicode chars work — &#9660; todo: implement toggling
+             [:td 
+                [:a {:href "#"}
+                   (.htmlToDocumentFragment goog.dom "&#9664;")]]]))
+      (.append ($ dom-miners) (html
+        [:tr {:style "display: none;"}
+             [:td {:colspan "3"} 
+              [:pre (pr-str cfg)]]])) 
+    ))
+  
+  (.click ($ (str dom-miners " tr td:nth-child(3) a")) 
+    (fn[e]
+      (let [el ($ (.-srcElement e))
+            details-tr (.next (.closest el "tr"))]
+          (.toggle details-tr)
+          ;(log (.htmlToDocumentFragment goog.dom "&#9660;"))
+          (.text el (if (= (.text el) "\u25C0") "\u25bc" "\u25C0"))
+          false)))
+
   
   ; todo: add miner functionality
   (.append ($ dom-miners) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
@@ -73,7 +85,7 @@
 
 (defn list-vars[vars]
   (.empty ($ dom-vars))
-  (log (pr-str vars))
+  (log (str "VARS:" (pr-str vars)))
   (doseq [v vars]
     (let [[name id value] v]
       
@@ -99,7 +111,7 @@
     (log (str "view selected " view-id))
     
     (.attr links "href" "#")
-  (.click links  
+    (.click links  
       (fn[e]
         (let [el (.-srcElement e)
               id (str "#" (.-id el))]
@@ -136,9 +148,12 @@
               
     (when-not (nil? (:current workspace))        
       (let [proj (:current workspace)]
+        
+       
         (.text ($ "#viewport article h1") (:name proj))
-        (list-vars (:vars proj)))
-        ; list-miners    
+        
+        (list-vars (:vars proj))
+        (list-miners (:miners proj)))  
     )
   )
 ) 

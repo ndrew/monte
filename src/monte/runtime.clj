@@ -47,7 +47,8 @@
            ["WORK-DIR" :path "Users/ndrw/monte/"]
            ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]]
       
-    ;:miners [["dummy_miner" :dummy-miner {:dummies ["testo" "pesto" "festo"]}]]
+    :miners [["dummy_miner" :->DummyMiner {:data ["testo" "pesto" "festo"]}]
+             ["git" :->GitMiner {:git-url :REPO-URL}]]
     }
     {:name "MyFolder"}
     {:name "Metropolis"}
