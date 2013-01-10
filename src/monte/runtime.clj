@@ -40,18 +40,19 @@
 
 
 (defn list-projects []
-  ; todo: use auto hashing
+  (map #(merge % {:hash (hash (:name %))})
   [{
     :name "Monte"
-    :hash (hash "Monte")
-    ; todo: miner retrieval
-    :miners [["dummy_miner" :dummy-miner {:dummies ["testo" "pesto" "festo"]}]]
-  }
-    {:name "MyFolder" :hash (hash "MyFolder")}
-    {:name "Metropolis" :hash (hash "Metropolis")}
-    {:name "KMC Booking" :hash (hash "KMC Booking")}
-    {:name "Diploma" :hash (hash "Diploma")}
-   ])
+    :vars [["REPO-URL" :url "https://github.com/ndrew/monte.git"]
+           ["WORK-DIR" :path "Users/ndrw/monte/"]
+           ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]]
+      
+    ;:miners [["dummy_miner" :dummy-miner {:dummies ["testo" "pesto" "festo"]}]]
+    }
+    {:name "MyFolder"}
+    {:name "Metropolis"}
+    {:name "KMC Booking"}
+    {:name "Diploma"}]))
 
 
 
@@ -72,7 +73,7 @@
     
     (reset! workspace
             {
-             :projects [];(list-projects)
+             :projects (list-projects)
              :miners (miners/list-miners 'monte.miners.impl)
              })
     
