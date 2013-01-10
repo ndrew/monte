@@ -54,9 +54,9 @@
         (throw (Exception. "Fetching from server not implemented yet!")) ; todo: fetch new version from server
       )
 
-      (if (seq args)
-        (if (every? (fn [path] (and (fs/exists? path) (fs/directory? path))) args)
-            (reset! runtime/workspace (core/super-repo (apply vector args)) ))) 
+      ;(if (seq args)
+      ;  (if (every? (fn [path] (and (fs/exists? path) (fs/directory? path))) args)
+      ;      (reset! runtime/workspace (core/super-repo (apply vector args)) ))) 
       
       (def server_instance (server/start (:port @settings)))
       (if (:auto-open @settings)
