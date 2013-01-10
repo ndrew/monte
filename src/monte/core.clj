@@ -1,5 +1,6 @@
 (ns monte.core
-	"Monte core stuff")
+	"Monte core stuff"
+	(:use [clojure.test]))
 
 (def data {
   :tasks [
@@ -77,35 +78,59 @@
 
 
 
+(def props-regex #"(\..*)[\{]|\..*$")
+(def filters-regex #"[\{](.+)[\}]")
+(def miners-regex #"\((.+)\)")
+(def not-entity-regex #"\(.+\)|\..+")
+
+
 (defn- extract-filters[s]
-   (let [[_ fltr] (re-find #"[\{](.+)[^\}]" s)]
-    	(when-not (nil? fltr)
-     	   {:filter fltr} ))
-)
+  (let [[_ fltr] (re-find filters-regex s)]
+    (when-not (nil? fltr)
+      {:filter fltr} )))
 
-(extract-filters "tasks=(jira_miner).task{:regex #'regex'}")
-(extract-filters "classes=(code_miner)")
-(extract-filters "test-cases=classes.class_name{:ends 'Test'}")
-
-
+ 
+;(extract-filters "classes=(code_miner)")
+;(extract-filters "test-cases=classes.class_name{:ends 'Test'}")
+  
 (defn- extract-miners[s] 
-  (let [[_ miner] (re-find #"\((.+)\)" s)]
+  (let [[_ miner] (re-find miners-regex s)]
     (when-not (nil? miner)
       (if (not (.startsWith miner "unify"))
-      {:miner miner} {:unify (clojure.string/replace miner #"unify\s" "")})
-      )))
+      {:miner miner} {:unify (clojure.string/replace miner #"unify\s" "")}))))
 
-(extract-miners "(jira_miner).task{:regex #'regex'}")
-(extract-miners "(unify unify tasks.asignee classes.javadoc.author commits.author)")
-
-
-(def props-regex #"(\..*)[\{]|\..*$")
 
 (defn- extract-props[s]
   (let [[a b] (re-find props-regex s)]
 		(when-not (nil? a)
       {:props (if (nil? b) a b)})))
 
+
+(defn- extract-entities[s]
+  (let [e (clojure.string/replace s not-entity-regex "")]
+  	(when-not (empty? e)
+      {:entity e})))
+
+(defn parse-expression[s] 
+  (reduce merge ((juxt 
+                  	extract-filters
+                  	extract-miners	
+                  	extract-props
+                  	extract-entities
+                  ) s)))
+
+
+(defn parse-entity[s]
+  (let [[_ a b](re-find #"(.+)=(.+)" s)]
+    { (keyword a) (parse-expression b) }))
+
+
+(extract-filters "tasks=(jira_miner).task{:regex #'regex'}")
+(extract-filters "classes=(code_miner)")
+(extract-filters "test-cases=classes.class_name{:ends 'Test'}")
+
+(extract-miners "(jira_miner).task{:regex #'regex'}")
+(extract-miners "(unify unify tasks.asignee classes.javadoc.author commits.author)")
 
 (extract-props "")
 (extract-props "(test)")
@@ -114,28 +139,11 @@
 (extract-props "(test).foo.bar.baz{:contain ffff}")
 
 
-(def not-entity-regex #"\(.+\)|\..+")
-
-(defn- extract-entities[s]
-  (let [e (clojure.string/replace s entity-regex "")]
-  	(when-not (empty? e)
-      {:entity e})))
-
 (extract-entities "(classes)")
 (extract-entities"(classes).baz")
 (extract-entities "classes.baz")
 (extract-entities "classes")
 (extract-entities "classes.faz.baz{:f a}")
-
-
-(defn parse-expression[s] 
-  (reduce merge ((juxt 
-                  	extract-filters
-                  	extract-miners	
-                  	extract-props
-                  	extract-entities
-                  ) s))
-  )
 
 (parse-expression "(code_miner)")
 (parse-expression "(code_miner){:contain fff}")
@@ -144,11 +152,5 @@
 (parse-expression "classes.class_name")
 (parse-expression "classes.class_name{:contain fff}")
 
-
-(defn parse-entity[s]
-  (let [[_ a b](re-find #"(.+)=(.+)" s)]
-		{
-      (keyword a) (parse-expression b)
-    }))
 
 (parse-entity "classes=(code_miner)")

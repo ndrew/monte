@@ -2,6 +2,18 @@
   (:use clojure.test
         monte.core))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(defmacro with-private-fns [[ns fns] & tests]
+  "Refers private fns from ns and runs tests in context."
+  `(let ~(reduce #(conj %1 %2 `(ns-resolve '~ns '~%2)) [] fns)
+     ~@tests))
+
+
+(with-private-fns [monte.core [extract-filters]]
+  (deftest parsing-entity-dsl
+  	(testing " parsing of dsl notation."
+      (is (= (extract-filters "no-filter") nil))
+      (is (= (extract-filters "(dummy_miner).task{:filter :all}") {:filter ":filter :all"}))
+    )
+  
+  ))
+  
