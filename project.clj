@@ -14,9 +14,9 @@
                  [fetch               "0.1.0-alpha2"]
                  [crate               "0.2.3"]
                  [jayq                "0.1.0-alpha4"]
-                 ; <?> why we need this?
-                 [shoreleave          "0.2.2"]
-                 [shoreleave/shoreleave-remote-noir "0.2.2"]
+                 ; maybe use these instead of fetch
+                 ;[shoreleave          "0.2.2"]
+                 ;[shoreleave/shoreleave-remote-noir "0.2.2"]
                  ]
   :plugins [[lein-cljsbuild   "0.2.9"]
             [lein-ring        "0.7.1"]]
