@@ -1,7 +1,8 @@
 (ns monte.runtime
   "Monte runtime engine — holds session and a list of workspace changes"
   (:require [monte.miners.core :as miners])
-  (:use [clojure.data :only [diff]]))
+  (:use [clojure.data :only [diff]]
+        [monte.miners.impl]))
 
 
 ; wrapper around merge
@@ -68,12 +69,11 @@
 (defn init 
   "initializes workspace to its initial state" 
   []
-    (println (miners/list-miners))
-      
+    
     (reset! workspace
             {
              :projects [];(list-projects)
-             ; :miners (miners/list-miners) 
+             :miners (miners/list-miners 'monte.miners.impl)
              })
     
     @workspace)
@@ -89,7 +89,7 @@
 
 
 ; uncomment for development 
-(to-initial-state)
+;(to-initial-state)
 
 
 (defn merge-changes [c1 c2]

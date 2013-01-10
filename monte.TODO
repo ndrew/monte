@@ -32,7 +32,10 @@ Projects:
 
 Miners:
  ✔ miner infrastructure @done (13-01-08 18:44)
+ ✔ implement miners as protocols @done (13-01-10 02:44)
+   ☐ try loading new miners from external file
  ☐ sample data miner, @P1, @in-progress
+
  ☐ git miner, @P2
    ☐ ?github api (via https://github.com/Raynes/clj-github)
  ☐ class miner (for java/groovy/php), @P2
