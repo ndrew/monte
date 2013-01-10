@@ -7,10 +7,13 @@ UI:
        ☐ directory listing, @postponed
 
  ☐ miner screen, @P1
-    ☐ list miners, @P1
-    ☐ list vars, @P1
-      ☐ adding vars
-
+    ☐ miners, @P1
+      ✔ save miner-schemas from server @done (13-01-10 12:58)
+      ☐ list miners, @in-progress
+    ☐ vars, @P1
+      ✔ list vars @done (13-01-10 12:59)
+      ☐ edit vars
+      ☐ add vars
  ☐ help hints, @P5
 
 Bugs:

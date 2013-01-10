@@ -22,9 +22,12 @@
 ; todo: move here all jquery selectors
 (def dom-projects "ul.projects")
 (def dom-miners "#miner_table tbody")
+(def dom-vars "#var_table tbody")
+
 
 (def lbl-add "add new")
 
+(def miner-schemas (atom []))
 
 (defn tick
   "return current timespamp"
@@ -50,24 +53,43 @@
 
 (defn list-miners[miners]
   (.empty ($ dom-miners))
-  
+  (log (pr-str miners))
   (doseq [m miners]
     (let [[name id cfg] m]
-      (.append ($ dom-miners) 
+      
+      (comment(.append ($ dom-miners) 
                (html
                  [:tr [:td name] ; todo: name editing
                       [:td id]   ; todo: miner type displaying
                       ; todo: implement toggling
                       [:td (.htmlToDocumentFragment goog.dom "&#9660;")] ; dark magic to get unicode chars work
                     ]))))
+      
+      )
   
   ; todo: add miner functionality
   (.append ($ dom-miners) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
 
 
 (defn list-vars[vars]
-  ; todo:
-  )
+  (.empty ($ dom-vars))
+  (log (pr-str vars))
+  (doseq [v vars]
+    (let [[name id value] v]
+      
+      (.append ($ dom-vars) 
+               (html
+                 [:tr [:td name] ; todo: name editing
+                      [:td id]   ; todo: miner type displaying
+                      ; todo: implement toggling
+                      [:td value] 
+                    ]))
+      
+      ))
+  
+  ; todo: add var functionality
+  (.append ($ dom-vars) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
+
 
 
 (defn select-project-view [link-id] 
@@ -91,18 +113,13 @@
 
 
 
-(defn load-project [proj]
-  (log "got project with workspace")
-  (log (pr-str proj))
-    
-  (.text ($ "#viewport article h1") (:name proj))
-  (list-miners (:miners proj))
-
+(defn set-project [proj]
   (select-project-view "#miner"))
 
 ;;; ui-update stuff
 
 (defn workspace-updated [workspace]
+  (log "workspace updated")
   (log (pr-str workspace))
   (.text ($ :#debug) (pr-str workspace))
   
@@ -112,12 +129,19 @@
              (not (nil? (:projects workspace)))
     (list-projects (:projects workspace))))
   
-  (when(and project-view 
-            (not (nil? (:current workspace)))
-               ; todo: updating project
-            )
-   
-)) 
+  (when project-view
+     
+    (when-not (nil? (:miners workspace))
+      (reset! miner-schemas (:miners workspace))) ; store all miners
+              
+    (when-not (nil? (:current workspace))        
+      (let [proj (:current workspace)]
+        (.text ($ "#viewport article h1") (:name proj))
+        (list-vars (:vars proj)))
+        ; list-miners    
+    )
+  )
+) 
 
 
 ;;;; looping stuff ;;;;
@@ -142,7 +166,7 @@
 (defn ui-init []
   (when project-view 
     (fm/remote (set-project project-hash) [proj]
-        (load-project proj))))
+        (set-project proj))))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; main

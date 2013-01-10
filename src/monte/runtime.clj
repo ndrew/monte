@@ -62,7 +62,7 @@
                 (:projects @workspace)))]
      (reset! changes 
           (conj @changes 
-                [(System/currentTimeMillis) proj]))
+                [(System/currentTimeMillis) {:current proj}]))
      proj
   ))
 
