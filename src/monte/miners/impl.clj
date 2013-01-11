@@ -1,33 +1,29 @@
 (ns monte.miners.impl
-  (:gen-class)
-  (:use monte.miners.core))
+  (:gen-class))
 
-(deftype DummyMiner [config]
-  Miner
-  (get-schema[this]
-    {:data :everything})
+
+ 
+(defprotocol Miner
+  "Miner abstraction"
+  (f [this] "run miner")
+  (get-schema[this] "return a scheme(empty configuration) for miner"))
+
+
+(defmacro defminer [t & body]
+  `(do
+     (deftype ~t ~['config])
+     (extend-type ~t Miner ~@body))
+)
+
+(defminer DummyMiner      
+  (f [this]     
+     (let [cfg (.config this)]
+       (:data cfg)))
   
-  (f [this]
-     ;(:data config)
-   	"Hello From DummyMiner"  
-     ))
+  (get-schema[this] 
+    {:data :everything}))
 
-
-
-(deftype GitMiner [config]
-  Miner
-  (get-schema[this]
-    {:git-url :path})
-  
-  (f [this]
-     ;nil
-     "Hello From GitMiner" 
-     ))
-
-
-; smth like init statement
-
-;(println
-;(f (DummyMiner. {:name "dummy miner"
-;                :data [1 2 3]}))
-;)
+(comment 
+(defn list-types-implementing[protocol]
+  ; todo: add namespace filtering?
+  (distinct (keys (:impls protocol)))) 

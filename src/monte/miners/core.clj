@@ -5,18 +5,13 @@
 ; note, that you can use miner implementation only within monte.miners.core
 ;
 
-(defprotocol Miner
-  "Miner abstraction"
-  (f [this] "run miner")
-  (get-schema[this] "return a scheme(empty configuration) for miner"))
 
 
 (defn implements? [protocol atype]
   (and atype (.isAssignableFrom ^Class (:on-interface protocol) atype)))
 
 
-
-(defn list-types-implementing[protocol n]
+(defn list-types-implementing-old[protocol n]
   (println (str "list-types-implementing " (:on-interface protocol)))
   (filter (fn[x] (let [[a b] x]
             (comment(
