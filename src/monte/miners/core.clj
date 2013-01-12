@@ -1,4 +1,5 @@
 (ns monte.miners.core
+  (:use monte.miners.impl)
   (:gen-class))
  
 (defprotocol Miner
@@ -14,20 +15,19 @@
             )))
 
 (defmacro defminer[a & body] 
-  `(from-ns 'monte.miners.dummy
+  `(from-ns 'monte.miners.impl
       (deftype ~a [~'config])   
       (extend-type ~a Miner ~@body)   
 ))
- 
-(comment 
- (defminer DummyMiner      
+
+
+(defminer DummyMiner      
   (f [this]     
      (let [cfg (.config this)]
        (:data cfg)))
   
   (get-schema[this] 
     {:data :everything}))
-)
 
 ; macro as I thought it would find test namespace
 
