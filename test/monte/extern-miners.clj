@@ -1,4 +1,4 @@
-(println "ZZZZZZZ")
+(print "loading extenal miner...")
 
 (defminer ExternMiner
   (f [this]     
@@ -7,4 +7,6 @@
   
   (get-schema[this] 
     {:data :everything}))
+
+(println "done")
 

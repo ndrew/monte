@@ -29,12 +29,16 @@
 ) 
 
 
-(def miner-fns (list-types-implementing Miner))
 
+(deftest miner-listings 
 
-(deftest miner-listings
+  (def miner-fns (list-types-implementing Miner))
+
   (println miner-fns)
   (is (not (empty? miner-fns)))
+
+  ; todo: try creating ?
 )    
+  
     
 

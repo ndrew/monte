@@ -7,11 +7,12 @@
   (get-schema[this] "return a scheme(empty configuration) for miner"))
 
 
+
 (defmacro defminer [t & body]
   `(do
-     (deftype ~t ~['config])
-     (extend-type ~t Miner ~@body))
-)
+        (deftype ~t ~['config])
+        (extend-type ~t Miner ~@body)))
+
 
 (defminer DummyMiner      
   (f [this]     
@@ -21,11 +22,8 @@
   (get-schema[this] 
     {:data :everything}))
 
-;(println monte.miners_test/->TestForMinerCreation)
 
-
-
-
+; macro as I thought it would find test namespace
 
 (defmacro list-types-implementing[protocol]
   `(remove nil? (map #(let [[k# v#] %
@@ -39,3 +37,9 @@
             )
            ) (:impls ~protocol)))
   )
+
+
+(defn load-extern-miners[path]
+  (binding [*ns* (find-ns 'monte.miners.core)] (load-file path))
+) 
+

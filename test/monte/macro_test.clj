@@ -4,36 +4,41 @@
 
 (defprotocol Foo (f[x] ""))
 
-(defmacro from-miner-ns[& body] 
+
+(defmacro from-ns[nmsps & body] 
   `(binding 
-     [*ns* (find-ns 'monte.miners.dummy)] 
+     [*ns* (find-ns ~nmsps)] 
        (eval
           (quote (do ~@body))
             )))
 
-
-(deftest from-ns
-    (is (empty? (ns-publics 'monte.miners.dummy)))
+(deftest from-ns-test
     
-    (from-miner-ns (def test-from-miner-ns :test))  
-    (is (not (empty? (ns-publics 'monte.miners.dummy))))
-
-    (println (ns-publics 'monte.miners.dummy))
+    (from-ns 'monte.miners.dummy (def test-from-ns :test))  
+      ;(println (ns-publics 'monte.miners.dummy))
     
-    (is (= :test @(ns-resolve (find-ns 'monte.miners.dummy) 'test-from-miner-ns)))
+    (is (= :test @(ns-resolve (find-ns 'monte.miners.dummy) 'test-from-ns)))
 )
 
 
 (defmacro defminer[a & body] 
-  `(from-miner-ns 
+  `(from-ns 'monte.miners.dummy
     	(deftype ~a [])   
      	(extend-type ~a Foo ~@body)   
 ))
  
-(println (macroexpand-1 '(defminer kurva (f[x] "ffff"))))
-;(defminer kurva (f[x] "ffff"))
+;(println (macroexpand-1 '(defminer kurva (f[x] "ffff"))))
 
-;(deftest ttt
-;    (println (f (kurva.)))
-;    (is (= 1 0))
-;  )
+
+(deftest ttt
+  (defminer mnr (f[x] :hello))
+
+    ;(println (ns-publics 'monte.miners.dummy))
+    
+    (let [miner (ns-resolve (find-ns 'monte.miners.dummy) '->mnr)]
+      (is (= :hello (f (miner))))
+    )
+    
+    
+    ; todo: 
+)
