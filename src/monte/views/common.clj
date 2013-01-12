@@ -21,7 +21,7 @@
       (include-js "/extern/jquery-ui-1.9.1.js")
       (include-js "/extern/raphael-min.js")
     
-      (include-js "/js/cljs.js")
+      (include-js "/js/js.js")
     ]
     [:body [:div {:id "viewport"} content ]]))
 

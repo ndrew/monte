@@ -27,7 +27,7 @@
         :jar true
 		:source-path "src-cljs"
         :compiler {
-            :output-to "resources/public/js/cljs.js"
+            :output-to "resources/public/js/js.js"
             :optimizations :whitespace
             :externs ["resources/public/extern/raphael-min.js"]
             :pretty-print true}
