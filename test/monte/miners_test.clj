@@ -10,15 +10,15 @@
 
 
 (deftest miner-defining
- 	(is (not (nil? TestForMinerCreation)))
- 	(let [miner (TestForMinerCreation. {})
+ 	(is (not (nil? monte.miners.dummy.TestForMinerCreation)))
+ 	(let [miner (monte.miners.dummy.TestForMinerCreation. {})
           result (f miner)
           schema (get-schema miner)]
 
         (is (= result :f))
 	    	(is (= schema :schema))))
 
-(def dummy-miner (monte.miners.core.DummyMiner. {:data :DUMMY}))
+(def dummy-miner (monte.miners.dummy.DummyMiner. {:data :DUMMY}))
 
 (deftest dummy-miner-tests
     (let [result (f dummy-miner)]
@@ -27,7 +27,6 @@
 (deftest external-miners
   (load-extern-miners "test/monte/extern-miners.clj")   
 ) 
-
 
 
 (deftest miner-listings 

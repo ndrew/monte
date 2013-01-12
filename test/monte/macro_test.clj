@@ -1,9 +1,13 @@
 (ns monte.macro-test
-  (:require [monte.miners.dummy :as test-ns])
-  (:use clojure.test))
-
-(defprotocol Foo (f[x] ""))
-
+  (:require [monte.miners.dummy :as test-ns
+             monte.miners.core :miners])
+  (:use clojure.test
+        ))
+;
+ 
+ 
+(comment         
+(defprotocol Foo (f[x] "")(g[x] ""))
 
 (defmacro from-ns[nmsps & body] 
   `(binding 
@@ -21,24 +25,26 @@
 )
 
 
-(defmacro defminer[a & body] 
+(defmacro defminer1[a & body] 
   `(from-ns 'monte.miners.dummy
     	(deftype ~a [])   
      	(extend-type ~a Foo ~@body)   
 ))
  
-;(println (macroexpand-1 '(defminer kurva (f[x] "ffff"))))
-
 
 (deftest ttt
-  (defminer mnr (f[x] :hello))
+  (defminer1 mnr (f[x] :hello)(g[x] :world))
+      ;(println (ns-publics 'monte.miners.dummy))
+    
+  (let [miner ((ns-resolve (find-ns 'monte.miners.dummy) '->mnr))]
+    (is (= :hello (f miner)))
+    (is (= :world (g miner)))
+     
+  )
 
-    ;(println (ns-publics 'monte.miners.dummy))
-    
-    (let [miner (ns-resolve (find-ns 'monte.miners.dummy) '->mnr)]
-      (is (= :hello (f (miner))))
-    )
-    
-    
-    ; todo: 
+  ;(defminer1 mnr1 (f[x] :hello)(g[x] :world))
+
+      ; todo: 
+)
+
 )
