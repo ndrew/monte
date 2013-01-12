@@ -24,13 +24,17 @@
     (let [result (f dummy-miner)]
       (is (= result :DUMMY))))
 
+(deftest external-miners
+  (load-extern-miners "test/monte/extern-miners.clj")   
+) 
+
 
 (def miner-fns (list-types-implementing Miner))
 
-       
+
 (deftest miner-listings
+  (println miner-fns)
   (is (not (empty? miner-fns)))
 )    
     
 
- 
