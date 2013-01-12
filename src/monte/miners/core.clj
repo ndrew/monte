@@ -1,36 +1,41 @@
 (ns monte.miners.core
   (:gen-class))
-
-;;;;
-; note, that you can use miner implementation only within monte.miners.core
-;
-
-
-
-(defn implements? [protocol atype]
-  (and atype (.isAssignableFrom ^Class (:on-interface protocol) atype)))
+ 
+(defprotocol Miner
+  "Miner abstraction"
+  (f [this] "run miner")
+  (get-schema[this] "return a scheme(empty configuration) for miner"))
 
 
-(defn list-types-implementing-old[protocol n]
-  (println (str "list-types-implementing " (:on-interface protocol)))
-  (filter (fn[x] (let [[a b] x]
-            (comment(
-             when (.startsWith (str a) "->") ; dark magic        
-              (implements? protocol 
-               (resolve (symbol 
-                (.replace (str n "." a) "->" "")))))
-            ))
-            true
-            ) 
-         (ns-publics n)))
+(defmacro defminer [t & body]
+  `(do
+     (deftype ~t ~['config])
+     (extend-type ~t Miner ~@body))
+)
 
-
-(defn list-miners[n] 
-  "return list of all miners registered in system"
+(defminer DummyMiner      
+  (f [this]     
+     (let [cfg (.config this)]
+       (:data cfg)))
   
-  (let [miners (list-types-implementing Miner n)]
-      (map #(hash-map
-       (keyword(str(first %)))
-       (get-schema((first(rest %)) {}))
-      )
-      miners)))
+  (get-schema[this] 
+    {:data :everything}))
+
+;(println monte.miners_test/->TestForMinerCreation)
+
+
+
+
+
+(defmacro list-types-implementing[protocol]
+  `(remove nil? (map #(let [[k# v#] %
+               [_# miner-ns# miner-fn#] (re-find #"(.*)\.(.*)$" (.getName k#))]
+            (cond (not (nil? (find-ns (symbol miner-ns#))))
+              [k# (ns-resolve (find-ns (symbol miner-ns#)) (symbol miner-fn#))]
+              :else 
+                (do 
+                  (println (str "Can't load " miner-ns# "/->" miner-fn#))
+                  nil)
+            )
+           ) (:impls ~protocol)))
+  )
