@@ -62,7 +62,10 @@
       
       [:div {:id "visualization_view" :class "view"}
             [:p "Define the views and configure data presentation. " 
-            [:span {:class "hint"} "(?)"]]]]
+            [:span {:class "hint"} "(?)"]]
+            
+            [:div [:button {:id "run"} "run" ]]
+            ]]
 
       
       

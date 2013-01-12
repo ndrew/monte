@@ -5,7 +5,6 @@
   (:require 
     [monte.backend.server :as server]
     [monte.runtime :as runtime]
-    [monte.core :as core]
     [clojure.tools.cli :as cli]
     [fs.core :as fs]
     [clojure.java.browse :as browser]

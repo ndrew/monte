@@ -2,7 +2,7 @@
   "Monte runtime engine — holds session and a list of workspace changes"
   (:require [monte.miners.core :as miners])
   (:use [clojure.data :only [diff]]
-        [monte.miners.impl]))
+        ))
 
 
 ; wrapper around merge
@@ -41,7 +41,7 @@
 
 (defn list-projects []
   (map #(merge % {:hash (hash (:name %))})
-  [{
+    [{
     :name "Monte"
     :vars [["REPO-URL" :url "https://github.com/ndrew/monte.git"]
            ["WORK-DIR" :path "Users/ndrw/monte/"]
@@ -49,11 +49,20 @@
       
     :miners [["dummy_miner" :->DummyMiner {:data ["testo" "pesto" "festo"]}]
              ["git" :->GitMiner {:git-url :REPO-URL}]]
+    :entities [
+               
+                ["tasks=(jira_miner).task{:like '...'}"]
+                ["classes=(code_miner)"]
+                ["test-cases=classes.class_name{:ends 'Test'}"] 
+                ["commits=(git-miner)"]
+                ["users=(unify tasks.asignee classes.javadoc.author commits.author)"]               
+               
+               ]
+    :connections [["dummy_miner="]]
     }
     {:name "MyFolder"}
     {:name "Metropolis"}
-    {:name "KMC Booking"}
-    {:name "Diploma"}]))
+    {:name "KMC Booking"}]))
 
 
 
@@ -75,7 +84,7 @@
     (reset! workspace
             {
              :projects (list-projects)
-             :miners (miners/list-miners 'monte.miners.impl)
+             :miners [];(miners/list-miners 'monte.miners.impl)
              })
     
     @workspace)
@@ -91,7 +100,7 @@
 
 
 ; uncomment for development 
-;(to-initial-state)
+(to-initial-state)
 
 
 (defn merge-changes [c1 c2]

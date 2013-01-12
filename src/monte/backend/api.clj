@@ -1,17 +1,18 @@
 (ns monte.backend.api
 	"Monte Remote Call API"
-	(:require [monte.runtime :as runtime]
-			  [fs.core :as fs])
+	(:require 
+			[monte.runtime :as runtime]   			  
+			[fs.core :as fs])
 	(:use [noir.fetch.remotes :only [defremote]]))
 
+; 
 
 
 (defremote get-workspace [last-changed] 
   (cond (nil? last-changed) 
         (runtime/full-refresh)
   :else (runtime/partial-refresh last-changed)))
-
-
+  
 
 ; actions
 
