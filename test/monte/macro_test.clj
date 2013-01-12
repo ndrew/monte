@@ -20,7 +20,7 @@
 
     (println (ns-publics 'monte.miners.dummy))
     
-    (is (= :test (ns-resolve (find-ns 'monte.miners.dummy) 'test-from-miner-ns)))
+    (is (= :test @(ns-resolve (find-ns 'monte.miners.dummy) 'test-from-miner-ns)))
 )
 
 
