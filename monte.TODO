@@ -1,7 +1,7 @@
 UI:
- ✔ intro screen, @P1 @done (13-01-07 14:22)
+ ☐ intro screen,
      ✔ copy from prototype @done (13-01-07 14:22)
-     ✔ layout @done (13-01-05 13:20) @P1
+     ✔ layout @done (13-01-05 13:20) 
      ✔ listing projects @done (13-01-05 17:34)
      ☐ adding new project, @P3, @postponed
        ☐ directory listing, @postponed
@@ -36,8 +36,12 @@ Projects:
 Miners:
  ✔ miner infrastructure @done (13-01-08 18:44)
  ✔ implement miners as protocols @done (13-01-10 02:44)
-   ☐ try loading new miners from external file
- ☐ sample data miner, @P1, @in-progress
+   ✔ try loading new miners from external file @done (13-01-12 06:36)
+ ✔ sample data miner, @in-progress @done (13-01-12 06:36)
+
+ ☐ macros_test.clj -> miners.core, @P1
+
+ ☐ ?caching for miners?
 
  ☐ git miner, @P2
    ☐ ?github api (via https://github.com/Raynes/clj-github)
@@ -96,8 +100,14 @@ Visualizations:
 Workspace:
   ☐ diff
   ☐ save history of operations, @P3
-  ☐ use datalog, @P1
+  ☐ use datalog, @P5 — nope, maybe later
     ☐ check ttt.search.core for querying upon core.logic, @P0
     ☐ http://clojuredocs.org/clojure_contrib/1.2.0/clojure.contrib.datalog.database/make-database
     ☐ 
-  ☐ 
+  ☐ saving and loading (see non-commited cfg) @P1
+  ☐ auto-update(like LT)
+
+  Infrastructure:
+  ☐ lein-reload
+  ☐ remove cljsbuild from :hooks and reconfigure lein profiles and hooks
+  ☐ migrate from noir to compojure
