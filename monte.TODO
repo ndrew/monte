@@ -39,7 +39,7 @@ Miners:
    ✔ try loading new miners from external file @done (13-01-12 06:36)
  ✔ sample data miner, @in-progress @done (13-01-12 06:36)
 
- ☐ macros_test.clj -> miners.core, @P1
+ ✔ macros_test.clj -> miners.core, @P1 @done (13-01-12 18:03)
 
  ☐ ?caching for miners?
 
@@ -107,7 +107,8 @@ Workspace:
   ☐ saving and loading (see non-commited cfg) @P1
   ☐ auto-update(like LT)
 
-  Infrastructure:
+ Infrastructure:
   ☐ lein-reload
   ☐ remove cljsbuild from :hooks and reconfigure lein profiles and hooks
   ☐ migrate from noir to compojure
+  ☐ use pretty print!
