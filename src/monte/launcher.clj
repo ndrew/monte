@@ -20,7 +20,7 @@
 
 (defn init [options]
     (cond 
-      (fs/exists? home) (
+      (and (fs/exists? home) (fs/exists? settings-loc)) (
         reset! settings (merge (merge default-settings options) (read-string (slurp settings-loc))))
       :else (do(
         (fs/mkdirs home)
