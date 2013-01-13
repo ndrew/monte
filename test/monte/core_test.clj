@@ -78,37 +78,63 @@
   `(println (str ~@body " at " (System/currentTimeMillis) )))
 
 
-(defn miner-results[miner]
-    (when miner
-      (if-let [d (get @raw-data miner)]
-        @d
-        (let [f (future
-                  (if (get @raw-data miner) "ALREADY CALCULATED")
-                  
-                  (log "\t\thello from future " miner)
-                  (Thread/sleep (*(count (str miner)) 1000))
-                  miner)]
-           
-          (reset! raw-data (conj @raw-data (hash-map miner f))) 
-          @f
-          ))))
-    
+(defn get-async[key f]
+  (when key
+    (if-let [d (locking raw-data (get @raw-data key))] ; synchronized get does the trick
+      @d
+      (let [lock (future
+                      ;(log (pr-str @raw-data))
+                        (log "\t\thello from future " key)
+                        (f))]
+        (locking raw-data
+          (reset! raw-data (conj @raw-data (hash-map key lock))) 
+        )
+        @lock
+        ))))
+
   
 (defn process-entity[[name cfg]] 
-  (log "\tprocessing " name )
-  (let [d (miner-results(keyword (:miner cfg)))]
-    (log (str name " got data " (pr-str d)))
-    (hash-map (keyword name) d)))
+  (log "\tprocessing " name " " (pr-str cfg) )
+  
+  (let [key (keyword name)
+        _miner-key (keyword (:miner cfg))
+        _entity-key (keyword (:entity cfg))
+        m (get-async _miner-key (fn[] (Thread/sleep 1000) :MINER))
+        e (get-async _entity-key (fn[] :ENTITY))
+        ]
+    (log (str name "\t\tgot data " (pr-str m)))
+    (hash-map key m)))
       
           
+(def dummy-entities ;(:entities scheme))
+  
+  ;(comment
+     ["t1=(code_miner)"
+     "t2=(code_miner1)"
+     "t3=(code_miner)"
+     "t4=(code_miner1)"
+     "t5=(code_miner)"
+     "t6=(code_miner1)"
+     "t7=(code_miner)"
+     "t8=(code_miner)"
+     "t9=(code_miner)"
+     "t10=(code_miner)"
+     "t11=(code_miner)"
+     "t12=(code_miner2)"
+     "t13=(code_miner3)"
+     "t14=(code_miner4)"
+     "t15=(code_miner)"
+     ])
+          
 
-(log "start processing " (reduce #(str %1 "\n" %2) (:entities scheme)))
-
+(log "start processing " (reduce #(str %1 "\n" %2) dummy-entities))
 
 (def result (doall(pmap process-entity 
-  (map parse-entity (:entities scheme)))))
+  (map parse-entity dummy-entities))))
 
 (log "result is" (pr-str result))
+
+(log (pr-str @raw-data))
 
 ;(log (pr-str @data1))
 ;(println (get @data1 :code_miner))
