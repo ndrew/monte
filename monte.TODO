@@ -109,5 +109,6 @@ Workspace:
  Infrastructure:
   ☐ lein-reload
   ☐ remove cljsbuild from :hooks and reconfigure lein profiles and hooks
-  ☐ migrate from noir to compojure
+  ✔ migrate from noir to compojure @done (13-01-13 18:30)
   ☐ use pretty print!
+  ☐ add marginalia docs

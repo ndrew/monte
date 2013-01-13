@@ -1,4 +1,5 @@
 (ns monte.ui  
+  "Monte user interface"
   (:require-macros [shoreleave.remotes.macros :as fm])
   (:require [jayq.core :as jq]
             [shoreleave.remotes.http-rpc :as rpc])
@@ -15,14 +16,11 @@
 (def project-view false)
 (def project-hash 0) ; project-hash
 
-; timestamp of latest update
-(def latest-update (atom 0))
+(def latest-update (atom 0)) ; timestamp of latest update
 
-; todo: move here all jquery selectors
 (def dom-projects "ul.projects")
 (def dom-miners "#miner_table tbody")
 (def dom-vars "#var_table tbody")
-
 
 (def lbl-add "add new")
 
@@ -42,11 +40,9 @@
         (html [:li 
               [:a {:href (str "/project/" (:hash p))}
                   (:name p)]
-              [:span "..."]]))
-      
-      (log (pr-str p))))
+              [:span "..."]])))) ; todo: add last modified time here
   
-  	(.append ($ dom-projects) 
+  	  (.append ($ dom-projects) 
              (html [:li {:class "new"} [:a {:href "#"} lbl-add]])))
 	
 
@@ -65,8 +61,7 @@
       (.append ($ dom-miners) (html
         [:tr {:style "display: none;"}
              [:td {:colspan "3"} 
-              [:pre (pr-str cfg)]]])) 
-    ))
+              [:pre (pr-str cfg)]]]))))
   
   (.click ($ (str dom-miners " tr td:nth-child(3) a")) 
     (fn[e]
@@ -77,7 +72,6 @@
           (.text el (if (= (.text el) "\u25C0") "\u25bc" "\u25C0"))
           false)))
 
-  
   ; todo: add miner functionality
   (.append ($ dom-miners) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
 
@@ -100,7 +94,6 @@
   
   ; todo: add var functionality
   (.append ($ dom-vars) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
-
 
 
 (defn select-project-view [link-id] 
@@ -127,7 +120,6 @@
 (defn set-project [proj]
   (select-project-view "#miner"))
 
-;;; ui-update stuff
 
 (defn workspace-updated [workspace]
   (log "workspace updated")
@@ -141,16 +133,11 @@
     (list-projects (:projects workspace))))
   
   (when project-view
-     
     (when-not (nil? (:miners workspace))
-      (reset! miner-schemas (:miners workspace))) ; store all miners
-              
+      (reset! miner-schemas (:miners workspace))) ; store all miners              
     (when-not (nil? (:current workspace))        
       (let [proj (:current workspace)]
-        
-       
         (.text ($ "#viewport article h1") (:name proj))
-        
         (list-vars (:vars proj))
         (list-miners (:miners proj)))  
     )
