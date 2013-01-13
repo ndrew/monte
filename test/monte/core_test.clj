@@ -107,15 +107,16 @@
   (when key
     (if-let [d (locking raw-data (get @raw-data key))] ; synchronized get does the trick
       @d
-      (let [lock (future
-                      ;(log (pr-str @raw-data))
-                        (log "\t\thello from future " key)
-                        (f))]
-        (locking raw-data
-          (reset! raw-data (conj @raw-data (hash-map key lock))) 
-        )
-        @lock
-        ))))
+      (when f
+        (let [lock (future
+                        ;(log (pr-str @raw-data))
+                          (log "\t\thello from future " key)
+                          (f))]
+          (locking raw-data
+            (reset! raw-data (conj @raw-data (hash-map key lock))) 
+          )
+          @lock
+          )))))
 
   
 (defn process-entity[[name cfg]] 
@@ -125,10 +126,11 @@
           _miner-key (keyword (:miner cfg))
           _entity-key (keyword (:entity cfg))
           m (get-async _miner-key (fn[] _miner-key)) ; todo: miner calling
-          e (get-async _entity-key (fn[] @(get _entity-key @raw-data))) ; todo: add wait?
+          e (if _entity-key (get-async _entity-key nil))
           ]
+        
       
-        (let [data (if m m (:data e))] ; first try data from miner, otherwise - we have entity
+        (let [data (if e (:data e) m)] ; first try data from miner, otherwise - we have entity
           (log (str name "\t\tgot data " (pr-str data)))
           ; todo: property accessor and filtering 
           (hash-map 
