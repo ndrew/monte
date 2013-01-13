@@ -1,6 +1,7 @@
 (ns monte.core-test
   (:use clojure.test
         clojure.pprint
+        [clojure.string :only [split]]
         monte.core))
 
 (defmacro with-private-fns [[ns fns] & tests]
@@ -71,6 +72,29 @@
   
   
   
+(defn- access-single-property[data property]
+  
+  (let [prop (keyword property)]
+    ;(println (str "access-single-property: " prop))
+    (cond
+      (map? data) (get data prop)
+      (vector? data) (vec(map #(access-single-property % prop) data))
+    )
+  )
+)
+
+(defn access-property[data prop]
+  (let [keys (split prop #"\.")]
+        (reduce #(access-single-property %1 %2)
+                data keys)))
+  
+  
+(deftest accessor-test 
+
+  (is (= (access-property {} "key") nil))
+  (is (= (access-property {:key :foo} "key") :foo))
+  (is (= (access-property [{:key :bar} {:key :baz}] "key") [:bar :baz]))
+  (is (= (access-property [{:nested {:key :foo}} {:nested :baz}] "nested.key") [:foo nil])))
 
     
 (def raw-data (atom {}))
