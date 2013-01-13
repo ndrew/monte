@@ -67,7 +67,7 @@
 
       (println "Press Cmd^C or Control^C to stop Monte! Or type some crap")
       (read-line) ; todo: find out why this doesn't work from console
-      (.stop server_instance)
+      (.stop @server_instance)
       (println "Bye")
     )
   )

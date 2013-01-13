@@ -3,7 +3,6 @@
   (:use 
         [hiccup.page :only [include-css include-js html5]]
         [hiccup.element :only [javascript-tag]]))
-; [noir.core :only [defpartial]]
 
 (defn layout [& content]
   (html5 
