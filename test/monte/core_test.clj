@@ -100,8 +100,8 @@
     (get-async (keyword name) #(let [key (keyword name)
           _miner-key (keyword (:miner cfg))
           _entity-key (keyword (:entity cfg))
-          m (get-async _miner-key (fn[] (Thread/sleep 1000) _miner-key))
-          e (get-async _entity-key (fn[] :ENTITY))
+          m (get-async _miner-key (fn[] _miner-key)) ; todo: miner calling
+          e (get-async _entity-key (fn[] @(get _entity-key @raw-data))) ; todo: add wait?
           ]
       
         (let [data (if m m (:data e))] ; first try data from miner, otherwise - we have entity
