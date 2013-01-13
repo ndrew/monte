@@ -81,22 +81,29 @@
 (defn miner-results[miner]
     (when miner
       (if-let [d (get @raw-data miner)]
-        d
-        @(future
-          (log "\t\thello from future " miner)
-          (Thread/sleep 1000)
-          "TEST"))))
-  
-  
+        @d
+        (let [f (future
+                  (if (get @raw-data miner) "ALREADY CALCULATED")
+                  
+                  (log "\t\thello from future " miner)
+                  (Thread/sleep (*(count (str miner)) 1000))
+                  miner)]
+           
+          (reset! raw-data (conj @raw-data (hash-map miner f))) 
+          @f
+          ))))
+    
   
 (defn process-entity[[name cfg]] 
   (log "\tprocessing " name )
-  (hash-map (keyword name)
-            (miner-results(keyword (:miner cfg)))))
+  (let [d (miner-results(keyword (:miner cfg)))]
+    (log (str name " got data " (pr-str d)))
+    (hash-map (keyword name) d)))
       
           
 
-(log "start processing")
+(log "start processing " (reduce #(str %1 "\n" %2) (:entities scheme)))
+
 
 (def result (doall(pmap process-entity 
   (map parse-entity (:entities scheme)))))

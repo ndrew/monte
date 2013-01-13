@@ -58,6 +58,7 @@
 (def scheme {
   :entities ["tasks=(jira_miner).task{:regex #'regex'}"
              "classes=(code_miner)"
+             "dummy-classes=(code_miner){:foo 'Bar'}"
              ; подумати про кластеризацію, в ідеалі — автоматом
              "test-cases=classes.class_name{:ends 'Test'}"
              "commits=(git-miner)"
