@@ -26,6 +26,7 @@ Projects:
  ☐ listing of existing projects @P1
    ☐ project structure
      ✔ :name @done (13-01-05 17:35)
+     ✔ :hash @done (13-01-12 18:08)
      ☐ last modified
    ☐ serialization/deserialization
      ☐ in user dir?
@@ -38,9 +39,7 @@ Miners:
  ✔ implement miners as protocols @done (13-01-10 02:44)
    ✔ try loading new miners from external file @done (13-01-12 06:36)
  ✔ sample data miner, @in-progress @done (13-01-12 06:36)
-
- ✔ macros_test.clj -> miners.core, @P1 @done (13-01-12 18:03)
-
+ ✔ macros_test.clj -> miners.core, @done (13-01-12 18:03)
  ☐ ?caching for miners?
 
  ☐ git miner, @P2
