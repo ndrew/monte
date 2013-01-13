@@ -7,17 +7,15 @@
   
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
-                 [fs                  "1.2.0"]
-                 [noir                "1.2.1" 
-                    :exclusions [org.clojure/clojure]]
+                 [fs                    "1.2.0"]
+                 [compojure             "1.1.3"]
+                 [lib-noir              "0.3.3"]
                  [org.clojure/tools.cli "0.2.2"]
-                 [fetch               "0.1.0-alpha2"]
-                 [crate               "0.2.3"]
-                 [jayq                "0.1.0-alpha4"]
-                 ; maybe use these instead of fetch
-                 ;[shoreleave          "0.2.2"]
-                 ;[shoreleave/shoreleave-remote-noir "0.2.2"]
-                 ]
+                 [crate                 "0.2.3"]
+                 [jayq                  "0.1.0-alpha4"]
+                 
+                 [shoreleave            "0.2.2"]
+                 [com.cemerick/shoreleave-remote-ring "0.0.2"]]
   :plugins [[lein-cljsbuild   "0.2.9"]
             [lein-ring        "0.7.1"]]
   :hooks [leiningen.cljsbuild]
@@ -39,7 +37,7 @@
       ;; <!> add some hacks later
     )}
 
-  :ring         {:handler monte.backend.server/handler
+  :ring         {:handler monte.backend.server/monte-routing
                  :auto-reload? true
                  :auto-refresh true}
 

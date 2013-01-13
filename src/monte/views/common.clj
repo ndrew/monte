@@ -1,10 +1,11 @@
 (ns monte.views.common 
   "common template for other monte views"
-  (:use [noir.core :only [defpartial]]
-        [hiccup.page-helpers :only [include-css include-js html5 javascript-tag]]))
+  (:use 
+        [hiccup.page :only [include-css include-js html5]]
+        [hiccup.element :only [javascript-tag]]))
+; [noir.core :only [defpartial]]
 
-
-(defn template [& content]
+(defn layout [& content]
   (html5 
     [:head 
       [:meta {:http-equiv "Content-Type" :content "text/html;charset=utf-8"}]
@@ -24,6 +25,3 @@
       (include-js "/js/js.js")
     ]
     [:body [:div {:id "viewport"} content ]]))
-
-(defpartial layout [& content]
-  (template content))

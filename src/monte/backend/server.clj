@@ -1,16 +1,33 @@
 (ns monte.backend.server
-	"Monte noir server"
-	(:use noir.core)
-  	(:require [noir.server :as server]
-  			   monte.backend.api))
+  "Monte server routines"
+  (:use compojure.core
+  		monte.views.index
+  		monte.views.project
+  		monte.backend.api
+  	   [ring.adapter.jetty :only [run-jetty]])
+  
+  (:require [compojure.route :as route]
+            [compojure.handler :as handler]
+            [cemerick.shoreleave.rpc :as rpc]))
 
-(server/load-views "src/monte/views/")
-
+ 
+(defroutes monte-routes
+  (GET "/" [] (intro-view))
+  (GET "/project/:hash" [hash] (project-view hash))
+  (route/files "/" {:root "resources/public"})
+  (route/not-found "<h1>Page not found</h1>"))
+ 
+ 
+(def monte-routing (-> #'monte-routes
+                       rpc/wrap-rpc
+                       handler/site))
+ 
+  
 (defn start [port]
-	(server/start port))
-
-(defn stop [instance]
-	(server/stop instance))
-
-(def handler (server/gen-handler {	:mode :dev
-									:ns 'monte.views}))
+  (try  
+  	(print "Starting server..")	
+  	(run-jetty #'monte-routing {:port port})
+  	(catch Exception e 
+      (do
+         (println "ERROR! Stacktrace:" )
+         (.printStackTrace e)))))

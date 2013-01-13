@@ -19,13 +19,17 @@
 (def settings-loc (str home "/settings.clj"))
 
 (defn init [options]
-    (cond 
-      (and (fs/exists? home) (fs/exists? settings-loc)) (
-        reset! settings (merge (merge default-settings options) (read-string (slurp settings-loc))))
-      :else (do(
-        (fs/mkdirs home)
-        (spit settings-loc (pr-str @settings))
-      ))))
+   
+  (when-not (fs/exists? home) 
+     (fs/mkdir home)
+     (spit settings-loc (pr-str default-settings))
+  )
+  
+  (reset! settings
+    (merge 
+      (if (fs/exists? settings-loc) (read-string (slurp settings-loc)) default-settings)
+      options)))
+    
 
 ; these are waiting for better times
 ;
@@ -56,14 +60,14 @@
       ;(if (seq args)
       ;  (if (every? (fn [path] (and (fs/exists? path) (fs/directory? path))) args)
       ;      (reset! runtime/workspace (core/super-repo (apply vector args)) ))) 
-      
-      (def server_instance (server/start (:port @settings)))
+     
+      (def server_instance (future (server/start (:port @settings))))
       (if (:auto-open @settings)
         (browser/browse-url (str "http://localhost:" (:port @settings))))
 
       (println "Press Cmd^C or Control^C to stop Monte! Or type some crap")
       (read-line) ; todo: find out why this doesn't work from console
-      (server/stop server_instance)
+      (.stop server_instance)
       (println "Bye")
     )
   )

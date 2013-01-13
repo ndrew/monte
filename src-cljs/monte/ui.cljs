@@ -1,11 +1,10 @@
-(ns monte.ui
-  
-  (:require [fetch.remotes :as remotes]
-	          [jayq.core :as jq])
+(ns monte.ui  
+  (:require-macros [shoreleave.remotes.macros :as fm])
+  (:require [jayq.core :as jq]
+            [shoreleave.remotes.http-rpc :as rpc])
   (:use [jayq.util :only [log wait clj->js]]
         [jayq.core :only [$ append]]
-        [crate.core :only [html]])
-  (:require-macros [fetch.macros :as fm]))
+        [crate.core :only [html]]))
 
 
 (def error (atom false)) ; todo: make use of it
@@ -163,7 +162,7 @@
 (def repeat-handle (atom 0))
 
 (defn refresh[& last-updated]
-  (fm/remote (get-workspace (first last-updated)) [workspace] 
+  (fm/rpc (get-workspace (first last-updated)) [workspace] 
 	(when-not 
       (nil? workspace)
 	  (workspace-updated workspace))))
@@ -180,7 +179,7 @@
 
 (defn ui-init []
   (when project-view 
-    (fm/remote (set-project project-hash) [proj]
+    (fm/rpc (set-project project-hash) [proj]
         (set-project proj))))
 
 ;;;;;;;;;;;;;;;;;;;
