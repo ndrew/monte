@@ -1,5 +1,6 @@
 (ns monte.core-test
   (:use clojure.test
+        clojure.pprint
         monte.core))
 
 (defmacro with-private-fns [[ns fns] & tests]
@@ -95,15 +96,24 @@
   
 (defn process-entity[[name cfg]] 
   (log "\tprocessing " name " " (pr-str cfg) )
-  
-  (let [key (keyword name)
-        _miner-key (keyword (:miner cfg))
-        _entity-key (keyword (:entity cfg))
-        m (get-async _miner-key (fn[] (Thread/sleep 1000) :MINER))
-        e (get-async _entity-key (fn[] :ENTITY))
-        ]
-    (log (str name "\t\tgot data " (pr-str m)))
-    (hash-map key m)))
+    
+    (get-async (keyword name) #(let [key (keyword name)
+          _miner-key (keyword (:miner cfg))
+          _entity-key (keyword (:entity cfg))
+          m (get-async _miner-key (fn[] (Thread/sleep 1000) _miner-key))
+          e (get-async _entity-key (fn[] :ENTITY))
+          ]
+      
+        (let [data (if m m (:data e))] ; first try data from miner, otherwise - we have entity
+          (log (str name "\t\tgot data " (pr-str data)))
+          ; todo: property accessor and filtering 
+          (hash-map 
+            :entity key
+            :data data)
+        )
+      )
+    )
+  )
       
           
 (def dummy-entities ;(:entities scheme))
@@ -113,7 +123,7 @@
      "t2=(code_miner1)"
      "t3=(code_miner)"
      "t4=(code_miner1)"
-     "t5=(code_miner)"
+     "t5=t1"
      "t6=(code_miner1)"
      "t7=(code_miner)"
      "t8=(code_miner)"
@@ -132,9 +142,9 @@
 (def result (doall(pmap process-entity 
   (map parse-entity dummy-entities))))
 
-(log "result is" (pr-str result))
+(log "result is" (binding [*print-right-margin* 7] (pprint result)))
 
-(log (pr-str @raw-data))
+;(log (pr-str @raw-data))
 
 ;(log (pr-str @data1))
 ;(println (get @data1 :code_miner))
