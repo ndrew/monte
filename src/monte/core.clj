@@ -1,6 +1,5 @@
 (ns monte.core
-	"Monte core stuff"
-	(:use [clojure.test]))
+	"Monte core stuff")
 
 (def data {
   :tasks [
@@ -57,23 +56,20 @@
   })
 
 (def scheme {
-  :entities [
-             ["tasks=(jira_miner).task{:regex #'regex'}"]
-             ["classes=(code_miner)"]
+  :entities ["tasks=(jira_miner).task{:regex #'regex'}"
+             "classes=(code_miner)"
              ; подумати про кластеризацію, в ідеалі — автоматом
-             ["test-cases=classes.class_name{:ends 'Test'}"] 
-             ["commits=(git-miner)"]
-             ["users=(unify tasks.asignee classes.javadoc.author commits.author)"]]
+             "test-cases=classes.class_name{:ends 'Test'}"
+             "commits=(git-miner)"
+             "users=(unify tasks.asignee classes.javadoc.author commits.author)"]
 
-  :connections [["classes.javadoc{:contain tasks.id}"]
-                ["classes.dependencies{:contain classes.class_name}"]
-                ["commit.files{:contain classes.file}"]
-                ["commit.msg{:regex '{regex here}' tasks.id}"]
-                
-                ["classes.javadoc.raw{:contain users}"]
-                ["users{:contain commits.author}"]
-                ["users{:contain tasks.assignee}"]
-                ]
+  :connections ["classes.javadoc{:contain tasks.id}"
+                "classes.dependencies{:contain classes.class_name}"
+                "commit.files{:contain classes.file}"
+                "commit.msg{:regex '{regex here}' tasks.id}"
+                "classes.javadoc.raw{:contain users}"
+                "users{:contain commits.author}"
+                "users{:contain tasks.assignee}"]
 })
 
 
@@ -89,10 +85,7 @@
     (when-not (nil? fltr)
       {:filter fltr} )))
 
- 
-;(extract-filters "classes=(code_miner)")
-;(extract-filters "test-cases=classes.class_name{:ends 'Test'}")
-  
+   
 (defn- extract-miners[s] 
   (let [[_ miner] (re-find miners-regex s)]
     (when-not (nil? miner)
@@ -114,6 +107,7 @@
   	(when-not (empty? e)
       {:entity e})))
 
+
 (defn parse-expression[s] 
   (reduce merge ((juxt 
                   	extract-filters
@@ -124,7 +118,9 @@
 
 
 (defn parse-entity[s]
-  (let [[z a b](re-find #"(.+)=(.+)" s)]
-    (when-not (empty? z)
-      	(hash-map (keyword a) (parse-expression b))
-      )))
+  (when-not (nil? s)
+    (let [[z a b](re-find #"(.+)=(.+)" s)]
+      (when-not (empty? z)
+      	(vector (keyword a) (parse-expression b))))))
+
+
