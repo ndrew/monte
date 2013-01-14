@@ -16,14 +16,15 @@
                  
                  [shoreleave            "0.2.2"]
                  [com.cemerick/shoreleave-remote-ring "0.0.2"]]
-  :plugins [[lein-cljsbuild   "0.2.9"]
+  :plugins [[lein-cljsbuild   "0.2.10"]
             [lein-ring        "0.7.1"]]
   :hooks [leiningen.cljsbuild]
   
   :cljsbuild {
     :builds [{
+        :incremental false
         :jar true
-		:source-path "src-cljs"
+		    :source-path "src-cljs"
         :compiler {
             :output-to "resources/public/js/js.js"
             :optimizations :whitespace
