@@ -106,11 +106,12 @@
 (defn get-async[key & f]
   (when key
     
-    (when (nil? f)
+    ; should be synchronized without this
+    (comment (when (nil? f)
       (while (not (get @raw-data key))
         (log "waiting for " key)             
         (Thread/sleep 100) 
-        (get @raw-data key)))
+        (get @raw-data key))))
     
     
     
@@ -131,13 +132,11 @@
 (defn process-entity[[name cfg]] 
   (log "\tprocessing " name " " (pr-str cfg) )
     
-    ;(Thread/sleep 500)
-    
     (get-async (keyword name) #(let [key (keyword name)
           _miner-key (keyword (:miner cfg))
           _entity-key (keyword (:entity cfg))
           props (:props cfg)
-          m (get-async _miner-key (fn[] (Thread/sleep 1000) {:testo _miner-key})) ; todo: miner calling
+          m (get-async _miner-key (fn[]  {:testo _miner-key})) ; todo: miner calling
           e (get-async _entity-key)
           ]
 
