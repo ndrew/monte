@@ -105,6 +105,13 @@
 
 (defn get-async[key & f]
   (when key
+    
+    (when (nil? f)
+      (while (not (get @raw-data key))
+        (log "waiting for " key)             
+        (Thread/sleep 100) 
+        (get @raw-data key)))
+    
     (if-let [d (locking raw-data (get @raw-data key))] ; synchronized get does the trick
       @d
       (when f
@@ -127,18 +134,11 @@
           _entity-key (keyword (:entity cfg))
           props (:props cfg)
           m (get-async _miner-key (fn[] (Thread/sleep 1000) {:testo _miner-key})) ; todo: miner calling
-          
+          e (get-async _entity-key)
           ]
 
-          ; dirty
-          (when _entity-key
-            (while (not (get-async _entity-key))
-                (log "waiting for " key)             
-                (Thread/sleep 100) 
-                get-async _entity-key)       
-              )
                
-        (let [data (if _miner-key m (get-async _entity-key))] ; first try data from miner, otherwise - we have entity
+        (let [data (if _miner-key m (:data e))] ; first try data from miner, otherwise - we have entity
           
           ; todo: property accessor and filtering 
           
