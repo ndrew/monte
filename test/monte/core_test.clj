@@ -116,8 +116,7 @@
       @d
       (when f
         (let [lock (future
-                        ;(log (pr-str @raw-data))
-                          ;(log "\t\thello from future " key)
+                          (log "\t\thello from future " key)
                           ((first f)))]
           (locking raw-data
             (reset! raw-data (conj @raw-data (hash-map key lock))) 
@@ -127,7 +126,7 @@
 
   
 (defn process-entity[[name cfg]] 
-  ;(log "\tprocessing " name " " (pr-str cfg) )
+  (log "\tprocessing " name " " (pr-str cfg) )
     
     (get-async (keyword name) #(let [key (keyword name)
           _miner-key (keyword (:miner cfg))
