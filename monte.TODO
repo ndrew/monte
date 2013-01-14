@@ -14,8 +14,16 @@ UI:
       ✔ list vars @done (13-01-10 12:59)
       ☐ edit vars
       ☐ add vars
+ ☐ refine data screen
+   ☐ entities
+   ☐ relations
+
+ ☐ visualization screen
+   ☐ add raphael canvas
+   
  ☐ help hints, @P5
 
+ ☐ 
 Bugs:
   ☐ 
 
@@ -97,7 +105,12 @@ Visualizations:
      ☐ tag cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
 
 Workspace:
-  ☐ diff
+  ☐ storing entities, @P1
+  ☐ stroring relations, @P1
+ 
+  operation on workspace:
+    ☐ diff
+    ☐ filtering
   ☐ save history of operations, @P3
   ☐ use datalog, @P5 — nope, maybe later
     ☐ check ttt.search.core for querying upon core.logic, @P0
