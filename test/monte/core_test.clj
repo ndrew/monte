@@ -103,15 +103,15 @@
   `(println (str ~@body " at " (System/currentTimeMillis) )))
 
 
-(defn get-async[key f]
+(defn get-async[key & f]
   (when key
     (if-let [d (locking raw-data (get @raw-data key))] ; synchronized get does the trick
       @d
       (when f
         (let [lock (future
                         ;(log (pr-str @raw-data))
-                          (log "\t\thello from future " key)
-                          (f))]
+                          ;(log "\t\thello from future " key)
+                          ((first f)))]
           (locking raw-data
             (reset! raw-data (conj @raw-data (hash-map key lock))) 
           )
@@ -120,19 +120,31 @@
 
   
 (defn process-entity[[name cfg]] 
-  (log "\tprocessing " name " " (pr-str cfg) )
+  ;(log "\tprocessing " name " " (pr-str cfg) )
     
     (get-async (keyword name) #(let [key (keyword name)
           _miner-key (keyword (:miner cfg))
           _entity-key (keyword (:entity cfg))
-          m (get-async _miner-key (fn[] _miner-key)) ; todo: miner calling
-          e (if _entity-key (get-async _entity-key nil))
+          props (:props cfg)
+          m (get-async _miner-key (fn[] (Thread/sleep 1000) {:testo _miner-key})) ; todo: miner calling
+          
           ]
-        
-      
-        (let [data (if e (:data e) m)] ; first try data from miner, otherwise - we have entity
-          (log (str name "\t\tgot data " (pr-str data)))
+
+          ; dirty
+          (when _entity-key
+            (while (not (get-async _entity-key))
+                (log "waiting for " key)             
+                (Thread/sleep 100) 
+                get-async _entity-key)       
+              )
+               
+        (let [data (if _miner-key m (get-async _entity-key))] ; first try data from miner, otherwise - we have entity
+          
           ; todo: property accessor and filtering 
+          
+          (when props 
+            (log "ACCESSING PROPERTY " props " data " data)
+            (log (access-property data props)))
           (hash-map 
             :entity key
             :data data)
@@ -149,7 +161,7 @@
      "t2=(code_miner1)"
      "t3=(code_miner)"
      "t4=(code_miner1)"
-     "t5=t1"
+     "t5=t14.testo"
      "t6=(code_miner1)"
      "t7=(code_miner)"
      "t8=(code_miner)"
@@ -163,18 +175,18 @@
      ])
           
 
-(log "start processing " (reduce #(str %1 "\n" %2) dummy-entities))
+;(log "start processing " (reduce #(str %1 "\n" %2) dummy-entities))
 
 (def result (doall(pmap process-entity 
   (map parse-entity dummy-entities))))
 
-(log "result is" (binding [*print-right-margin* 7] (pprint result)))
+;(log "result is" (binding [*print-right-margin* 7] (pprint result)))
 
 ;(log (pr-str @raw-data))
 
 ;(log (pr-str @data1))
 ;(println (get @data1 :code_miner))
 
-(log "done")
+;(log "done")
 
 
