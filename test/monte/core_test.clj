@@ -112,21 +112,26 @@
         (Thread/sleep 100) 
         (get @raw-data key)))
     
-    (if-let [d (locking raw-data (get @raw-data key))] ; synchronized get does the trick
-      @d
+    
+    
+    (locking raw-data
+    (when-not (get @raw-data key)
       (when f
-        (let [lock (future
+          (let [lock (future
                           (log "\t\thello from future " key)
                           ((first f)))]
-          (locking raw-data
-            (reset! raw-data (conj @raw-data (hash-map key lock))) 
-          )
-          @lock
-          )))))
+            (log "SETTING FUTURE : " key)
+            (swap! raw-data conj (hash-map key lock))))))
+    
+    @(get @raw-data key)
+      
+    ))
 
   
 (defn process-entity[[name cfg]] 
   (log "\tprocessing " name " " (pr-str cfg) )
+    
+    ;(Thread/sleep 500)
     
     (get-async (keyword name) #(let [key (keyword name)
           _miner-key (keyword (:miner cfg))
