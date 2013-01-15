@@ -21,6 +21,10 @@
       (include-js "/extern/jquery-ui-1.9.1.js")
       (include-js "/extern/raphael-min.js")
     
+      (include-js "/extern/dracula_graph.js")
+      (include-js "/extern/dracula_graffle.js")
+      (include-js "/extern/dracula_algorithms.js")    
+    
       (include-js "/js/js.js")
     ]
     [:body [:div {:id "viewport"} content ]]))

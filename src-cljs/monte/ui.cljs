@@ -95,6 +95,64 @@
   ; todo: add var functionality
   (.append ($ dom-vars) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
 
+;; vis stuff
+(def graph (atom nil))
+
+(def vis-data-entities ["fffuuu!" "barrrr" "bazzzzz" "ffffuuuuzzzz"])
+(def vis-data-connections [])
+
+
+(defn js-map
+  "makes a javascript map from a clojure one"
+  [cljmap]
+  (let [out (js-obj)]
+    (doall (map #(aset out (name (first %)) (second %)) cljmap))
+    out))
+
+
+
+(defn render-dummy[r n] 
+  (let [[x y] (.-point n)
+        id (. n -id)]
+          (.push (.set r) (.text r x y id))))
+
+
+
+(defn get-graph[] 
+  (if-not @graph 
+    (do
+      (reset! graph (js/Graph.))
+            
+      (doseq [a vis-data-entities]
+        (.addNode @graph a
+                        (js-map{:render render-dummy}))
+        )
+      @graph
+    )
+    @graph
+    ))
+
+
+(defn redraw-vis[]
+  (let [layouter (js/Graph.Layout.Spring. (get-graph))
+        renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) 400 400)
+        ]
+      
+    
+      (.layout layouter)
+      (.draw renderer)
+    )
+  
+   ;     layouter = new Graph.Layout.Spring(g);
+   ;     renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
+
+   ;     layouter.layout();
+   ;     renderer.draw();
+
+  )
+
+
+
 
 (defn select-project-view [link-id] 
   (let [view-id (str link-id "_view")
@@ -113,7 +171,15 @@
     (.hide views)
 
     (.removeAttr ($ link-id) "href")
-    (.toggle ($ view-id))))
+    (.toggle ($ view-id))
+    
+    (when (= "#visualization_view" (str view-id))
+       
+          (.empty ($ "#canvas"));
+          (redraw-vis)
+         
+      )
+    ))
 
 
 

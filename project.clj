@@ -28,7 +28,11 @@
         :compiler {
             :output-to "resources/public/js/js.js"
             :optimizations :whitespace
-            :externs ["resources/public/extern/raphael-min.js"]
+            :externs ["resources/public/extern/raphael-min.js"
+                      "resources/public/extern/dracula_graph.js"
+                      "resources/public/extern/dracula_graffle.js"
+                      "resources/public/extern/dracula_algorithms.js"
+                      ]
             :pretty-print true}
     }]}
 
