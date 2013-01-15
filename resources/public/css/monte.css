@@ -78,8 +78,7 @@ ul li:hover {
 
 .view {
   display: none;
-  padding-bottom: 0.5em;
-}
+  padding-bottom: 0.5em;}
 
 .list {
   display: inline-block; 
@@ -104,10 +103,20 @@ ul li:hover {
 
 #canvas {
   margin-top: 0.5em;
-  margin-left: 0.5em;
+  margin-left: 215px;
   margin-right: 0.5em;
   padding: 1em;
   border: 1px solid #ccc;}
+
+#legend {
+  background-color: white;
+  margin-left: 0.5em;
+  padding-left: 0em;
+  padding-top: 0;
+  position: absolute;
+  width: 200px;
+}
+
 
 article p {
   margin-left: 3em;
@@ -142,6 +151,14 @@ label {
   vertical-align: top;
 }
 
+pre {
+  font-family: "Andale Mono", "Courier New", Courier, monospace;
+  padding-top: 0;
+  padding-bottom: 1.5em;
+  font-size: 0.8em;
+  overflow: auto;
+  width: 100%;
+}
 
 #debug:before {
   content: "Debug: ";}

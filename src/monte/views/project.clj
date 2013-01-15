@@ -49,7 +49,9 @@
             [:p "Define the views and configure data presentation. " 
             [:span {:class "hint"} "(?)"]]
             [:label "Filter: "][:input {:type "text" :class "filter_box"} ][:button {:id "redraw"} "Redraw"]
-            [:div {:id "canvas"}]
+            [:div
+              [:div {:id "legend"}]
+              [:div {:id "canvas"}]]
             ]]
 
       

@@ -122,11 +122,10 @@
   (if-not @graph 
     (do
       (reset! graph (js/Graph.))
-            
+      ; todo: 
       (doseq [a vis-data-entities]
         (.addNode @graph a
-                        (js-map{:render render-dummy}))
-        )
+                        (js-map{:render render-dummy})))
       @graph
     )
     @graph
@@ -135,7 +134,7 @@
 
 (defn redraw-vis[]
   (.empty ($ "#canvas"));
-  (let [wnd-width (.-innerWidth js/window)
+  (let [wnd-width (- (.-innerWidth js/window) 300)
         wnd-height (.-innerHeight js/window)
         layouter (js/Graph.Layout.Spring. (get-graph))
         renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) wnd-width wnd-height)]
@@ -164,8 +163,8 @@
     (.toggle ($ view-id))
     
     (when (= "#visualization_view" (str view-id))
-       
-          (redraw-vis)
+        ; todo: set miners
+        (redraw-vis)
          
       )
     ))
@@ -175,7 +174,10 @@
 (defn set-project [proj]
   (select-project-view "#miner"))
 
+(defn- status[& body] ; for testing purposes
+  (.text ($ ".status") (reduce str body)))
 
+       
 (defn workspace-updated [workspace]
   (log "workspace updated")
   (log (pr-str workspace))
@@ -195,6 +197,8 @@
         (.text ($ "#viewport article h1") (:name proj))
         (list-vars (:vars proj))
         (list-miners (:miners proj)))  
+      
+        (status "connected" )
     )
   )
 ) 
