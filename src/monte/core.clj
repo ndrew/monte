@@ -63,7 +63,9 @@
              ; подумати про кластеризацію, в ідеалі — автоматом
              "test-cases=classes.class_name{:ends 'Test'}"
              "commits=(git-miner)"
-             "users=(unify tasks.asignee classes.javadoc.author commits.author)"]
+             ; TODO: regex for unify
+             ;"users=(unify tasks.asignee classes.javadoc.author commits.author)"
+             ]
 
   :connections ["classes.javadoc{:contain tasks.id}"
                 "classes.dependencies{:contain classes.class_name}"

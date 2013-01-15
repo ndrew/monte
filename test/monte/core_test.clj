@@ -28,6 +28,8 @@
       (is (= (extract-miners "(miner)")             {:miner "miner"}))
       (is (= (extract-miners "(miner).property")    {:miner "miner"}))
       (is (= (extract-miners "(miner).property{:filter :foo}")  {:miner "miner"}))
+      
+      
       ; unification
       (is (= (extract-miners "(unify)")                nil))
       (is (= (extract-miners "(unify tasks.asignee classes.javadoc.author commits.author)")         
@@ -55,19 +57,19 @@
       (is (= (extract-entities "(miner).property")                nil))
       (is (= (extract-entities "(miner).property{:filter :foo}")  nil))
       ; parsing right parts
-      (is (= (parse-expression "entity")                    {:entity "entity"}))
-      (is (= (parse-expression "entity.property")           {:entity "entity" :props "property"}))
-      (is (= (parse-expression "entity{:filter}")           {:entity "entity" :filter ":filter"}))
-      (is (= (parse-expression "(miner)")                   {:miner "miner"}))
-      (is (= (parse-expression "(miner).property")          {:miner "miner" :props "property"}))
-      (is (= (parse-expression "(miner).property{:filter :foo}")  {:miner "miner" :props "property" :filter ":filter :foo"}))
+      (is (= (parse-expression "entity")                    [{:entity "entity"}]))
+      (is (= (parse-expression "entity.property")           [{:entity "entity"} {:props "property"}]))
+      (is (= (parse-expression "entity{:filter}")           [{:entity "entity" :filter ":filter"}]))
+      (is (= (parse-expression "(miner)")                   [{:miner "miner"}]))
+      (is (= (parse-expression "(miner).property")          [{:miner "miner"} {:props "property"}]))
+      (is (= (parse-expression "(miner).property{:filter :foo}")  [{:miner "miner"} {:props "property" :filter ":filter :foo"}]))
       ; parsing both parts
-      (is (= (parse-entity "domain=entity")                         [:domain {:entity "entity"}]))
-      (is (= (parse-entity "domain=entity.property")                [:domain {:entity "entity" :props "property"}]))
-      (is (= (parse-entity "domain=entity{:filter}")                [:domain {:entity "entity" :filter ":filter"}]))
-      (is (= (parse-entity "domain=(miner)")                        [:domain {:miner "miner"}]))
-      (is (= (parse-entity "domain=(miner).property")               [:domain {:miner "miner" :props "property"}]))
-      (is (= (parse-entity "domain=(miner).property{:filter :foo}") [:domain {:miner "miner" :props "property" :filter ":filter :foo"}]))
+      (is (= (parse-entity "domain=entity")                         [:domain [{:entity "entity"}]]))
+      (is (= (parse-entity "domain=entity.property")                [:domain [{:entity "entity"} {:props "property"}]]))
+      (is (= (parse-entity "domain=entity{:filter}")                [:domain [{:entity "entity" :filter ":filter"}]]))
+      (is (= (parse-entity "domain=(miner)")                        [:domain [{:miner "miner"}]]))
+      (is (= (parse-entity "domain=(miner).property")               [:domain [{:miner "miner"} {:props "property"}]]))
+      (is (= (parse-entity "domain=(miner).property{:filter :foo}") [:domain [{:miner "miner"} {:props "property" :filter ":filter :foo"}]]))
     )))
   
   
@@ -129,37 +131,38 @@
     ))
 
   
-(defn process-entity[[name cfg]] 
-  (log "\tprocessing " name " " (pr-str cfg) )
-    
-    (get-async (keyword name) #(let [key (keyword name)
-          _miner-key (keyword (:miner cfg))
-          _entity-key (keyword (:entity cfg))
-          props (:props cfg)
-          m (get-async _miner-key (fn[]  {:testo _miner-key})) ; todo: miner calling
-          e (get-async _entity-key)
-          ]
+(defn process-entity[[name config]] 
+  (log "\tprocessing " name " " (pr-str config) )
 
-               
-        (let [data (if _miner-key m (:data e))] ; first try data from miner, otherwise - we have entity
-          
-          ; todo: property accessor and filtering 
-          
-          (when props 
-            (log "ACCESSING PROPERTY " props " data " data)
-            (log (access-property data props)))
-          (hash-map 
-            :entity key
-            :data data)
-        )
-      )
-    )
-  )
+  (let [key (keyword name)
+        data-cfg (first config)
+        props (rest config)]
+    
+    (get-async (keyword name) 
+      #(let [ mk (keyword (:miner data-cfg))
+              ek (keyword (:entity data-cfg))
+              miner-data (get-async mk 
+                           (fn[] {:testo mk})) ; todo: miner calling
+              entity-data (get-async ek)
+              fltr  (:filter data-cfg)]
+                
+                (let [data (if mk miner-data ; first try data from miner, otherwise - we have entity
+                               (:data entity-data))] 
+                  ; filtration of data
+                  
+                  (hash-map 
+                    :entity key
+                    :data (reduce (fn[x y] 
+                            (let [prop (access-property x (:props y))]
+                              (if (:filter y)
+                              prop ; filtration
+                              prop))) data props)))))))
+  
       
           
-(def dummy-entities ;(:entities scheme))
+(def dummy-entities (:entities scheme))
   
-  ;(comment
+  (comment
      ["t1=(code_miner)"
      "t2=(code_miner1)"
      "t3=(code_miner)"
@@ -183,7 +186,7 @@
 (def result (doall(pmap process-entity 
   (map parse-entity dummy-entities))))
 
-;(log "result is" (binding [*print-right-margin* 7] (pprint result)))
+(log "result is" (binding [*print-right-margin* 7] (pprint result)))
 
 ;(log (pr-str @raw-data))
 
