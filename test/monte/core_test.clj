@@ -109,11 +109,11 @@
   (when key
     
     ; should be synchronized without this
-    (comment (when (nil? f)
+    (when (nil? f)
       (while (not (get @raw-data key))
         (log "waiting for " key)             
         (Thread/sleep 100) 
-        (get @raw-data key))))
+        (get @raw-data key)))
     
     
     
@@ -126,6 +126,7 @@
             (log "SETTING FUTURE : " key)
             (swap! raw-data conj (hash-map key lock))))))
     
+    (log "getting " key " async")
     @(get @raw-data key)
       
     ))
@@ -142,7 +143,9 @@
       #(let [ mk (keyword (:miner data-cfg))
               ek (keyword (:entity data-cfg))
               miner-data (get-async mk 
-                           (fn[] {:testo mk})) ; todo: miner calling
+                           (fn[] 
+                             (Thread/sleep (rand-int 10000) )
+                             {:testo mk})) ; todo: miner calling
               entity-data (get-async ek)
               fltr  (:filter data-cfg)]
                 
@@ -160,10 +163,10 @@
   
       
           
-(def dummy-entities (:entities scheme))
+(def dummy-entities ;(:entities scheme))
   
-  (comment
-     ["t1=(code_miner)"
+     [
+     "t1=t28.testo"
      "t2=(code_miner1)"
      "t3=(code_miner)"
      "t4=(code_miner1)"
@@ -178,6 +181,16 @@
      "t13=(code_miner3)"
      "t14=(code_miner4)"
      "t15=(code_miner)"
+     "t21=(code_miner7)"
+     "t22=(code_miner1)"
+     "t23=(code_miner)"
+     "t24=(code_miner1)"
+     "t25=t15.testo"
+     "t26=(code_miner1)"
+     "t27=(code_miner)"
+     "t28=(code_miner)"
+     "t29=(code_miner)"
+     
      ])
           
 
