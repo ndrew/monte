@@ -73,24 +73,6 @@
     )))
   
   
-  
-(defn- access-single-property[data property]
-  
-  (let [prop (keyword property)]
-    ;(println (str "access-single-property: " prop))
-    (cond
-      (map? data) (get data prop)
-      (vector? data) (vec(map #(access-single-property % prop) data))
-    )
-  )
-)
-
-(defn access-property[data prop]
-  (let [keys (split prop #"\.")]
-        (reduce #(access-single-property %1 %2)
-                data keys)))
-  
-  
 (deftest accessor-test 
 
   (is (= (access-property {} "key") nil))
@@ -98,71 +80,7 @@
   (is (= (access-property [{:key :bar} {:key :baz}] "key") [:bar :baz]))
   (is (= (access-property [{:nested {:key :foo}} {:nested :baz}] "nested.key") [:foo nil])))
 
-    
-(def raw-data (atom {}))
-  
-(defmacro log[& body]
-  `(println (str ~@body " at " (System/currentTimeMillis) )))
 
-
-(defn get-async[key & f]
-  (when key
-    
-    ; should be synchronized without this
-    (when (nil? f)
-      (while (not (get @raw-data key))
-        (log "waiting for " key)             
-        (Thread/sleep 100) 
-        (get @raw-data key)))
-    
-    
-    
-    (locking raw-data
-    (when-not (get @raw-data key)
-      (when f
-          (let [lock (future
-                          (log "\t\thello from future " key)
-                          ((first f)))]
-            (log "SETTING FUTURE : " key)
-            (swap! raw-data conj (hash-map key lock))))))
-    
-    (log "getting " key " async")
-    @(get @raw-data key)
-      
-    ))
-
-  
-(defn process-entity[[name config]] 
-  (log "\tprocessing " name " " (pr-str config) )
-
-  (let [key (keyword name)
-        data-cfg (first config)
-        props (rest config)]
-    
-    (get-async (keyword name) 
-      #(let [ mk (keyword (:miner data-cfg))
-              ek (keyword (:entity data-cfg))
-              miner-data (get-async mk 
-                           (fn[] 
-                             (Thread/sleep (rand-int 10000) )
-                             {:testo mk})) ; todo: miner calling
-              entity-data (get-async ek)
-              fltr  (:filter data-cfg)]
-                
-                (let [data (if mk miner-data ; first try data from miner, otherwise - we have entity
-                               (:data entity-data))] 
-                  ; filtration of data
-                  
-                  (hash-map 
-                    :entity key
-                    :data (reduce (fn[x y] 
-                            (let [prop (access-property x (:props y))]
-                              (if (:filter y)
-                              prop ; filtration
-                              prop))) data props)))))))
-  
-      
-          
 (def dummy-entities ;(:entities scheme))
   
      [
@@ -194,18 +112,17 @@
      ])
           
 
-;(log "start processing " (reduce #(str %1 "\n" %2) dummy-entities))
+(log "start processing " (reduce #(str %1 "\n" %2) dummy-entities))
 
+; todo: validation?
+
+;(comment ; uncomment me!
 (def result (doall(pmap process-entity 
   (map parse-entity dummy-entities))))
 
 (log "result is" (binding [*print-right-margin* 7] (pprint result)))
+;)
 
-;(log (pr-str @raw-data))
-
-;(log (pr-str @data1))
-;(println (get @data1 :code_miner))
-
-;(log "done")
+(log "done")
 
 

@@ -100,6 +100,13 @@
       )))))
 
 
+(defn- extract-unification[s]
+  (let [[_ miner] (re-find miners-regex s)]
+    (when-not (nil? miner)
+      (if (.startsWith miner "unify")
+        (let [unifier (clojure.string/replace miner #"unify\s|unify" "")]
+          (when-not (empty? unifier) {:unify unifier}))))))    
+
 (defn- extract-props[s]
   (let [[a b c] (re-find props-regex s)]
 		(when-not (nil? a)
@@ -113,14 +120,18 @@
 
 
 (defn parse-expression[s]
-  (let [keys (split s  #"\.")
-        data-f #(reduce merge ((juxt extract-miners extract-entities extract-filters) %))
-        prop-f #(reduce merge ((juxt extract-props extract-filters) %))]
-    (reduce 
-        #(conj %1 (prop-f (str "." %2)))
-         (vector(data-f (first keys))) (rest keys))))
-
-
+  ; add UNIFICATION
+  ; 
+  ;
+  (if-let [unifier (:unify (extract-unification s))]
+    {:tobe :done}
+    (let [keys (split s  #"\.")
+          data-f #(reduce merge ((juxt extract-miners extract-entities extract-filters) %))
+          prop-f #(reduce merge ((juxt extract-props extract-filters) %))]
+      (reduce 
+          #(conj %1 (prop-f (str "." %2)))
+           (vector(data-f (first keys))) (rest keys)))))
+  
 (defn parse-entity[s]
   (when-not (nil? s)
     (let [[z a b](re-find #"(.+)=(.+)" s)]
@@ -128,3 +139,92 @@
       	(vector (keyword a) (parse-expression b))))))
 
 
+;;;;;;;;;;;;;
+; accessors
+  
+(defn- access-single-property[data property]
+  (let [prop (keyword property)]
+    ;(println (str "access-single-property: " prop))
+    (cond
+      (map? data) (get data prop)
+      (vector? data) (vec(map #(access-single-property % prop) data))
+    )
+  )
+)
+
+
+(defn access-property[data prop]
+  "accesses 'property' of data, nil otherwise"
+  (let [keys (split prop #"\.")]
+        (reduce #(access-single-property %1 %2)
+                data keys)))
+
+
+;;;;;;;;;;;;;
+; miner and entities storage
+
+(def raw-data (atom {}))
+
+  
+(defmacro log[& body] ; for testing purposes
+  `(println (str ~@body " at " (System/currentTimeMillis) )))
+
+
+(defn get-async[key & f]
+  
+  (when key
+    
+    ; should be synchronized without this
+    (when (nil? f)
+      (while (not (get @raw-data key))
+        (log "waiting for " key)             
+        (Thread/sleep 100) 
+        (get @raw-data key)))
+    
+    
+    
+    (locking raw-data
+    (when-not (get @raw-data key)
+      (when f
+          (let [lock (future
+                          (log "\t\thello from future " key)
+                          ((first f)))]
+            (log "SETTING FUTURE : " key)
+            (swap! raw-data conj (hash-map key lock))))))
+    
+    (log "getting " key " async")
+    @(get @raw-data key)
+      
+    ))
+
+  
+(defn process-entity[[name config]] 
+  (log "\tprocessing " name " " (pr-str config) )
+
+  (let [key (keyword name)
+        data-cfg (first config)
+        props (rest config)]
+    
+    (get-async (keyword name) 
+      #(let [ mk (keyword (:miner data-cfg))
+              ek (keyword (:entity data-cfg))
+              uk (keyword (:unify data-cfg))
+              miner-data (get-async mk 
+                           (fn[] 
+                             (Thread/sleep (rand-int 10000) )
+                             {:testo mk})) ; todo: miner calling
+              entity-data (get-async ek)
+              fltr  (:filter data-cfg)]
+                
+                ; todo: unification handling
+                (let [data (if mk miner-data ; first try data from miner, otherwise - we have entity
+                               (:data entity-data))] 
+                  ; filtration of data
+                  
+                  (hash-map 
+                    :entity key
+                    :data (reduce (fn[x y] 
+                            (let [prop (access-property x (:props y))]
+                              (if (:filter y)
+                              prop ; filtration
+                              prop))) data props)))))))
