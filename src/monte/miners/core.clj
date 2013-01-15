@@ -40,6 +40,11 @@
      ) (:impls ~protocol))))
 
 
+(defn list-all-miners[]
+  "returns list[miner-class miner-constructor-func] of all loaded miners"
+  (list-types-implementing Miner))
+
+
 (defn load-extern-miners[path]
   "loads miners from file path"
   (binding [*ns* (find-ns 'monte.miners.core)] (load-file path))) 
@@ -47,13 +52,14 @@
 ;;;;;;;;;;;;
 ; miner impls
 
-(defminer DummyMiner      
-  (f [this]     
-     (let [cfg (.config this)]
-       (:data cfg)))
-  
-  (get-schema[this] 
-    {:data :everything}))
+(comment
+  (defminer DummyMiner      
+    (f [this]     
+       (let [cfg (.config this)]
+         (:data cfg)))
+    
+    (get-schema[this] 
+      {:data :everything})))
 
 
 (defminer JIRAMiner
