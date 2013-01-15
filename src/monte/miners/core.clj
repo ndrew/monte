@@ -1,5 +1,6 @@
 (ns monte.miners.core
   (:use monte.miners.impl)
+  (:require [monte.dummies :as dummies])
   (:gen-class))
 
 
@@ -30,7 +31,7 @@
      (map #(let [[k# v#] %
          [_# miner-ns# miner-fn#] (re-find #"(.*)\.(.*)$" (.getName k#))]
       (cond (not (nil? (find-ns (symbol miner-ns#))))
-        [k# (ns-resolve (find-ns (symbol miner-ns#)) (symbol miner-fn#))]
+        [k# (ns-resolve (find-ns (symbol miner-ns#)) (symbol (str "->" miner-fn#)))]
         :else 
           (do 
             (println (str "Can't load " miner-ns# "/->" miner-fn#))
@@ -54,5 +55,11 @@
   (get-schema[this] 
     {:data :everything}))
 
-;(def)
 
+(defminer JIRAMiner
+  (f [this]     
+     (let [cfg (.config this)] ; use cfg later
+       monte.dummies/tasks))
+  
+  (get-schema[this] 
+    {})) ; tbd
