@@ -75,15 +75,23 @@ ul li:hover {
 
 
 .view {
-  display: none;}
+  display: none;
+  padding-bottom: 0.5em;
+}
 
 .list {
   display: inline-block; 
   vertical-align: top;
-  margin-right: 0.5em;}
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+}
 
 .list table {
   background-color: #fff; padding: 1em;}
+
+.list h4 {
+  margin: 0.5em;
+}
 
 #viewport {
   padding-left: 1em;
@@ -91,6 +99,45 @@ ul li:hover {
 /*FIXME:*/
   border: 1px solid #ccc;}
 
+
+#canvas {
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  border: 1px solid #ccc;}
+
+article p {
+  margin-left: 3em;
+}
+
+label {
+  margin-left: 0.5em;
+  font-weight: 500;
+  font-size: 1.25em;
+}
+
+.filter_box {
+  width:45em; 
+  margin-left: 0.5em; 
+  height: 2.5em;
+}
+
+.status {
+  background: rgba(128, 128, 128, 0.1);
+  border:1px solid #ddd;
+  position:absolute;
+  top:0;
+  right:0;
+  height: 10em;
+  width:33%;
+  padding: 0.2em;
+  text-align: right;}
+
+.actions {
+  padding-top: 2.5em;
+  display: inline-block; 
+  vertical-align: top;
+}
 
 
 #debug:before {

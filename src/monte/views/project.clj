@@ -12,6 +12,7 @@
   (common/layout 
     [:article {:id "project"
                :style "background-color: rgba(255,255,128,0.5);"}
+      [:div {:class "status"} "STATUS HERE"]
     
       [:h1 {:style "display: block;"} "Opening..."] 
       [:h2 {:style "display: block; padding-left: 1.5em;"}
@@ -34,6 +35,8 @@
                   [:table {:id "var_table"}
                          [:tr [:td {:class="new" :colspan="3"}
                                    [:a {:href "#" :id "new_var"} "add new"]]]]]
+            [:div {:class "actions"}
+                  [:button {:id "run_miners"} "Run miners"]]
       ]
       
     
@@ -42,11 +45,12 @@
             [:p "Connect the data sets from miners. " 
             [:span {:class "hint"} "(?)"]]]
       
+      
       [:div {:id "visualization_view" :class "view"}
             [:p "Define the views and configure data presentation. " 
             [:span {:class "hint"} "(?)"]]
-            
-            [:div [:button {:id "run"} "run" ]]
+            [:label "Filter: "][:input {:type "text" :class "filter_box"} ]
+            [:div {:id "canvas"}]
             ]]
 
       
