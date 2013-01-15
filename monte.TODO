@@ -113,6 +113,7 @@ Workspace:
     ✔ parsing miners @done (13-01-15 01:29)
     ✔ 'property' accessor @done (13-01-15 01:29)
     ☐ filtration
+    ☐ unification
   ☐ defining relations
     ✔ same DSL as for entities @done (13-01-15 01:30)
   operation on workspace:
