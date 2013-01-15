@@ -1,5 +1,6 @@
 (ns monte.core
-	"Monte core stuff")
+	"Monte core stuff"
+  (:use [clojure.string :only [split]]))
 
 (def data {
   :tasks [
@@ -109,13 +110,13 @@
       {:entity e})))
 
 
-(defn parse-expression[s] 
-  (reduce merge ((juxt 
-                  	extract-filters
-                  	extract-miners	
-                  	extract-props
-                  	extract-entities
-                  ) s)))
+(defn parse-expression[s]
+  (let [keys (split s  #"\.")
+        data-f #(reduce merge ((juxt extract-miners extract-entities extract-filters) %))
+        prop-f #(reduce merge ((juxt extract-props extract-filters) %))]
+    (reduce 
+        #(conj %1 (prop-f (str "." %2)))
+         (vector(data-f (first keys))) (rest keys))))
 
 
 (defn parse-entity[s]
