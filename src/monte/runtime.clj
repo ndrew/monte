@@ -1,8 +1,7 @@
 (ns monte.runtime
   "Monte runtime engine — holds session and a list of workspace changes"
   (:require [monte.miners.core :as miners])
-  (:use [clojure.data :only [diff]]
-        ))
+  (:use [clojure.data :only [diff]]))
 
 
 ; wrapper around merge
@@ -10,8 +9,10 @@
   (let [before (select-keys a (keys b))
         after  (select-keys b (keys a)) 
         ]
-    (when-not (empty? before)
-      (println (str before "(" a ") will be replaced with " after "( " b ")"))))
+    ;(when-not (empty? before)
+    ;  (println (str before "(" a ") will be replaced with " after "( " b ")")))
+    
+    )
   (merge a b))
 
 
