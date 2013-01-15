@@ -134,24 +134,14 @@
 
 
 (defn redraw-vis[]
-  (let [layouter (js/Graph.Layout.Spring. (get-graph))
-        renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) 400 400)
-        ]
-      
-    
+  (.empty ($ "#canvas"));
+  (let [wnd-width (.-innerWidth js/window)
+        wnd-height (.-innerHeight js/window)
+        layouter (js/Graph.Layout.Spring. (get-graph))
+        renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) wnd-width wnd-height)]
       (.layout layouter)
       (.draw renderer)
-    )
-  
-   ;     layouter = new Graph.Layout.Spring(g);
-   ;     renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
-
-   ;     layouter.layout();
-   ;     renderer.draw();
-
-  )
-
-
+    ))
 
 
 (defn select-project-view [link-id] 
@@ -175,7 +165,6 @@
     
     (when (= "#visualization_view" (str view-id))
        
-          (.empty ($ "#canvas"));
           (redraw-vis)
          
       )

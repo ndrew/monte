@@ -10,10 +10,12 @@ body {
   margin: 0; padding: 0;
   overflow-y: scroll;
 /*FIXME: */
-  background-color: rgba(128, 128, 128,0.05);}
+  background-color: #fbfafa;
+}
 
 
 article {
+  background-color: rgba(255,255,128,0.6);
   margin: 0; padding: 0;}
 
 
@@ -104,6 +106,7 @@ ul li:hover {
   margin-top: 0.5em;
   margin-left: 0.5em;
   margin-right: 0.5em;
+  padding: 1em;
   border: 1px solid #ccc;}
 
 article p {
@@ -119,17 +122,17 @@ label {
 .filter_box {
   width:45em; 
   margin-left: 0.5em; 
+  margin-right: 0.5em;
   height: 2.5em;
 }
 
 .status {
-  background: rgba(128, 128, 128, 0.1);
-  border:1px solid #ddd;
+  background: rgba(140, 128, 128, 0.05);
   position:absolute;
   top:0;
   right:0;
-  height: 10em;
-  width:33%;
+  height: 7em;
+  width:44%;
   padding: 0.2em;
   text-align: right;}
 

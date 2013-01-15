@@ -10,8 +10,7 @@
 (defn project-view[project] ; project – hash
 
   (common/layout 
-    [:article {:id "project"
-               :style "background-color: rgba(255,255,128,0.5);"}
+    [:article {:id "project"}
       [:div {:class "status"} "STATUS HERE"]
     
       [:h1 {:style "display: block;"} "Opening..."] 
@@ -49,7 +48,7 @@
       [:div {:id "visualization_view" :class "view"}
             [:p "Define the views and configure data presentation. " 
             [:span {:class "hint"} "(?)"]]
-            [:label "Filter: "][:input {:type "text" :class "filter_box"} ]
+            [:label "Filter: "][:input {:type "text" :class "filter_box"} ][:button {:id "redraw"} "Redraw"]
             [:div {:id "canvas"}]
             ]]
 

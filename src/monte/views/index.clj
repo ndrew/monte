@@ -9,8 +9,7 @@
 (defn intro-view[]
   (runtime/to-initial-state) 
   (common/layout
-    [:article {:id "intro"
-               :style "background-color: rgba(255,255,128,0.5);"}
+    [:article {:id "intro"}
            
       [:h1 "Monte"]
       [:p "Please open existing project, or create a new one" 
