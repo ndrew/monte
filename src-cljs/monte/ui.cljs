@@ -37,7 +37,7 @@
 
 (def vis-data-connections [])
 
-(def legend-width 260) ; todo: replace with $ query
+(def legend-width 235) ; todo: replace with $ query
 
 (def wnd-height (atom (- (.-innerHeight js/window) legend-width)))
 
@@ -48,6 +48,19 @@
 (def layouter (atom nil))
 
 (def repeat-handle (atom 0))
+
+(defn js-map
+  "makes a javascript map from a clojure one"
+  [cljmap]
+  (let [out (js-obj)]
+    (doall (map #(aset out (name (first %)) (second %)) cljmap))
+    out))
+
+
+(defn render-dummy[r n] 
+  (let [[x y] (.-point n)
+        id (. n -id)]
+          (.push (.set r) (.text r x y id))))
 
 
 (defn get-graph[] 
@@ -63,6 +76,7 @@
     @graph
     ))
 
+
 (defn infinite-loop [ms func]
   (js/setInterval 
     (fn[] 
@@ -72,12 +86,6 @@
       ) ms))
 
 
-(defn js-map
-  "makes a javascript map from a clojure one"
-  [cljmap]
-  (let [out (js-obj)]
-    (doall (map #(aset out (name (first %)) (second %)) cljmap))
-    out))
 
 
 (defn tick []
@@ -157,40 +165,20 @@
 
 
 
-(defn render-dummy[r n] 
-  (let [[x y] (.-point n)
-        id (. n -id)]
-          (.push (.set r) (.text r x y id))))
-
-
-
-
-
 (defn redraw-vis[]
-      (if-not @renderer
-        (reset! renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) @wnd-width @wnd-height)))
-  
-      (aset @renderer "width" @wnd-width)
-      (aset @renderer "height" @wnd-height)
-
-      (.height ($ "#canvas") @wnd-height)
-      (.width ($ "#canvas") @wnd-width)
-  
-      (if-not @layouter 
-        (reset! layouter (js/Graph.Layout.Spring. (get-graph))))
+  (if-not @renderer
+    (reset! renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) @wnd-width @wnd-height)))
+   
+  (aset @renderer "width" @wnd-width)
+  (aset @renderer "height" @wnd-height)
+  (.height ($ "#canvas") @wnd-height)
+  (.width ($ "#canvas") @wnd-width)
+      
+  (if-not @layouter 
+    (reset! layouter (js/Graph.Layout.Spring. (get-graph))))
                    
-      (.layout @layouter)
-      (.draw @renderer)
-    )
-
-(.resize ($ js/window) 
-  (fn[e]
-     (reset! wnd-width  (- (.-innerWidth js/window) legend-width))
-     (reset! wnd-height (- (.-innerHeight js/window) legend-width))
-      (if @renderer
-       (do 
-         ; todo use setInterval for smoother update
-          (redraw-vis)))))
+  (.layout @layouter)
+  (.draw @renderer))
 
 
 (defn select-project-view [link-id] 
@@ -216,15 +204,6 @@
         (redraw-vis))))
 
 
-;; ui stuff on project load
-(defn set-project [proj]
-  (.click ($ "#redraw") 
-                (fn[e]
-                  (log "redrawing")
-                  (redraw-vis)
-                ))
-  
-  (select-project-view "#miner"))
 
        
 (defn workspace-updated [workspace]
@@ -251,27 +230,50 @@
         (status "Loaded project " (:name proj)))))) 
 
 
-;;;; looping stuff ;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;
+; ajax calls' handlers
+
+;; ui stuff on project load
+
+(defn set-project [project-id]
+  (fm/rpc (set-project project-id) [proj]
+    (select-project-view "#miner")))
+
 
 (defn refresh[& last-updated]
+  "pings backend for changes"
   (fm/rpc (get-workspace (first last-updated)) [workspace] 
-	(when-not 
+  (when-not 
       (nil? workspace)
-	  (workspace-updated workspace))))
-
-
+    (workspace-updated workspace))))
 
 
 (defn ui-init []
+  "does the ui initialization"
+  (.click ($ "#redraw") (fn[e] (redraw-vis)))
+
+  (.resize ($ js/window) 
+  (fn[e]
+     (reset! wnd-width  (- (.-innerWidth js/window) legend-width))
+     (reset! wnd-height (- (.-innerHeight js/window) legend-width))
+      (if @renderer
+       (do 
+         ; todo use setInterval for smoother update
+          (redraw-vis)))))
+  
   (when project-view 
-    (fm/rpc (set-project project-hash) [proj]
-        (set-project proj))))
+    (set-project project-hash)))
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;
 ;; main
 (jq/document-ready 
   (fn [] 
-      (ui-init)
+    (ui-init)
 	  (refresh) ; full refresh
 	  (let [poll-interval 2000]
 	  (reset! repeat-handle 
