@@ -49,6 +49,8 @@
 
 (def fetch-interval 1500)
 
+(def proj (atom {}))
+
 (defn js-map
   "makes a javascript map from a clojure one"
   [cljmap]
@@ -273,6 +275,7 @@
   "notifies backend that project with id=project-id had been selected"
   (fm/rpc (set-project project-id) [p]
     (update-project-ui p)
+    (reset! proj p)
     (reset! latest-update (tick))))
 
 
@@ -281,11 +284,15 @@
   (fm/rpc (get-workspace (first last-updated)) [workspace] 
   (when-not (nil? workspace)
     (update-workspace-ui workspace)
+    (when-not (:current workspace)
+      (reset! proj {})
+      )
     (reset! latest-update (tick)))))
 
 
 (defn run-miners[]
-  (fm/rpc (run-miners) []))
+  "launches data mining in backend"
+  (fm/rpc (run-miners (:hash @proj)) []))
 
 
 (defn load-data[]

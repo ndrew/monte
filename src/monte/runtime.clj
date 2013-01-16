@@ -1,6 +1,7 @@
 (ns monte.runtime
   "Monte runtime engine — holds session and a list of workspace changes"
-  (:require [monte.miners.core :as miners])
+  (:require [monte.miners.core :as miners]
+            [monte.core :as core])
   (:use [clojure.data :only [diff]]))
 
 
@@ -165,4 +166,13 @@
 
 ; uncomment for development 
 (to-initial-state)
+
+
+(defn run-miners[project-id]
+  (println (str "running miners for project=" project-id))
+
+  )
+
+;(def result (doall(pmap core/process-entity 
+;  (map core/parse-entity dummy-entities))))
 
