@@ -131,15 +131,23 @@
     @graph
     ))
 
+(def wnd-height (atom 400))
+(def wnd-width (atom 400))
+
+(def renderer (atom nil))
 
 (defn redraw-vis[]
-  (.empty ($ "#canvas"));
-  (let [wnd-width (- (.-innerWidth js/window) 300)
-        wnd-height (.-innerHeight js/window)
-        layouter (js/Graph.Layout.Spring. (get-graph))
-        renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) wnd-width wnd-height)]
+  (let [layouter (js/Graph.Layout.Spring. (get-graph))]
+      
+        ;(js/Graph.Renderer.Raphael. "canvas" (get-graph) 100 100)
+      
+      
+      (if-not @renderer
+        (reset! renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) @wnd-width @wnd-height)))
+         
       (.layout layouter)
-      (.draw renderer)
+      (.draw @renderer)
+      
     ))
 
 
@@ -163,6 +171,10 @@
     (.toggle ($ view-id))
     
     (when (= "#visualization_view" (str view-id))
+        ;(.empty ($ "#canvas"));
+        (reset! wnd-width  (- (.-innerWidth js/window) 250))
+        (reset! wnd-height (- (.-innerHeight js/window) 250))
+        
         ; todo: set miners
         (redraw-vis)
          
@@ -198,7 +210,12 @@
         (list-vars (:vars proj))
         (list-miners (:miners proj)))  
       
-        (status "connected" )
+        (status "Loaded project")
+        (.click ($ "#redraw") 
+                (fn[e]
+                  (log "redrawing")
+                  (redraw-vis)
+                ))
     )
   )
 ) 
