@@ -51,8 +51,7 @@
                :files ["{WORK-DIR}/Utils.java"] 
                :msg "bugfix"
                :author "some@one.else"
-              }
-            ]
+              }]
   
   })
 

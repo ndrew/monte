@@ -69,3 +69,22 @@
   
   (get-schema[this] 
     {})) ; tbd
+
+
+(defminer VCSMiner
+  (f [this]     
+     (let [cfg (.config this)] ; use cfg later
+       monte.dummies/commits))
+  
+  (get-schema[this] 
+    {})) ; tbd
+
+
+(defminer SRCMiner
+  (f [this]     
+     (let [cfg (.config this)] ; use cfg later
+       monte.dummies/src-analysis-data))
+  
+  (get-schema[this] 
+    {})) ; tbd
+

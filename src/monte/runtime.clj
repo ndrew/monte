@@ -63,6 +63,9 @@
 
 (defn entities-for-project[]
   ["tasks=(JIRAMiner)"
+   "commits=(VCSMiner)"
+   "src=(SRCMiner)"
+   
    ;["classes=(code_miner)"]
    ;["test-cases=classes.class_name{:ends 'Test'}"] 
    ;["commits=(git-miner)"]
@@ -174,21 +177,23 @@
                 (= (:hash x) project-id)) 
                 (:projects @workspace)))]
  
+    ;(println (pr-str proj))
+    
     (let [miners (:miners proj)
           entities (:entities proj)]
 
-          (def result (doall(pmap 
-                             (fn[x] 
-                               (let[m (first (:m x))
-                                    d (first (:e x))]
-                                      (println "pmap")
-                                      (println (pr-str m))
-                                      (println (pr-str d))
-                                      {(first d) (core/process-entity-new d m)}
-                               ))
-                               (vector (hash-map :m miners :e (map core/parse-entity entities))))))
+          ;(println "==============================")
+          (def result (doall
+            (pmap 
+               #(let[[d m] %1]
+                    (println "pmap")
+                    (println (pr-str m))
+                    (println (pr-str d))
+                    {(first d) (core/process-entity-new d m)})
+            (doall (map #(conj miners (core/parse-entity %1)) entities)))))
           
-          (println result)
+          (print "result=")
+          (println (pr-str result))
           (reset! changes 
             (conj @changes [(System/currentTimeMillis) {:data result}]))
           result
