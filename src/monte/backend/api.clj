@@ -14,3 +14,6 @@
 
 (defremote set-project [project-hash]
 	(runtime/set-project project-hash))
+
+(defremote run-miners[]
+  (println "FFFFF"))

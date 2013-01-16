@@ -255,6 +255,8 @@
   "does the ui initialization"
   (.click ($ "#redraw") (fn[e] (redraw-vis)))
 
+  (.click ($ "#run_miners") (fn[e] (run-miners)))
+  
   (.resize ($ js/window) 
   (fn[e]
       (update-vis-bounds)
@@ -280,6 +282,10 @@
   (when-not (nil? workspace)
     (update-workspace-ui workspace)
     (reset! latest-update (tick)))))
+
+
+(defn run-miners[]
+  (fm/rpc (run-miners) []))
 
 
 (defn load-data[]
