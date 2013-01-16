@@ -54,21 +54,25 @@
      (map (fn[x] 
             (let [[miner-type constructor] x
                    miner (constructor cfg)] ; todo: loading config
-                    [(.getName miner-type) 
+                    [(last (clojure.string/split (.getName miner-type) #"\.")) 
                      miner-type 
                      (miners/get-schema miner)]))
           (miners/list-all-miners)))))
 
+
 (defn entities-for-project[]
-  [["tasks=(jira_miner).task{:like '...'}"]
-   ["classes=(code_miner)"]
-   ["test-cases=classes.class_name{:ends 'Test'}"] 
-   ["commits=(git-miner)"]
-   ["users=(unify tasks.asignee classes.javadoc.author commits.author)"]])
+  [["tasks=(JIRAMiner)"]
+   ;["classes=(code_miner)"]
+   ;["test-cases=classes.class_name{:ends 'Test'}"] 
+   ;["commits=(git-miner)"]
+   ;["users=(unify tasks.asignee classes.javadoc.author commits.author)"]
+   ])
 
 
 (defn connections-for-project[]
-  [["dummy_miner="]])
+  [
+   ;["dummy_miner="]
+   ])
 
 
 (defn vars-for-project[]
@@ -124,8 +128,6 @@
           (conj [] [(- (System/currentTimeMillis) 1000) (init)])))
 
 
-; uncomment for development 
-;(to-initial-state)
 
 
 (defn merge-changes [c1 c2]
@@ -159,3 +161,8 @@
 (defn partial-refresh [timestamp]
   "merge and return changes done after last-updated"
   (workspace-diff timestamp))
+
+
+; uncomment for development 
+(to-initial-state)
+
