@@ -7,67 +7,48 @@
     [monte.runtime :as runtime]
     [clojure.tools.cli :as cli]
     [fs.core :as fs]
-    [clojure.java.browse :as browser]
-    ))
+    [clojure.java.browse :as browser]))
 
 (def default-settings {
-  :version 0.0
-}) 
+  :version 0.0}) 
 
 (def settings     (atom default-settings))
 (def home         (str (System/getProperty "user.home") "/.monte"))
 (def settings-loc (str home "/settings.clj"))
 
 (defn init [options]
-   
   (when-not (fs/exists? home) 
      (fs/mkdir home)
-     (spit settings-loc (pr-str default-settings))
-  )
+     (spit settings-loc (pr-str default-settings)))
   
   (reset! settings
-    (merge 
-      (if (fs/exists? settings-loc) (read-string (slurp settings-loc)) default-settings)
-      options)))
-    
+    (merge (if (fs/exists? settings-loc) 
+      (read-string (slurp settings-loc)) default-settings) options)))
 
-; these are waiting for better times
-;
-;(defn get-jar-file [version]
-;  (let [path (str home "/monte-" version ".jar")]
-;    (when-not (fs/exists? path)
-;      (throw (Exception. (str path " does not exist!"))))
-;    (fs/file path)))
-
-;(defn run [version]
-;	(let [jar (get-jar-file version)]
-		; todo: add jar to class path and launch server and client
-;    )
-;)
 
 (defn -main [& args]
-  
-   (let [[options args banner]
+  (print "Starting Monte backend..")
+  (let [[options args banner]
         (cli args
           ["-p" "--port" "Port to listen on" :default 8899]
-          ["-a" "--[no-]auto-open" :default true]
-          )]
+          ["-a" "--[no-]auto-open" :default true])]
+    
       (init options)
       (when-not (= 0.0 (:version @settings))
-        (throw (Exception. "Fetching from server not implemented yet!")) ; todo: fetch new version from server
-      )
+        (throw (Exception. "Fetching from server not implemented yet!"))) ; todo: fetch new version from server
 
       ;(if (seq args)
       ;  (if (every? (fn [path] (and (fs/exists? path) (fs/directory? path))) args)
       ;      (reset! runtime/workspace (core/super-repo (apply vector args)) ))) 
-     
+      
       (def server_instance (future (server/start (:port @settings))))
       (if (:auto-open @settings)
         (browser/browse-url (str "http://localhost:" (:port @settings))))
 
+      (println "STARTED")
       (println "Press Cmd^C or Control^C to stop Monte! Or type some crap")
+      
       (read-line) ; todo: find out why this doesn't work from console
       (.stop @server_instance)
-      (println "Bye")
-    )
-  )
+      
+      (println "Bye")))

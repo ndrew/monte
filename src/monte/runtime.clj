@@ -78,35 +78,30 @@
                 (:projects @workspace)))]
      (reset! changes 
           (conj @changes 
-                [(System/currentTimeMillis) {:current proj}]))
+                [(System/currentTimeMillis) {:current proj
+                                             :projects []}]))
      proj
   ))
 
 
-(defn init 
+(defn init []
   "initializes workspace to its initial state" 
-  []
-    
-    (reset! workspace
-            {
-             :projects (list-projects)
-             :miners [];(miners/list-miners 'monte.miners.impl)
-             })
-    
-    @workspace)
+  (reset! workspace 
+          {:projects (list-projects)
+           :miners [];(miners/list-miners 'monte.miners.impl)
+          }) 
+  @workspace)
 
 
-(defn to-initial-state
-  "resets all changes" ; maybe start new session instead?  
-  []
-  (println "starting from a blank page.")
+(defn to-initial-state []
+  "resets all changes"
+  (println "Workspace had been reset to initial state.")
   (reset! changes 
-          (conj @changes 
-                [(System/currentTimeMillis) (init)])))
+          (conj [] [(- (System/currentTimeMillis) 1000) (init)])))
 
 
 ; uncomment for development 
-(to-initial-state)
+;(to-initial-state)
 
 
 (defn merge-changes [c1 c2]
@@ -132,13 +127,11 @@
        (reduce merge-changes new-changes))))))
 
 
-(defn full-refresh 
+(defn full-refresh []
   "merge and return all changes merged"
-  []
   (workspace-diff 0)) 
 
 
-(defn partial-refresh 
+(defn partial-refresh [timestamp]
   "merge and return changes done after last-updated"
-  [timestamp]
   (workspace-diff timestamp))
