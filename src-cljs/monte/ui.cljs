@@ -83,9 +83,9 @@
     (do
       (reset! graph (js/Graph.))
       ; todo: 
-      (doseq [a vis-data-entities]
-        (.addNode @graph a
-                        (js-map{:render render-dummy})))
+      ;(doseq [a vis-data-entities]
+      ;  (.addNode @graph a
+      ;                  (js-map{:render render-dummy})))
       @graph
     )
     @graph
@@ -255,9 +255,6 @@
 
 (defn ui-init []
   "does the ui initialization"
-  (.click ($ "#redraw") (fn[e] (redraw-vis)))
-
-  (.click ($ "#run_miners") (fn[e] (run-miners)))
   
   (.resize ($ js/window) 
   (fn[e]
@@ -282,12 +279,33 @@
 (defn refresh[& last-updated]
   "pings backend for changes"
   (fm/rpc (get-workspace (first last-updated)) [workspace] 
+  
   (when-not (nil? workspace)
     (update-workspace-ui workspace)
     (when-not (:current workspace)
-      (reset! proj {})
-      )
-    (reset! latest-update (tick)))))
+      (reset! proj {}))
+    
+    (when (:data workspace)
+      (status "received miner-data")
+      
+      ;(reset! graph nil)
+      
+      (get-graph) ; load graph
+      
+      (doseq [a (:data workspace)]
+        
+          (let [k (first (keys a))
+                data (:data (get a k))]
+       
+          (log (str "processing " (pr-str k))) ; add to legend + create a render func
+          ; (log (pr-str data))
+        
+          (doseq [d data]            
+            (.addNode @graph (:id d)
+                       (js-map{:render render-dummy})))))
+      (redraw-vis)
+    
+    (reset! latest-update (tick))))))
 
 
 (defn run-miners[]
@@ -308,6 +326,9 @@
 (jq/document-ready 
   (fn [] 
     (ui-init)
+    (.click ($ "#redraw") (fn[e] (redraw-vis)))
+    (.click ($ "#run_miners") (fn[e] (run-miners)))
+
     (load-data)
     (reset! repeat-handle 
 	          (infinite-loop fetch-interval 
