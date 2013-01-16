@@ -228,3 +228,40 @@
                               (if (:filter y)
                               prop ; filtration
                               prop))) data props)))))))
+
+
+
+; todo: refactor
+(defn process-entity-new[[name config] miners] 
+  (log "processing " name " " (pr-str config) )
+  (log "miners=" (apply str miners) )
+  
+  (let [key (keyword name)
+        data-cfg (first config)
+        props (rest config)]
+    
+    (get-async (keyword name) 
+      #(let [ mk (keyword (:miner data-cfg))
+              ek (keyword (:entity data-cfg))
+              uk (keyword (:unify data-cfg))
+              miner-data (get-async mk 
+                           (fn[] 
+                             (monte.miners.core/f((ns-resolve 'monte.miners.impl (symbol (str "->" (.getName mk)))) {})) ; todo: retrieving cfg from miners
+                             
+                             )) 
+              entity-data (get-async ek)
+              fltr  (:filter data-cfg)]
+                
+                ; todo: unification handling
+                (let [data (if mk miner-data ; first try data from miner, otherwise - we have entity
+                               (:data entity-data))] 
+                  ; filtration of data
+                  
+                  (hash-map 
+                    :entity key
+                    :data (reduce (fn[x y] 
+                            (let [prop (access-property x (:props y))]
+                              (if (:filter y)
+                              prop ; filtration
+                              prop))) data props)))))))
+

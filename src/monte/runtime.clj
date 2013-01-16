@@ -62,7 +62,7 @@
 
 
 (defn entities-for-project[]
-  [["tasks=(JIRAMiner)"]
+  ["tasks=(JIRAMiner)"
    ;["classes=(code_miner)"]
    ;["test-cases=classes.class_name{:ends 'Test'}"] 
    ;["commits=(git-miner)"]
@@ -168,11 +168,27 @@
 (to-initial-state)
 
 
-(defn run-miners[project-id]
+(defn run-miners[project-id] 
   (println (str "running miners for project=" project-id))
+  (when-let [proj (first(filter (fn [x] 
+                (= (:hash x) project-id)) 
+                (:projects @workspace)))]
+ 
+    (let [miners (:miners proj)
+          entities (:entities proj)]
 
-  )
-
-;(def result (doall(pmap core/process-entity 
-;  (map core/parse-entity dummy-entities))))
-
+          (def result (doall(pmap 
+                             (fn[x] 
+                               (let[m (first (:m x))
+                                    d (first (:e x))]
+                                      (println "pmap")
+                                      (println (pr-str m))
+                                      (println (pr-str d))
+                                      (core/process-entity-new d m)
+                               ))
+                               (vector (hash-map :m miners :e (map core/parse-entity entities))))))
+          
+          (println result)
+          result
+          
+          )))
