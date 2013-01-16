@@ -10,8 +10,7 @@
   (runtime/to-initial-state) 
   (common/layout
     [:article {:id "intro"}
-           
-      [:h1 "Monte"]
+      [:h1 {:class "proj-name"}  "Monte"]
       [:p "Please open existing project, or create a new one" 
           [:span {:class "hint"} "(?)"]]
       
