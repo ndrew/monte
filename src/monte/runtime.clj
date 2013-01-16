@@ -38,31 +38,54 @@
 ;;;;;;
 ; data handling routines
 
+(defn get-miner-schemas[]
+  (doall
+    (map (fn[x] 
+      (let [[miner-type constructor] x
+             miner (constructor {})] ; todo: loading config
+              [(.getName miner-type) miner-type (miners/get-schema miner)]))
+              (miners/list-all-miners))))
+
+
+(defn miners-for-project[]
+  (let [cfg {}]
+    ; TODO: ?storing miners somewher
+   (doall
+     (map (fn[x] 
+            (let [[miner-type constructor] x
+                   miner (constructor cfg)] ; todo: loading config
+                    [(.getName miner-type) 
+                     miner-type 
+                     (miners/get-schema miner)]))
+          (miners/list-all-miners)))))
+
+(defn entities-for-project[]
+  [["tasks=(jira_miner).task{:like '...'}"]
+   ["classes=(code_miner)"]
+   ["test-cases=classes.class_name{:ends 'Test'}"] 
+   ["commits=(git-miner)"]
+   ["users=(unify tasks.asignee classes.javadoc.author commits.author)"]])
+
+
+(defn connections-for-project[]
+  [["dummy_miner="]])
+
+
+(defn vars-for-project[]
+  [["REPO-URL" :url "https://github.com/ndrew/monte.git"]
+   ["WORK-DIR" :path "Users/ndrw/monte/"]
+   ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]])
 
 
 (defn list-projects []
+  ; retrieving from fs
   (map #(merge % {:hash (hash (:name %))})
     [{
-    :name "Monte"
-    :vars [["REPO-URL" :url "https://github.com/ndrew/monte.git"]
-           ["WORK-DIR" :path "Users/ndrw/monte/"]
-           ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]]
-      
-    :miners (doall
-              (map (fn[x] 
-                      (let [[miner-type constructor] x
-                             miner (constructor {})] ; todo: loading config
-                              ["tasks" miner-type (miners/get-schema miner)]))
-                              (miners/list-all-miners)))
-    :entities [
-                ["tasks=(jira_miner).task{:like '...'}"]
-                ["classes=(code_miner)"]
-                ["test-cases=classes.class_name{:ends 'Test'}"] 
-                ["commits=(git-miner)"]
-                ["users=(unify tasks.asignee classes.javadoc.author commits.author)"]               
-               
-               ]
-    :connections [["dummy_miner="]]
+      :name "Monte" ; todo: cfg by name
+      :vars (vars-for-project)
+      :miners (miners-for-project)  
+      :entities (entities-for-project)
+      :connections (connections-for-project)
     }
     ; these are awaiting for better times
     ;{:name "MyFolder"}
@@ -78,8 +101,9 @@
                 (:projects @workspace)))]
      (reset! changes 
           (conj @changes 
-                [(System/currentTimeMillis) {:current proj
-                                             :projects []}]))
+                [(System/currentTimeMillis) 
+                 {:current proj
+                  :projects []}]))
      proj
   ))
 
@@ -88,7 +112,7 @@
   "initializes workspace to its initial state" 
   (reset! workspace 
           {:projects (list-projects)
-           :miners [];(miners/list-miners 'monte.miners.impl)
+           :miners (get-miner-schemas)
           }) 
   @workspace)
 
