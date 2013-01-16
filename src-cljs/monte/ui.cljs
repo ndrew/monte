@@ -131,24 +131,37 @@
     @graph
     ))
 
-(def wnd-height (atom 400))
-(def wnd-width (atom 400))
+(def wnd-height (atom (- (.-innerHeight js/window) 250)))
+(def wnd-width (atom (- (.-innerWidth js/window) 250)))
 
 (def renderer (atom nil))
+(def layouter (atom nil))
 
 (defn redraw-vis[]
-  (let [layouter (js/Graph.Layout.Spring. (get-graph))]
-      
-        ;(js/Graph.Renderer.Raphael. "canvas" (get-graph) 100 100)
-      
-      
       (if-not @renderer
         (reset! renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) @wnd-width @wnd-height)))
-         
-      (.layout layouter)
+  
+      (aset @renderer "width" @wnd-width)
+      (aset @renderer "height" @wnd-height)
+
+      (.height ($ "#canvas") @wnd-height)
+      (.width ($ "#canvas") @wnd-width)
+  
+      (if-not @layouter 
+        (reset! layouter (js/Graph.Layout.Spring. (get-graph))))
+                   
+      (.layout @layouter)
       (.draw @renderer)
-      
-    ))
+    )
+
+(.resize ($ js/window) 
+  (fn[e]
+     (reset! wnd-width  (- (.-innerWidth js/window) 250))
+     (reset! wnd-height (- (.-innerHeight js/window) 250))
+      (if @renderer
+       (do 
+         ; todo use setInterval for smoother update
+          (redraw-vis)))))
 
 
 (defn select-project-view [link-id] 
@@ -171,15 +184,13 @@
     (.toggle ($ view-id))
     
     (when (= "#visualization_view" (str view-id))
-        ;(.empty ($ "#canvas"));
-        (reset! wnd-width  (- (.-innerWidth js/window) 250))
-        (reset! wnd-height (- (.-innerHeight js/window) 250))
         
-        ; todo: set miners
+        ;(reset! wnd-width  (- (.-innerWidth js/window) 250))
+        ;(reset! wnd-height (- (.-innerHeight js/window) 250))
+
+        
         (redraw-vis)
-         
-      )
-    ))
+      )))
 
 
 
