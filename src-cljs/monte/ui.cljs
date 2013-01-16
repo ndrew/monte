@@ -37,17 +37,17 @@
 
 (def vis-data-connections [])
 
-(def legend-width 235) ; todo: replace with $ query
+(def wnd-height (atom 0))
 
-(def wnd-height (atom (- (.-innerHeight js/window) legend-width)))
-
-(def wnd-width (atom (- (.-innerWidth js/window) legend-width)))
+(def wnd-width (atom 0))
 
 (def renderer (atom nil))
 
 (def layouter (atom nil))
 
 (def repeat-handle (atom 0))
+
+(def fetch-interval 1500)
 
 (defn js-map
   "makes a javascript map from a clojure one"
@@ -61,6 +61,19 @@
   (let [[x y] (.-point n)
         id (. n -id)]
           (.push (.set r) (.text r x y id))))
+
+
+;;;;;;;;;;;;;;;;;
+; data handling
+
+
+(defn update-vis-bounds[]
+  (let [legend-width (.width ($ "#legend"))
+        w-margin 45
+        canvas-top (.-top (.offset ($ "#canvas")))
+        h-margin 15]
+    (reset! wnd-width  (- (.-innerWidth js/window) (+ legend-width w-margin)))
+    (reset! wnd-height (- (.-innerHeight js/window) (+ canvas-top h-margin)))))
 
 
 (defn get-graph[] 
@@ -84,8 +97,6 @@
         (= true @error) (js/clearInterval @repeat-handle))
         :else (func)
       ) ms))
-
-
 
 
 (defn tick []
@@ -166,6 +177,7 @@
 
 
 (defn redraw-vis[]
+  (update-vis-bounds)
   (if-not @renderer
     (reset! renderer (js/Graph.Renderer.Raphael. "canvas" (get-graph) @wnd-width @wnd-height)))
    
@@ -205,14 +217,26 @@
 
 
 
-       
-(defn workspace-updated [workspace]
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ui handlers for
+   
+(defn update-project-ui [project]
+  "does ui update on project selected"
+  (select-project-view "#miner")
+  (.text ($ "#viewport article h1") (:name project))
+  (list-vars (:vars project))
+  (list-miners (:miners project))      
+  (status "Loaded project " (:name project)))
+   
+   
+(defn update-workspace-ui [workspace]
+  "does ui update on workspace changed"
+
   (log "workspace updated")
   (log (pr-str workspace))
-  (.text ($ :#debug) (pr-str workspace))
-  
-  (reset! latest-update (tick))
-  
+  (.text ($ :#debug) (pr-str workspace)) 
   (when (and intro-view 
              (not (nil? (:projects workspace)))
     (list-projects (:projects workspace))))
@@ -223,31 +247,8 @@
                  
     (when-not (nil? (:current workspace))        
       (let [proj (:current workspace)]
-        (.text ($ "#viewport article h1") (:name proj))
-        (list-vars (:vars proj))
-        (list-miners (:miners proj))
-        
-        (status "Loaded project " (:name proj)))))) 
+        (update-project-ui proj))))) 
 
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;
-; ajax calls' handlers
-
-;; ui stuff on project load
-
-(defn set-project [project-id]
-  (fm/rpc (set-project project-id) [proj]
-    (select-project-view "#miner")))
-
-
-(defn refresh[& last-updated]
-  "pings backend for changes"
-  (fm/rpc (get-workspace (first last-updated)) [workspace] 
-  (when-not 
-      (nil? workspace)
-    (workspace-updated workspace))))
 
 
 (defn ui-init []
@@ -256,16 +257,36 @@
 
   (.resize ($ js/window) 
   (fn[e]
-     (reset! wnd-width  (- (.-innerWidth js/window) legend-width))
-     (reset! wnd-height (- (.-innerHeight js/window) legend-width))
+      (update-vis-bounds)
       (if @renderer
        (do 
          ; todo use setInterval for smoother update
-          (redraw-vis)))))
-  
-  (when project-view 
-    (set-project project-hash)))
+          (redraw-vis))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;
+; ajax calls' handlers
+
+
+(defn set-project [project-id]
+  "notifies backend that project with id=project-id had been selected"
+  (fm/rpc (set-project project-id) [p]
+    (update-project-ui p)
+    (reset! latest-update (tick))))
+
+
+(defn refresh[& last-updated]
+  "pings backend for changes"
+  (fm/rpc (get-workspace (first last-updated)) [workspace] 
+  (when-not (nil? workspace)
+    (update-workspace-ui workspace)
+    (reset! latest-update (tick)))))
+
+
+(defn load-data[]
+  "requests backend for data"
+  (if project-view 
+      (set-project project-hash)
+      (refresh)))
 
 
 
@@ -274,9 +295,8 @@
 (jq/document-ready 
   (fn [] 
     (ui-init)
-	  (refresh) ; full refresh
-	  (let [poll-interval 2000]
-	  (reset! repeat-handle 
-	          (infinite-loop poll-interval 
-                            (fn [] 
-					            (refresh @latest-update)))))))
+    (load-data)
+    (reset! repeat-handle 
+	          (infinite-loop fetch-interval 
+              (fn [] 
+					      (refresh @latest-update))))))
