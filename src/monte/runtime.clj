@@ -184,11 +184,13 @@
                                       (println "pmap")
                                       (println (pr-str m))
                                       (println (pr-str d))
-                                      (core/process-entity-new d m)
+                                      {(first d) (core/process-entity-new d m)}
                                ))
                                (vector (hash-map :m miners :e (map core/parse-entity entities))))))
           
           (println result)
+          (reset! changes 
+            (conj @changes [(System/currentTimeMillis) {:data result}]))
           result
           
           )))
