@@ -31,18 +31,13 @@
 
 
 (deftest miner-listings 
-  
   (let [miner-fns (list-all-miners)]
-    ;(println (class miner-fns))
-
     (is (not (empty? miner-fns)))
-    
-    (doall(map (fn[x] 
-           (let [[k v] x]
-              (println "creating " (.getName k))
-              (println (str "result: " (pr-str (f (v {})))))
-              [k v]
-            )) miner-fns)))
-  
-  )
-  ; todo: try creating ?
+      (doall(map (fn[x] 
+        (let [[k constructor] x]
+           ;(println "creating " (.getName k))
+           ;(println (str "result: " (pr-str (f (v {})))))
+           (is (class? k))
+           (is (var? constructor))
+           
+           )) miner-fns))))

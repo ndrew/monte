@@ -48,10 +48,13 @@
            ["WORK-DIR" :path "Users/ndrw/monte/"]
            ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]]
       
-    :miners [["dummy_miner" :->DummyMiner {:data ["testo" "pesto" "festo"]}]
-             ["git" :->GitMiner {:git-url :REPO-URL}]]
+    :miners (doall
+              (map (fn[x] 
+                      (let [[miner-type constructor] x
+                             miner (constructor {})] ; todo: loading config
+                              ["tasks" miner-type (miners/get-schema miner)]))
+                              (miners/list-all-miners)))
     :entities [
-               
                 ["tasks=(jira_miner).task{:like '...'}"]
                 ["classes=(code_miner)"]
                 ["test-cases=classes.class_name{:ends 'Test'}"] 
@@ -61,9 +64,11 @@
                ]
     :connections [["dummy_miner="]]
     }
-    {:name "MyFolder"}
-    {:name "Metropolis"}
-    {:name "KMC Booking"}]))
+    ; these are awaiting for better times
+    ;{:name "MyFolder"}
+    ;{:name "Metropolis"}
+    ;{:name "KMC Booking"}
+    ]))
 
 
 
