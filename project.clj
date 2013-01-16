@@ -12,8 +12,7 @@
                  [lib-noir              "0.3.3"]
                  [org.clojure/tools.cli "0.2.2"]
                  [crate                 "0.2.3"]
-                 [jayq                  "0.1.0-alpha4"]
-                 
+                 [jayq                  "2.0.0"]
                  [shoreleave            "0.2.2"]
                  [com.cemerick/shoreleave-remote-ring "0.0.2"]]
   :plugins [[lein-cljsbuild   "0.2.10"]
