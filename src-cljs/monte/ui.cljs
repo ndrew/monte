@@ -184,21 +184,25 @@
     (.toggle ($ view-id))
     
     (when (= "#visualization_view" (str view-id))
-        
-        ;(reset! wnd-width  (- (.-innerWidth js/window) 250))
-        ;(reset! wnd-height (- (.-innerHeight js/window) 250))
-
-        
-        (redraw-vis)
-      )))
+        (redraw-vis))))
 
 
-
+;; ui stuff on project load
 (defn set-project [proj]
+  (.click ($ "#redraw") 
+                (fn[e]
+                  (log "redrawing")
+                  (redraw-vis)
+                ))
+  
   (select-project-view "#miner"))
 
-(defn- status[& body] ; for testing purposes
-  (.text ($ ".status") (reduce str body)))
+
+(defn- status[& body]
+  "nice status string"
+  (log (reduce str (first body) (rest body)))
+  
+  (.text ($ ".status") (reduce str (first body) (rest body))))
 
        
 (defn workspace-updated [workspace]
@@ -214,22 +218,15 @@
   
   (when project-view
     (when-not (nil? (:miners workspace))
-      (reset! miner-schemas (:miners workspace))) ; store all miners              
+      (reset! miner-schemas (:miners workspace))) ; store all miners 
+                 
     (when-not (nil? (:current workspace))        
       (let [proj (:current workspace)]
         (.text ($ "#viewport article h1") (:name proj))
         (list-vars (:vars proj))
-        (list-miners (:miners proj)))  
-      
-        (status "Loaded project")
-        (.click ($ "#redraw") 
-                (fn[e]
-                  (log "redrawing")
-                  (redraw-vis)
-                ))
-    )
-  )
-) 
+        (list-miners (:miners proj))
+        
+        (status "Loaded project " (:name proj)))))) 
 
 
 ;;;; looping stuff ;;;;

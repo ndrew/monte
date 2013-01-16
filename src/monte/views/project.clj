@@ -13,11 +13,16 @@
     [:article {:id "project"}
       [:div {:class "status"} "STATUS HERE"]
     
-      [:h1 {:style "display: block;"} "Opening..."] 
-      [:h2 {:style "display: block; padding-left: 1.5em;"}
-         " 1. " [:a {:href "#" :id "miner"} "Miners"] 
-         " 2. " [:a {:href "#" :id "refine"} "Refine data"] ; todo: better naming
-         " 3. " [:a {:href "#" :id "visualization"} "Visualization"]]
+      [:h1 {:class "proj-name"} "Opening..."] 
+      [:h2 {:class "view-nav"}
+         ; todo: migrate to lists
+         "&nbsp;1. " [:a {:href "#" :id "miner"} "Miners"] 
+         "&nbsp;2. " [:a {:href "#" :id "refine"} "Refine data"] ; todo: better naming
+         "&nbsp;3. " [:a {:href "#" :id "visualization"} "Visualization"]]
+      
+      [:div {:class "actions"}
+                  [:button {:id "run_miners"} "Run miners"]
+                  [:button {:id "redraw"} "Redraw"]]
       
       [:div {:id "miner_view" :class "view"}
             [:p "Please select and configure miners. " 
@@ -34,8 +39,6 @@
                   [:table {:id "var_table"}
                          [:tr [:td {:class="new" :colspan="3"}
                                    [:a {:href "#" :id "new_var"} "add new"]]]]]
-            [:div {:class "actions"}
-                  [:button {:id "run_miners"} "Run miners"]]
       ]
       
     
@@ -46,11 +49,15 @@
       
       
       [:div {:id "visualization_view" :class "view"}
-            [:p "Define the views and configure data presentation. " 
-            [:span {:class "hint"} "(?)"]]
-            [:label "Filter: "][:input {:type "text" :class "filter_box"} ][:button {:id "redraw"} "Redraw"]
+            ;[:p "Define the views and configure data presentation. " 
+            ;[:span {:class "hint"} "(?)"]]
+            [:div {:style "margin-left: 210px;"} 
+              [:label "Filter: "]
+              [:input {:type "text" :class "filter_box"} ]]
             [:div
-              [:div {:id "legend"}]
+              [:div {:id "legend"}
+                [:span "Legend"]
+               ]
               [:div {:id "canvas"}]]
             ]]
 
