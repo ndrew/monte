@@ -9,7 +9,8 @@ UI:
  ☐ miner screen, @P1
     ☐ miners, @P1
       ✔ save miner-schemas from server @done (13-01-10 12:58)
-      ☐ list miners, @in-progress
+      ✔ list miners, @in-progress @done (13-01-16 03:29)
+      ☐ launching miners
     ☐ vars, @P1
       ✔ list vars @done (13-01-10 12:59)
       ☐ edit vars
@@ -19,11 +20,18 @@ UI:
    ☐ relations
 
  ☐ visualization screen
-   ☐ add raphael canvas
+   ✔ add raphael canvas @done (13-01-15 23:39)
+   ☐ add timeline
+   ☐ add filter box
+   ☐ add legend
 
  ☐ help hints, @P5
 
- ☐ 
+ ☐ status panel
+   ☐ autohiding on timeout
+
+ ☐ actions panel
+   ☐ add full refresh button
 Bugs:
   ☐ 
 
@@ -115,6 +123,7 @@ Workspace:
     ☐ filtration
     ☐ unification
   ☐ defining relations
+    ☐ ?auto-detecting layouts? use fuzzy search(like http://ntz-develop.blogspot.com/)
     ✔ same DSL as for entities @done (13-01-15 01:30)
   operation on workspace:
     ☐ diff
@@ -125,11 +134,11 @@ Workspace:
   ☐ use datalog, @P5 — nope, maybe later
     ☐ check ttt.search.core for querying upon core.logic, @P0
     ☐ http://clojuredocs.org/clojure_contrib/1.2.0/clojure.contrib.datalog.database/make-database
-    ☐ 
   ☐ saving and loading (see non-commited cfg) @P1
   ☐ auto-update(like LT)
 
  Infrastructure:
+  ☐ readme.MD on github
   ☐ lein-reload
   ☐ remove cljsbuild from :hooks and reconfigure lein profiles and hooks
   ✔ migrate from noir to compojure @done (13-01-13 18:30)
