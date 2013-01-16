@@ -3,7 +3,7 @@
   (:require-macros [shoreleave.remotes.macros :as fm])
   (:require [jayq.core :as jq]
             [shoreleave.remotes.http-rpc :as rpc])
-  (:use [jayq.util :only [log wait clj->js]]
+  (:use [jayq.util :only [log wait]]
         [jayq.core :only [$ append]]
         [crate.core :only [html]]))
 
@@ -13,23 +13,83 @@
 ; <!> HACK:
 ; 	these variables will be set on server while page will be generated
 (def intro-view false)
+
 (def project-view false)
+
 (def project-hash 0) ; project-hash
 
 (def latest-update (atom 0)) ; timestamp of latest update
 
 (def dom-projects "ul.projects")
+
 (def dom-miners "#miner_table tbody")
+
 (def dom-vars "#var_table tbody")
 
 (def lbl-add "add new")
 
 (def miner-schemas (atom []))
 
-(defn tick
+;; vis stuff
+(def graph (atom nil))
+
+(def vis-data-entities ["fffuuu!" "barrrr" "bazzzzz" "ffffuuuuzzzz"]) ;todo
+
+(def vis-data-connections [])
+
+(def legend-width 260) ; todo: replace with $ query
+
+(def wnd-height (atom (- (.-innerHeight js/window) legend-width)))
+
+(def wnd-width (atom (- (.-innerWidth js/window) legend-width)))
+
+(def renderer (atom nil))
+
+(def layouter (atom nil))
+
+(def repeat-handle (atom 0))
+
+
+(defn get-graph[] 
+  (if-not @graph 
+    (do
+      (reset! graph (js/Graph.))
+      ; todo: 
+      (doseq [a vis-data-entities]
+        (.addNode @graph a
+                        (js-map{:render render-dummy})))
+      @graph
+    )
+    @graph
+    ))
+
+(defn infinite-loop [ms func]
+  (js/setInterval 
+    (fn[] 
+      (cond 
+        (= true @error) (js/clearInterval @repeat-handle))
+        :else (func)
+      ) ms))
+
+
+(defn js-map
+  "makes a javascript map from a clojure one"
+  [cljmap]
+  (let [out (js-obj)]
+    (doall (map #(aset out (name (first %)) (second %)) cljmap))
+    out))
+
+
+(defn tick []
   "return current timespamp"
-  []
   (. (new js/Date) getTime))
+
+
+(defn- status[& body]
+  "nice status string"
+  (log (reduce str (first body) (rest body)))
+  (.text ($ ".status") (reduce str (first body) (rest body))))
+
 
 
 (defn list-projects [projects]
@@ -44,7 +104,7 @@
   
   	  (.append ($ dom-projects) 
              (html [:li {:class "new"} [:a {:href "#"} lbl-add]])))
-	
+
 
 (defn list-miners[miners]
   (.empty ($ dom-miners))
@@ -95,20 +155,6 @@
   ; todo: add var functionality
   (.append ($ dom-vars) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
 
-;; vis stuff
-(def graph (atom nil))
-
-(def vis-data-entities ["fffuuu!" "barrrr" "bazzzzz" "ffffuuuuzzzz"])
-(def vis-data-connections [])
-
-
-(defn js-map
-  "makes a javascript map from a clojure one"
-  [cljmap]
-  (let [out (js-obj)]
-    (doall (map #(aset out (name (first %)) (second %)) cljmap))
-    out))
-
 
 
 (defn render-dummy[r n] 
@@ -118,24 +164,7 @@
 
 
 
-(defn get-graph[] 
-  (if-not @graph 
-    (do
-      (reset! graph (js/Graph.))
-      ; todo: 
-      (doseq [a vis-data-entities]
-        (.addNode @graph a
-                        (js-map{:render render-dummy})))
-      @graph
-    )
-    @graph
-    ))
 
-(def wnd-height (atom (- (.-innerHeight js/window) 250)))
-(def wnd-width (atom (- (.-innerWidth js/window) 250)))
-
-(def renderer (atom nil))
-(def layouter (atom nil))
 
 (defn redraw-vis[]
       (if-not @renderer
@@ -156,8 +185,8 @@
 
 (.resize ($ js/window) 
   (fn[e]
-     (reset! wnd-width  (- (.-innerWidth js/window) 250))
-     (reset! wnd-height (- (.-innerHeight js/window) 250))
+     (reset! wnd-width  (- (.-innerWidth js/window) legend-width))
+     (reset! wnd-height (- (.-innerHeight js/window) legend-width))
       (if @renderer
        (do 
          ; todo use setInterval for smoother update
@@ -197,13 +226,6 @@
   
   (select-project-view "#miner"))
 
-
-(defn- status[& body]
-  "nice status string"
-  (log (reduce str (first body) (rest body)))
-  
-  (.text ($ ".status") (reduce str (first body) (rest body))))
-
        
 (defn workspace-updated [workspace]
   (log "workspace updated")
@@ -230,7 +252,6 @@
 
 
 ;;;; looping stuff ;;;;
-(def repeat-handle (atom 0))
 
 (defn refresh[& last-updated]
   (fm/rpc (get-workspace (first last-updated)) [workspace] 
@@ -239,13 +260,6 @@
 	  (workspace-updated workspace))))
 
 
-(defn infinite-loop [ms func]
-	(js/setInterval 
-		(fn[] 
-			(cond 
-				(= true @error) (js/clearInterval @repeat-handle))
-				:else (func)
-			) ms))
 
 
 (defn ui-init []
