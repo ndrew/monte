@@ -39,26 +39,24 @@
 ;;;;;;
 ; data handling routines
 
-(defn get-miner-schemas[]
+(defn get-miner-schemas[cfg]
   (doall
     (map (fn[x] 
       (let [[miner-type constructor] x
-             miner (constructor {})] ; todo: loading config
+             miner (constructor cfg)] ; todo: loading config
               [(.getName miner-type) miner-type (miners/get-schema miner)]))
               (miners/list-all-miners))))
 
 
-(defn miners-for-project[]
-  (let [cfg {}]
-    ; TODO: ?storing miners somewher
-   (doall
-     (map (fn[x] 
-            (let [[miner-type constructor] x
-                   miner (constructor cfg)] ; todo: loading config
-                    [(last (clojure.string/split (.getName miner-type) #"\.")) 
-                     miner-type 
-                     (miners/get-schema miner)]))
-          (miners/list-all-miners)))))
+(defn miners-for-project[cfg]
+   (doall (map 
+      (fn[x] 
+        (let [[miner-type constructor] x
+               miner (constructor cfg)]
+                [(last (clojure.string/split (.getName miner-type) #"\.")) 
+                 miner-type 
+                 (miners/get-schema miner)]))
+      (miners/list-all-miners))))
 
 
 (defn entities-for-project[]
@@ -85,25 +83,24 @@
    ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]])
 
 
-(defn list-projects []
-  ; retrieving from fs
-  (map #(merge % {:hash (hash (:name %))})
-    [{
-      :name "Monte" ; todo: cfg by name
-      :vars (vars-for-project)
-      :miners (miners-for-project)  
-      :entities (entities-for-project)
-      :connections (connections-for-project)
-    }
-    ; these are awaiting for better times
-    ;{:name "MyFolder"}
-    ;{:name "Metropolis"}
-    ;{:name "KMC Booking"}
-    ]))
+(defn- monte-proj[]
+  ; todo: loading from fs
+  (let [vars (vars-for-project)
+        miners (miners-for-project vars)]{
+          :name "Monte"
+          :vars vars
+          :miners miners
+          :entities (entities-for-project)
+          :connections (connections-for-project)}))
 
+(defn list-projects []
+  ; todo: retrieving from fs
+  (map #(merge % {:hash (hash (:name %))})
+    [(monte-proj)]))
 
 
 (defn set-project [hash]
+  "sets current project"
   (let [proj (first(filter (fn [x] 
                 (= (:hash x) hash)) 
                 (:projects @workspace)))]
@@ -112,15 +109,14 @@
                 [(System/currentTimeMillis) 
                  {:current proj
                   :projects []}]))
-     proj
-  ))
+     proj))
 
 
 (defn init []
   "initializes workspace to its initial state" 
   (reset! workspace 
           {:projects (list-projects)
-           :miners (get-miner-schemas)
+           :miners (get-miner-schemas {}) ; load vars
           }) 
   @workspace)
 
@@ -132,8 +128,6 @@
           (conj [] [(- (System/currentTimeMillis) 1000) (init)])))
 
 
-
-
 (defn merge-changes [c1 c2]
   (let [[t1 & data1] c1
         [t2 & data2] c2]
@@ -141,8 +135,7 @@
     ; assume for now that data contains single change-set
     (let [a (first data1)
           b (first data2)]
-    [t2 (merge-data a b)]
-  )))
+    [t2 (merge-data a b)])))
 
 
 (defn workspace-diff [timestamp]
@@ -171,7 +164,8 @@
 (to-initial-state)
 
 
-(defn run-miners[project-id] 
+(defn run-miners[project-id]
+  "runs all miners"
   (println (str "running miners for project=" project-id))
   (when-let [proj (first(filter (fn [x] 
                 (= (:hash x) project-id)) 
@@ -186,16 +180,11 @@
           (def result (doall
             (pmap 
                #(let[[d m] %1]
-                    (println "pmap")
-                    (println (pr-str m))
-                    (println (pr-str d))
                     {(first d) (core/process-entity-new d m)})
             (doall (map #(conj miners (core/parse-entity %1)) entities)))))
           
-          (print "result=")
-          (println (pr-str result))
+          ;(print "result=")
+          ;(println (pr-str result))
           (reset! changes 
             (conj @changes [(System/currentTimeMillis) {:data result}]))
-          result
-          
-          )))
+          result)))
