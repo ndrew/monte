@@ -30,6 +30,8 @@
 
 (def dom-legend "#legend_table tbody")
 
+(def dom-connections "#connections_table tbody")
+
 (def lbl-add "add new")
 
 (def miner-schemas (atom []))
@@ -194,6 +196,18 @@
   ; todo: add var functionality
   (.append ($ dom-vars) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
 
+(defn list-connections[connections]
+  (log (pr-str connections))
+  (.empty ($ dom-connections))
+  (doseq [e connections]
+    (.append ($ dom-connections) 
+      (html
+        [:tr [:td {:colspan "3"} (pr-str e)]])))
+  
+  ; todo: add entity functionality
+  (.append ($ dom-connections) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
+
+
 
 (defn list-entities[entities]
   (.empty ($ dom-entities))
@@ -260,7 +274,8 @@
   (.text ($ "#viewport article h1") (:name project))
   (list-vars (:vars project))
   (list-miners (:miners project))
-  (list-entities (:entities project))    
+  (list-entities (:entities project))  
+  (list-connections (:connections project))
   (status "Loaded project " (:name project)))
    
 

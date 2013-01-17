@@ -19,24 +19,28 @@
 (def commits [{
                :rev "1"
                :task "TASK-0"
-               :files ["Core.java"]
+               :file "Core.java"
+               ;:files ["Core.java"]
                :msg "Started with TASK-0"
                :author "ndrew.sernyak@gmail.com"
              } {
                :rev "2"
                :task "TASK-1"
-               :files ["Core.java"] 
+               :file "Core.java"
+               ;:files ["Core.java"] 
                :msg "Implementing TASK-1"
                :author "ndrew.sernyak@gmail.com"
              } {
                :task "TASK-2"
                :rev "3"
-               :files ["Utils.java" "Core.java"]
+               :file "Utils.java"
+               ;:files ["Utils.java" "Core.java"]
                :msg "Implementing TASK-2"
                :author "aigooor@gmail.com"
              } {
                :rev "4"
-               :files ["Utils.java"] 
+               :file "Utils.java"
+               ;:files ["Utils.java"] 
                :msg "bugfix"
                :author "some@one.else"
               }])
