@@ -112,7 +112,7 @@
      ])
           
 
-(log "start processing " (reduce #(str %1 "\n" %2) dummy-entities))
+;(log "start processing " (reduce #(str %1 "\n" %2) dummy-entities))
 
 ; todo: validation?
 
@@ -120,9 +120,9 @@
 (def result (doall(pmap process-entity 
   (map parse-entity dummy-entities))))
 
-(log "result is" (binding [*print-right-margin* 7] (pprint result)))
+;(log "result is" (binding [*print-right-margin* 7] (pprint result)))
 ;)
 
-(log "done")
+;(log "done")
 
 
