@@ -86,8 +86,10 @@ ul li:hover {
     margin-left: 215px;
     border: 1px solid #ccc;}
 
+#visualization_view > div:first-child {
+  margin-left: 215px; }
+
 #legend {
-  background-color: white;
   margin-left: 0.5em;
   padding-left: 0em;
   padding-top: 0;
@@ -142,6 +144,9 @@ pre {
   font-size: 0.8em;
   overflow: auto;
   width: 100%;}
+
+nav {
+  display: inline-block;}
 
 #debug:before {
   content: "Debug: ";}

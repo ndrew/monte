@@ -45,23 +45,36 @@
     
       [:div {:id "refine_view" :class "view"} 
             [:p "Connect the data sets from miners. " 
-            [:span {:class "hint"} "(?)"]]]
+            [:span {:class "hint"} "(?)"]]
+            
+            [:div {:class "list"}
+                  [:h4 "Entities"]
+                  [:table {:id "entities_table"}
+                         [:tr [:td {:class="new" :colspan="3"}
+                                   [:a {:href "#" :id "new_miner"} "add new"]]]]]
+
+            [:div {:class "list"}
+                  [:h4 "Connections"]
+                  [:table {:id "connections_table"}
+                         [:tr [:td {:class="new" :colspan="3"}
+                                   [:a {:href "#" :id "new_miner"} "add new"]]]]]
+
+                        
+            ]
       
       
       [:div {:id "visualization_view" :class "view"}
-            ;[:p "Define the views and configure data presentation. " 
-            ;[:span {:class "hint"} "(?)"]]
-            [:div {:style "margin-left: 210px;"} 
-              [:label "Filter: "]
-              [:input {:type "text" :class "filter_box"} ]]
+            [:div  
+              [:label "Query: "]
+              [:input {:type "text" :class "filter_box"} ]
+              [:span {:class "hint"} "(?)"]]
             [:div
               [:div {:id "legend"}
-                [:span "Legend"]
-               ]
-              [:div {:id "canvas"}]]
-            ]]
-
-      
+                 [:div {:class "list" :style "display: block; width: 100%;"}
+                   [:h4 "Legend"]
+                   [:table {:id "legend_table"} [:tbody ]]
+                 ]]
+              [:div {:id "canvas"}]]]]
       
     ; just some info for debugging
     [:pre {:id "debug"}]
@@ -69,4 +82,5 @@
     (javascript-tag (str
                       "monte.ui.project_view = true;" 
                       "monte.ui.project_hash = " project ";"))
-    ))
+    )
+  )

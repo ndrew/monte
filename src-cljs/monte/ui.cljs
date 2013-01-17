@@ -26,6 +26,11 @@
 
 (def dom-vars "#var_table tbody")
 
+(def dom-entities "#entities_table tbody")
+
+(def dom-legend "#legend_table tbody")
+
+
 (def lbl-add "add new")
 
 (def miner-schemas (atom []))
@@ -159,7 +164,6 @@
 
 (defn list-vars[vars]
   (.empty ($ dom-vars))
-  (log (str "VARS:" (pr-str vars)))
   (doseq [v vars]
     (let [[name id value] v]
       
@@ -175,6 +179,18 @@
   
   ; todo: add var functionality
   (.append ($ dom-vars) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
+
+
+(defn list-entities[entities]
+  (.empty ($ dom-entities))
+  (doseq [e entities]
+    (.append ($ dom-entities) 
+      (html
+        [:tr [:td {:colspan "3"} (pr-str e)]])))
+  
+  ; todo: add entity functionality
+  (.append ($ dom-entities) (html [:tr [:td {:class "new" :colspan "3"} [:a {:href "#"} lbl-add] ]])))
+
 
 
 
@@ -229,9 +245,32 @@
   (select-project-view "#miner")
   (.text ($ "#viewport article h1") (:name project))
   (list-vars (:vars project))
-  (list-miners (:miners project))      
+  (list-miners (:miners project))
+  (list-entities (:entities project))    
   (status "Loaded project " (:name project)))
    
+
+(defn update-visualization[vis-data]
+  (get-graph) ; load graph
+  (.empty ($ dom-legend))
+  (doseq [a vis-data]
+    (let [k (first (keys a))
+          data (:data (get a k))]
+          (.append ($ dom-legend) (html
+             [:tr 
+             [:td {:colspan "3"} 
+              [:pre (pr-str k)]]]))
+  
+        ; (log (pr-str data))
+          (doseq [d data]            
+            (.addNode @graph d
+                      (js-map{:render 
+                              (fn[r n] 
+                                (render-dummy r n)
+                                
+                                )
+                              })))))
+  (redraw-vis))
    
 (defn update-workspace-ui [workspace]
   "does ui update on workspace changed"
@@ -244,12 +283,14 @@
     (list-projects (:projects workspace))))
   
   (when project-view
-    (when-not (nil? (:miners workspace))
-      (reset! miner-schemas (:miners workspace))) ; store all miners 
+    (when-let [miners (:miners workspace)]
+      (reset! miner-schemas miners)) ; store all miners 
                  
-    (when-not (nil? (:current workspace))        
-      (let [proj (:current workspace)]
-        (update-project-ui proj))))) 
+    (when-let [proj (:current workspace)]
+      (update-project-ui proj))
+    
+    (when-let [data (:data workspace)]
+      (update-visualization data)))) 
 
 
 
@@ -284,30 +325,7 @@
     (update-workspace-ui workspace)
     (when-not (:current workspace)
       (reset! proj {}))
-    
-    (when (:data workspace)
-      (status "received miner-data")
-      
-      ;(reset! graph nil)
-      
-      (get-graph) ; load graph
-      
-      (doseq [a (:data workspace)]
-        
-          (let [k (first (keys a))
-                data (:data (get a k))]
-       
-          (log (str "processing " (pr-str k))) ; add to legend + create a render func
-          ; (log (pr-str data))
-        
-          (doseq [d data]            
-            (.addNode @graph (:id d)
-                       ;(js-map{:render render-dummy})
-                       (js-map {})
-                       ))))
-      (redraw-vis)
-    
-    (reset! latest-update (tick))))))
+    (reset! latest-update (tick)))))
 
 
 (defn run-miners[]
