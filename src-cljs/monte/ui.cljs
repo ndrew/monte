@@ -66,7 +66,22 @@
 (defn render-dummy[r n] 
   (let [[x y] (.-point n)
         id (. n -id)]
-          (.push (.set r) (.text r x y id))))
+
+    ; here starts monkey code!
+    (cond 
+      ; task
+      (contains? id :title) (.push (.set r) (.text r x y (:title id)))
+      (contains? id :msg) (.push (.set r) (.text r x y (:msg id)))
+      (contains? id :file) (.push (.set r) (.text r x y (:file id)))
+      
+      
+       
+      ;(contains? id :msg) (.push (.set r) (.text r x y (:title id))) 
+      
+      :else (.push (.set r) (.text r x y id)))
+      
+    
+          ))
 
 
 ;;;;;;;;;;;;;;;;;

@@ -19,37 +19,37 @@
 (def commits [{
                :rev "1"
                :task "TASK-0"
-               :files ["{WORK-DIR}/Core.java"]
+               :files ["Core.java"]
                :msg "Started with TASK-0"
                :author "ndrew.sernyak@gmail.com"
              } {
                :rev "2"
                :task "TASK-1"
-               :files ["{WORK-DIR}/Core.java"] 
+               :files ["Core.java"] 
                :msg "Implementing TASK-1"
                :author "ndrew.sernyak@gmail.com"
              } {
                :task "TASK-2"
                :rev "3"
-               :files ["{WORK-DIR}/Utils.java" "{WORK-DIR}/Core.java"]
+               :files ["Utils.java" "Core.java"]
                :msg "Implementing TASK-2"
                :author "aigooor@gmail.com"
              } {
                :rev "4"
-               :files ["{WORK-DIR}/Utils.java"] 
+               :files ["Utils.java"] 
                :msg "bugfix"
                :author "some@one.else"
               }])
 
 
-(def src-analysis-data [{ :file "{WORK-DIR}/project.clj" } 
+(def src-analysis-data [{ :file "project.clj" } 
                         { 
-                          :file "{WORK-DIR}/Core.java"
+                          :file "Core.java"
                           :class_name "Core"
                           :dependencies ["java.util.List" "Utils"]
                           :javadoc [{:author "Andrew" :raw "12:/** @author Andrew \n impl of TASK-1 */"}  {:author "Ihor" :raw "42:/** @author Ihor \n necessary changes for TASK-2 */"} ]    
                         } { 
-                          :file "{WORK-DIR}/Utils.java"
+                          :file "Utils.java"
                           :class_name "Utils"
                           :dependencies ["java.util.List"]
                           :javadoc [{:raw "43:/** \n impl of TASK-1 */"}]    
