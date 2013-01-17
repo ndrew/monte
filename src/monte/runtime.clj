@@ -73,6 +73,7 @@
 
 (defn connections-for-project[]
   ["tasks.id=commits.task"
+   "commits.file=src.file"
    ;["dummy_miner="]
    ])
 
