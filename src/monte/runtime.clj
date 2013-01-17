@@ -185,8 +185,7 @@
                     ;(println (pr-str r))
                     {(first d) r})
             (doall (map #(conj miners (core/parse-entity %1)) entities)))))
-          
-          
+                    
           
           (reset! changes 
             (conj @changes [(System/currentTimeMillis) 

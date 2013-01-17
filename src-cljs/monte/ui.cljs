@@ -30,7 +30,6 @@
 
 (def dom-legend "#legend_table tbody")
 
-
 (def lbl-add "add new")
 
 (def miner-schemas (atom []))
@@ -38,7 +37,7 @@
 ;; vis stuff
 (def graph (atom nil))
 
-(def vis-data-entities ["fffuuu!" "barrrr" "bazzzzz" "ffffuuuuzzzz"]) ;todo
+(def vis-data-entities ["fffuuu!" "barrrr" "bazzzzz" "ffffuuuuzzzz"]) ;todo: remove
 
 (def vis-data-connections [])
 
@@ -250,7 +249,7 @@
   (status "Loaded project " (:name project)))
    
 
-(defn update-visualization[vis-data]
+(defn update-visualization[vis-data adj]
   (get-graph) ; load graph
   (.empty ($ dom-legend))
   (doseq [a vis-data]
@@ -270,6 +269,32 @@
                                 
                                 )
                               })))))
+  ;(log "adj handling")
+  (doseq [c adj]
+    ;(log (pr-str c))
+    (let [[e1 e2 pairs] c
+          m1 (first (remove (fn[x] (not (contains? x e1))) vis-data ))
+          m2 (first (remove (fn[x] (not (contains? x e2))) vis-data ))
+          d1 (:data (get m1 e1))
+          d2 (:data (get m2 e2))
+          
+          ]
+      
+      
+      (log (pr-str d1))
+      (log (pr-str d2))
+      (doseq [p pairs]
+        
+        (log (nth d1 (nth (first p) 0)))
+        (log (nth d2 (nth (first p) 1)))
+          
+        (.addEdge @graph (nth d1 (nth (first p) 0)) (nth d2 (nth (first p) 1)))
+        )
+      
+      
+      )
+    
+    )
   (redraw-vis))
    
 (defn update-workspace-ui [workspace]
@@ -289,8 +314,10 @@
     (when-let [proj (:current workspace)]
       (update-project-ui proj))
     
-    (when-let [data (:data workspace)]
-      (update-visualization data)))) 
+    (if (:data workspace)
+    (let [data (:data workspace)
+               adj (:connections workspace)]
+      (update-visualization data adj)))))
 
 
 

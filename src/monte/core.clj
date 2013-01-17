@@ -274,11 +274,11 @@
         e2 (parse-expression s2)]
 
          ;(println "FIRST ENTITY")
-          (println (pr-str e1))
-          (println (pr-str e2))
+        ;(println (pr-str e1))
+        ;(println (pr-str e2))
 
-         (println (pr-str (reduce-data (:data (get-async (keyword (:entity (first e1))))) (rest e1))))
-         (println (pr-str (reduce-data (:data (get-async (keyword (:entity (first e2))))) (rest e2))))
+         ;(println (pr-str (reduce-data (:data (get-async (keyword (:entity (first e1))))) (rest e1))))
+         ;(println (pr-str (reduce-data (:data (get-async (keyword (:entity (first e2))))) (rest e2))))
        
   (let [d1 (reduce-data (:data (get-async (keyword (:entity (first e1))))) (rest e1))
         d2 (reduce-data (:data (get-async (keyword (:entity (first e2))))) (rest e2))
@@ -289,5 +289,5 @@
                 ))]
       [(keyword (:entity (first e1)))
        (keyword (:entity (first e2)))
-       (remove empty? (map (fn[x] (remove nil? x)) (filter #(not (= (list nil nil) %)) adj)) )]    
+       (remove empty? (map (fn[x] (remove nil? x)) (filter #(not (= (list nil nil) %)) (vec adj))))]    
     )))
