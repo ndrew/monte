@@ -164,9 +164,10 @@
 
 (def raw-data (atom {}))
 
-  
-(defmacro log[& body] ; for testing purposes
-  `(println (str ~@body " at " (System/currentTimeMillis) )))
+ 
+ 
+;(defmacro log[& body] ; for testing purposes
+;  `(println (str ~@body " at " (System/currentTimeMillis) )))
 
 
 (defn get-async[key & f]
@@ -176,7 +177,7 @@
     ; should be synchronized without this
     (when (nil? f)
       (while (not (get @raw-data key))
-        (log "waiting for " key)             
+        ;(log "waiting for " key)             
         (Thread/sleep 100) 
         (get @raw-data key)))
     
@@ -186,19 +187,19 @@
     (when-not (get @raw-data key)
       (when f
           (let [lock (future
-                          (log "\t\thello from future " key)
+                          ;(log "\t\thello from future " key)
                           ((first f)))]
-            (log "SETTING FUTURE : " key)
+            ;(log "SETTING FUTURE : " key)
             (swap! raw-data conj (hash-map key lock))))))
     
-    (log "getting " key " async")
+    ;(log "getting " key " async")
     @(get @raw-data key)
       
     ))
 
   
 (defn process-entity[[name config]] 
-  (log "\tprocessing " name " " (pr-str config) )
+  ;(log "\tprocessing " name " " (pr-str config) )
 
   (let [key (keyword name)
         data-cfg (first config)
@@ -229,11 +230,17 @@
                               prop))) data props)))))))
 
 
+(defn- reduce-data [data props] 
+  (reduce (fn[x y] 
+    (let [prop (access-property x (:props y))]
+      (if (:filter y)
+      prop ; filtration
+      prop))) data props))
 
 ; todo: refactor
 (defn process-entity-new[[name config] miners] 
-  (log "processing " name " " (pr-str config) )
-  (log "miners=" (apply str miners) )
+  ;(log "processing " name " " (pr-str config) )
+  ;(log "miners=" (apply str miners) )
   
   (let [key (keyword name)
         data-cfg (first config)
@@ -258,9 +265,29 @@
                   
                   (hash-map 
                     :entity key
-                    :data (reduce (fn[x y] 
-                            (let [prop (access-property x (:props y))]
-                              (if (:filter y)
-                              prop ; filtration
-                              prop))) data props)))))))
+                    :data (reduce-data data props)))))))
 
+
+(defn process-connections[cstr]
+  (let [[s1 s2] (clojure.string/split cstr #"=")
+        e1 (parse-expression s1)
+        e2 (parse-expression s2)]
+
+         ;(println "FIRST ENTITY")
+          (println (pr-str e1))
+          (println (pr-str e2))
+
+         (println (pr-str (reduce-data (:data (get-async (keyword (:entity (first e1))))) (rest e1))))
+         (println (pr-str (reduce-data (:data (get-async (keyword (:entity (first e2))))) (rest e2))))
+       
+  (let [d1 (reduce-data (:data (get-async (keyword (:entity (first e1))))) (rest e1))
+        d2 (reduce-data (:data (get-async (keyword (:entity (first e2))))) (rest e2))
+        
+        adj (for [x (range (count d1))]
+              (for [y (range (count d2))]
+                (if (= (nth d1 x) (nth d2 y)) [x y] nil)
+                ))]
+      [(keyword (:entity (first e1)))
+       (keyword (:entity (first e2)))
+       (remove empty? (map (fn[x] (remove nil? x)) (filter #(not (= (list nil nil) %)) adj)) )]    
+    )))

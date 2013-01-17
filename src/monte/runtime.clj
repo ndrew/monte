@@ -60,9 +60,9 @@
 
 
 (defn entities-for-project[]
-  ["tasks=(JIRAMiner)"
-   "commits=(VCSMiner)"
-   "src=(SRCMiner)"
+  ["tasks=(JIRAMiner)" ; display: id
+   "commits=(VCSMiner)"; display: title
+   "src=(SRCMiner)"    ; 
    
    ;["classes=(code_miner)"]
    ;["test-cases=classes.class_name{:ends 'Test'}"] 
@@ -72,7 +72,7 @@
 
 
 (defn connections-for-project[]
-  [
+  ["tasks.id=commits.task"
    ;["dummy_miner="]
    ])
 
@@ -179,12 +179,18 @@
           ;(println "==============================")
           (def result (doall
             (pmap 
-               #(let[[d m] %1]
-                    {(first d) (core/process-entity-new d m)})
+               #(let[[d m] %1
+                     r (core/process-entity-new d m)]
+                    ;(println (first d))
+                    ;(println (pr-str r))
+                    {(first d) r})
             (doall (map #(conj miners (core/parse-entity %1)) entities)))))
           
-          ;(print "result=")
-          ;(println (pr-str result))
+          
+          
           (reset! changes 
-            (conj @changes [(System/currentTimeMillis) {:data result}]))
+            (conj @changes [(System/currentTimeMillis) 
+                            {:data result
+                             :connections (map core/process-connections (:connections proj))
+                             }]))
           result)))
