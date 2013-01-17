@@ -197,7 +197,7 @@
 
 (defn select-project-view [link-id] 
   (let [view-id (str link-id "_view")
-        links ($ "#viewport article a")
+        links ($ "#viewport article nav a")
         views ($ "#viewport article .view")]
     (log (str "view selected " view-id))
     
@@ -302,7 +302,9 @@
         
           (doseq [d data]            
             (.addNode @graph (:id d)
-                       (js-map{:render render-dummy})))))
+                       ;(js-map{:render render-dummy})
+                       (js-map {})
+                       ))))
       (redraw-vis)
     
     (reset! latest-update (tick))))))

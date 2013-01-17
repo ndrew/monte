@@ -12,13 +12,13 @@
   (common/layout 
     [:article {:id "project"}
       [:div {:class "status"} "STATUS HERE"]
-    
-      [:h1 {:class "proj-name"} "Opening..."] 
-      [:h2 {:class "view-nav"}
-         ; todo: migrate to lists
-         "&nbsp;1. " [:a {:href "#" :id "miner"} "Miners"] 
-         "&nbsp;2. " [:a {:href "#" :id "refine"} "Refine data"] ; todo: better naming
-         "&nbsp;3. " [:a {:href "#" :id "visualization"} "Visualization"]]
+      [:nav 
+        [:h1 {:class "proj-name"} "Opening..."] 
+        [:h2 {:class "view-nav"}
+           ; todo: migrate to lists
+           "&nbsp;1. " [:a {:href "#" :id "miner"} "Miners"] 
+           "&nbsp;2. " [:a {:href "#" :id "refine"} "Refine data"] ; todo: better naming
+           "&nbsp;3. " [:a {:href "#" :id "visualization"} "Visualization"]]]
       
       [:div {:class "actions"}
                   [:button {:id "run_miners"} "Run miners"]
