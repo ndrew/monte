@@ -7,6 +7,7 @@
   
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
+                 [datalog               "0.1.1"]
                  [fs                    "1.2.0"]
                  [compojure             "1.1.3"]
                  [lib-noir              "0.3.3"]

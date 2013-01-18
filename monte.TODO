@@ -134,7 +134,9 @@ Workspace:
     ☐ async miner run, @P1
 
   ☐ save history of operations, @P3
-  ☐ use datalog, @P5 — nope, maybe later
+  ☐ use datalog
+    ☐ do some tests with https://github.com/martintrojer/datalog
+      ✔ simle test @done (13-01-18 19:40)
     ☐ check ttt.search.core for querying upon core.logic, @P0
     ☐ http://clojuredocs.org/clojure_contrib/1.2.0/clojure.contrib.datalog.database/make-database
   ☐ saving and loading (see non-commited cfg) @P1
