@@ -1,122 +1,107 @@
 Questions:
- ☐ why printlns are passed via remotes
-
+  ☐ why printlns are passed via remotes
 UI:
- ☐ intro screen,
-     ✔ copy from prototype @done (13-01-07 14:22)
-     ✔ layout @done (13-01-05 13:20) 
-     ✔ listing projects @done (13-01-05 17:34)
-     ☐ adding new project, @P3, @postponed
-       ☐ directory listing, @postponed
-
- ☐ miner screen, @P1
-    ☐ miners, @P1
+  ☐ intro screen,
+  ✔ copy from prototype @done (13-01-07 14:22)
+  ✔ layout @done (13-01-05 13:20) 
+  ✔ listing projects @done (13-01-05 17:34)
+  ☐ adding new project, @P3, @postponed
+      ☐ directory listing, @postponed
+  ☐ miner screen, @P1
+  ☐ miners, @P1
       ✔ save miner-schemas from server @done (13-01-10 12:58)
       ✔ list miners, @in-progress @done (13-01-16 03:29)
       ☐ launching miners
-    ☐ vars, @P1
+  ☐ vars, @P1
       ✔ list vars @done (13-01-10 12:59)
       ☐ edit vars
       ☐ add vars
- ☐ refine data screen
-   ☐ entities
-   ☐ relations
-
- ☐ visualization screen
-   ✔ add raphael canvas @done (13-01-15 23:39)
-   ☐ add timeline
-   ☐ add filter box
-   ☐ add legend
-
- ☐ help hints, @P5
-
- ☐ status panel
-   ☐ autohiding on timeout
-
- ☐ actions panel
-   ☐ add full refresh button
+  ☐ refine data screen
+      ☐ entities
+      ☐ relations
+  ☐ visualization screen
+  ✔ add raphael canvas @done (13-01-15 23:39)
+  ☐ add timeline
+  ☐ add filter box
+  ☐ add legend
+  ☐ status panel
+  ☐ ?autohiding on timeout
+  ☐ displaying miner progress
+  ☐ actions panel
+    ☐ add full refresh button
+  ☐ misc
+    ☐ help hints, @P5
 Bugs:
-  ☐ 
-
 Cljs:
   ☐ ? use crossovers — https://github.com/emezeske/lein-cljsbuild/blob/0.2.10/doc/CROSSOVERS.md
-
 Projects:
- ☐ listing of existing projects @P1
-   ☐ project structure
-     ✔ :name @done (13-01-05 17:35)
-     ✔ :hash @done (13-01-12 18:08)
-     ☐ last modified
-   ☐ serialization/deserialization
-     ☐ in user dir?
-
- ☐ adding new projects @P3
-   ✔ for now we can create projects by hand @done (13-01-05 17:35)
-
+  ☐ listing of existing projects @P1
+    ☐ project structure
+      ✔ :name @done (13-01-05 17:35)
+      ✔ :hash @done (13-01-12 18:08)
+      ☐ last modified
+    ☐ serialization/deserialization
+      ☐ ?in user dir
+      ☐ ?via https://gist.github.com/4565367
+  ☐ adding new projects @P3
+     ✔ for now we can create projects by hand @done (13-01-05 17:35)
+     ☐ ui
 Miners:
- ✔ miner infrastructure @done (13-01-08 18:44)
- ✔ implement miners as protocols @done (13-01-10 02:44)
-   ✔ try loading new miners from external file @done (13-01-12 06:36)
- ✔ sample data miner, @in-progress @done (13-01-12 06:36)
- ✔ macros_test.clj -> miners.core, @done (13-01-12 18:03)
- ☐ ?caching for miners?
-
- ☐ git miner, @P2
-   ☐ ?github api (via https://github.com/Raynes/clj-github)
- ☐ class miner (for java/groovy/php), @P2
-   ☐ ?via regex
- ☐ clojure miner, @P2
-   ☐ check how it is done in codeq
- ☐ junit and other test results, @P2
-
- ☐ data cleaning
-   ☐ take some ideas from — http://vis.stanford.edu/wrangler/ (data cleaning and transformation)
-   ☐ http://code.google.com/p/google-refine/ (https://github.com/OpenRefine/OpenRefine)
-
- ☐ text mining
-   ☐ Word Tree — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Word_Tree.html
-   ☐ Tag Cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
-   ☐ Word Cloud Generator — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Word_Cloud_Generator.html
-
+  ✔ miner infrastructure @done (13-01-08 18:44)
+  ✔ implement miners as protocols @done (13-01-10 02:44)
+    ✔ try loading new miners from external file @done (13-01-12 06:36)
+  ✔ sample data miner, @in-progress @done (13-01-12 06:36)
+  ✔ macros_test.clj -> miners.core, @done (13-01-12 18:03)
+  ☐ ?caching for miners?
+  ☐ git miner, @P2
+    ☐ ?github api (via https://github.com/Raynes/clj-github)
+  ☐ class miner (for java/groovy/php), @P2
+    ☐ ?via regex
+  ☐ clojure miner, @P2
+    ☐ check how it is done in codeq
+  ☐ junit and other test results, @P2
+  ☐ data cleaning
+    ☐ take some ideas from — http://vis.stanford.edu/wrangler/ (data cleaning and transformation)
+    ☐ http://code.google.com/p/google-refine/ (https://github.com/OpenRefine/OpenRefine)
+  ☐ text mining
+    ☐ Word Tree — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Word_Tree.html
+    ☐ Tag Cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
+    ☐ Word Cloud Generator — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Word_Cloud_Generator.html
 Visualizations:
- ☐ d3 js — https://github.com/mbostock/d3/wiki/Gallery
-   ☐ treemaps — http://bl.ocks.org/4063582
-   ☐ buble charts — http://bl.ocks.org/4063269
-   ☐ chord diagram — http://bl.ocks.org/4062006 [show directed relationships among a group of entities]
-   ☐ dendrogram — http://bl.ocks.org/4063570
-   and much more — https://github.com/mbostock/d3/wiki/Gallery
- ☐ ? http://sigmajs.org/examples/parse_data.html
- ☐ some kind of timeline
+  ☐ d3 js — https://github.com/mbostock/d3/wiki/Gallery
+    ☐ treemaps — http://bl.ocks.org/4063582
+    ☐ buble charts — http://bl.ocks.org/4063269
+    ☐ chord diagram — http://bl.ocks.org/4062006 [show directed relationships among a group of entities]
+    ☐ dendrogram — http://bl.ocks.org/4063570
+    and much more — https://github.com/mbostock/d3/wiki/Gallery
+  ☐ ? http://sigmajs.org/examples/parse_data.html
+  ☐ some kind of timeline
     ☐ ? https://github.com/VeriteCo/TimelineJS
     ☐ ? cubism — http://square.github.com/cubism/
-
- ☐ ? google chart tools — https://google-developers.appspot.com/chart/
-
- ☐ ? tableau
-
- ☐ CHARTS:
-   See relationships among data points:
-     ☐ scatterplot — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Scatterplot.html
-     ☐ matrix charts — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Matrix_Chart.html
-     ☐ network diagram — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Network_Diagram.html
-  Compare a set of values:
-     ☐ bar chart — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Bar_Chart.html
-     ☐ block histogram — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Block_Histogram.html
-     ☐ !bubble chart — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Bubble_Chart.html
-   Track rises and falls over time:
-     ☐ line graph — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Line_Graph.html
-     ☐ stock graph — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Stack_Graph.html
-     ☐ stock graph for categories — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Stack_Graph_for_Categories.html
-   See the parts of a whole:
-     ☐ pie charts — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Pie_Chart.html
-     ☐ treemap — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap.html
-     ☐ ?treemap for comparison — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap_for_Comparisons.html
-    Analyze text:
-     ☐ word tree — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap_for_Comparisons.html
-     ☐ tag cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
-
+  ☐ ? google chart tools — https://google-developers.appspot.com/chart/
+  ☐ ? tableau
+  ☐ CHARTS:
+     See relationships among data points:
+       ☐ scatterplot — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Scatterplot.html
+       ☐ matrix charts — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Matrix_Chart.html
+       ☐ network diagram — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Network_Diagram.html
+    Compare a set of values:
+       ☐ bar chart — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Bar_Chart.html
+       ☐ block histogram — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Block_Histogram.html
+       ☐ !bubble chart — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Bubble_Chart.html
+     Track rises and falls over time:
+       ☐ line graph — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Line_Graph.html
+       ☐ stock graph — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Stack_Graph.html
+       ☐ stock graph for categories — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Stack_Graph_for_Categories.html
+     See the parts of a whole:
+       ☐ pie charts — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Pie_Chart.html
+       ☐ treemap — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap.html
+       ☐ ?treemap for comparison — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap_for_Comparisons.html
+      Analyze text:
+       ☐ word tree — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap_for_Comparisons.html
+       ☐ tag cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
 Workspace:
-  ☐ storing entities, @P1
+  ☐ storing entities, @P1 — https://gist.github.com/4565367
   ☐ stroring relations, @P1
  defining workspace (DSL):
   ☐ defining entities
@@ -149,82 +134,71 @@ Workspace:
   ✔ migrate from noir to compojure @done (13-01-13 18:30)
   ☐ use pretty print!
   ☐ add marginalia docs
-
 Research:
-
-matchure vs core.unify vs core.logic vs datalog vs core.match
-
-Datalog (Datomic?)
-  Links:
-    https://github.com/martintrojer/datalog/tree/master/src/datalog  
-    http://martinsprogrammingblog.blogspot.com/2012/08/some-more-datalog.html
-  Moar research:
-    ~43  https://groups.google.com/forum/?fromgroups=#!searchin/clojure/datalog
-    ~202 http://stackoverflow.com/search?q=datalog
-
-core.logic
-
-  examples of usage
-    https://github.com/ohpauleez/ttt/blob/master/src/ttt/search/core.cljs
-
-  Links:
-    https://github.com/clojure/core.logic
-    http://dosync.posterous.com/
-  Moar research:
-    ~230 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/core.logic
-    ~74  http://stackoverflow.com/search?q=core.logic
-
-core.unify
-  Links:
-    https://github.com/clojure/core.unify
-    http://blog.fogus.me/2010/12/14/unification-versus-pattern-matching-to-the-death/#fn:matching
-  Moar research:
-    ~12 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/core.unify
-
-Matching:
-  
-  http://dev.clojure.org/display/design/Matching
-
-  core.match
-    Links:
+  matchure vs core.unify vs core.logic vs datalog vs core.match
+  core.logs vs datomic — https://groups.google.com/forum/?fromgroups=#!searchin/clojure/datalog/clojure/NPW0C6XqucU/tPmNAufNDpMJ
+  pattern matching vs destructuring — http://blog.fogus.me/2011/01/14/pattern-matching-vs-destructuring-electric-boogaloo/
+  Datalog (Datomic?):
+    Links
+      https://github.com/martintrojer/datalog/tree/master/src/datalog  
+      http://martinsprogrammingblog.blogspot.com/2012/08/some-more-datalog.html
+      https://github.com/martintrojer/datalog/blob/master/src/datalog/example.clj
+    Moar research
+      ~43  https://groups.google.com/forum/?fromgroups=#!searchin/clojure/datalog
+      ~202 http://stackoverflow.com/search?q=datalog
+  core.logic:
+    examples of usage
+      https://github.com/ohpauleez/ttt/blob/master/src/ttt/search/core.cljs
+      https://gist.github.com/3122375
+      http://martinsprogrammingblog.blogspot.com/2012/07/replicating-datomicdatalog-queries-with.html
+    Links
+      https://github.com/clojure/core.logic
+      http://dosync.posterous.com/
+    Moar research
+      ~230 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/core.logic
+      ~74  http://stackoverflow.com/search?q=core.logic
+  core.unify:
+    Links
+      https://github.com/clojure/core.unify
+      http://blog.fogus.me/2010/12/14/unification-versus-pattern-matching-to-the-death/#fn:matching
+    Moar research
+      ~12 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/core.unify
+  Matching:  
+    http://dev.clojure.org/display/design/Matching
+    core.match:
+    Links
       https://github.com/clojure/core.match
-    Moar research:
+    Moar research
       ~10 http://stackoverflow.com/search?q=core.match
-
-  matchure
-    Links:
-      https://github.com/dcolthorp/matchure
-      https://github.com/dcolthorp/matchure/blob/master/test/matchure_test.clj
-    Moar research:
-      ~14 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/matchure
-      ~4  http://stackoverflow.com/search?q=matchure
-
-VS's
-  core.logs vs datomic
-    https://groups.google.com/forum/?fromgroups=#!searchin/clojure/datalog/clojure/NPW0C6XqucU/tPmNAufNDpMJ
-  pattern matching vs destructuring
-    http://blog.fogus.me/2011/01/14/pattern-matching-vs-destructuring-electric-boogaloo/
-
-
-additional stuff:
+    matchure:
+      Links
+        https://github.com/dcolthorp/matchure
+        https://github.com/dcolthorp/matchure/blob/master/test/matchure_test.clj
+      Moar research
+        ~14 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/matchure
+        ~4  http://stackoverflow.com/search?q=matchure
+research:
   caching: 
     for caching miner data
     https://github.com/clojure/core.cache
-
   moar mining:
-    CSV
-      https://github.com/clojure/data.csv
+    CSV — https://github.com/clojure/data.csv
+    XML — https://github.com/clojure/data.xml
+    JSON — https://github.com/clojure/data.json
+    ZIP — https://github.com/clojure/data.zip
   error handling:
     http://dev.clojure.org/display/design/Error+Handling
-
-  moar research:
-    event handing:
+even more research:
+  event handing:
       https://github.com/ztellman/lamina/
       lamina vis!
-    web servers:
-      aleph — https://github.com/ztellman/aleph/
-    pipelines — http://stuartsierra.com/2012/05/16/syntactic-pipelines
-    finger trees — https://github.com/clojure/data.finger-tree
-    zip — https://github.com/clojure/data.zip
-    benchmarking — https://github.com/clojure/test.benchmark
-    logging — https://github.com/clojure/tools.logging
+  web servers:
+    aleph — https://github.com/ztellman/aleph/
+  pipelines:
+    http://stuartsierra.com/2012/05/16/syntactic-pipelines
+  finger trees:
+    https://github.com/clojure/data.finger-tree
+  benchmarking:
+    https://github.com/clojure/test.benchmark
+  logging:
+    https://github.com/clojure/tools.logging
