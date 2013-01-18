@@ -55,6 +55,7 @@ Miners:
   ☐ ?caching for miners?
   ☐ git miner, @P2
     ☐ ?github api (via https://github.com/Raynes/clj-github)
+    ☐ some insites from ttt
   ☐ class miner (for java/groovy/php), @P2
     ☐ ?via regex
   ☐ clojure miner, @P2
@@ -101,8 +102,11 @@ Visualizations:
        ☐ word tree — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap_for_Comparisons.html
        ☐ tag cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
 Workspace:
-  ☐ storing entities, @P1 — https://gist.github.com/4565367
-  ☐ stroring relations, @P1
+  storing:
+    http://www.javacodegeeks.com/2013/01/clojure-reading-and-writing-a-reasonably-sized-file.html
+    https://gist.github.com/4565367
+    ☐ storing entities, @P1
+    ☐ stroring relations, @P1
  defining workspace (DSL):
   ☐ defining entities
     ✔ parsing entities name @done (13-01-15 01:29)
@@ -184,7 +188,9 @@ research:
   moar mining:
     CSV — https://github.com/clojure/data.csv
     XML — https://github.com/clojure/data.xml
-    JSON — https://github.com/clojure/data.json
+    JSON:
+      https://github.com/clojure/data.json
+      https://github.com/dakrone/cheshire
     ZIP — https://github.com/clojure/data.zip
   error handling:
     http://dev.clojure.org/display/design/Error+Handling
@@ -202,3 +208,6 @@ even more research:
     https://github.com/clojure/test.benchmark
   logging:
     https://github.com/clojure/tools.logging
+code quality stuff:
+  http://creativyst.com/Doc/Articles/Mgt/LOCMonster/LOCMonster.htm
+  http://ariya.ofilabs.com/2013/01/javascript-code-complexity-visualization.html
