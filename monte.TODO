@@ -149,3 +149,82 @@ Workspace:
   ✔ migrate from noir to compojure @done (13-01-13 18:30)
   ☐ use pretty print!
   ☐ add marginalia docs
+
+Research:
+
+matchure vs core.unify vs core.logic vs datalog vs core.match
+
+Datalog (Datomic?)
+  Links:
+    https://github.com/martintrojer/datalog/tree/master/src/datalog  
+    http://martinsprogrammingblog.blogspot.com/2012/08/some-more-datalog.html
+  Moar research:
+    ~43  https://groups.google.com/forum/?fromgroups=#!searchin/clojure/datalog
+    ~202 http://stackoverflow.com/search?q=datalog
+
+core.logic
+
+  examples of usage
+    https://github.com/ohpauleez/ttt/blob/master/src/ttt/search/core.cljs
+
+  Links:
+    https://github.com/clojure/core.logic
+    http://dosync.posterous.com/
+  Moar research:
+    ~230 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/core.logic
+    ~74  http://stackoverflow.com/search?q=core.logic
+
+core.unify
+  Links:
+    https://github.com/clojure/core.unify
+    http://blog.fogus.me/2010/12/14/unification-versus-pattern-matching-to-the-death/#fn:matching
+  Moar research:
+    ~12 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/core.unify
+
+Matching:
+  
+  http://dev.clojure.org/display/design/Matching
+
+  core.match
+    Links:
+      https://github.com/clojure/core.match
+    Moar research:
+      ~10 http://stackoverflow.com/search?q=core.match
+
+  matchure
+    Links:
+      https://github.com/dcolthorp/matchure
+      https://github.com/dcolthorp/matchure/blob/master/test/matchure_test.clj
+    Moar research:
+      ~14 https://groups.google.com/forum/?fromgroups=#!searchin/clojure/matchure
+      ~4  http://stackoverflow.com/search?q=matchure
+
+VS's
+  core.logs vs datomic
+    https://groups.google.com/forum/?fromgroups=#!searchin/clojure/datalog/clojure/NPW0C6XqucU/tPmNAufNDpMJ
+  pattern matching vs destructuring
+    http://blog.fogus.me/2011/01/14/pattern-matching-vs-destructuring-electric-boogaloo/
+
+
+additional stuff:
+  caching: 
+    for caching miner data
+    https://github.com/clojure/core.cache
+
+  moar mining:
+    CSV
+      https://github.com/clojure/data.csv
+  error handling:
+    http://dev.clojure.org/display/design/Error+Handling
+
+  moar research:
+    event handing:
+      https://github.com/ztellman/lamina/
+      lamina vis!
+    web servers:
+      aleph — https://github.com/ztellman/aleph/
+    pipelines — http://stuartsierra.com/2012/05/16/syntactic-pipelines
+    finger trees — https://github.com/clojure/data.finger-tree
+    zip — https://github.com/clojure/data.zip
+    benchmarking — https://github.com/clojure/test.benchmark
+    logging — https://github.com/clojure/tools.logging
