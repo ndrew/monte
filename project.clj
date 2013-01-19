@@ -7,6 +7,7 @@
   
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
+                 [org.clojure/core.logic "0.7.5"]
                  [datalog               "0.1.1"]
                  [fs                    "1.2.0"]
                  [compojure             "1.1.3"]
