@@ -139,6 +139,7 @@ Workspace:
   ☐ use pretty print!
   ☐ add marginalia docs
 Research:
+  ☐ finding patterns via kibit (https://github.com/jonase/kibit/)
   matchure vs core.unify vs core.logic vs datalog vs core.match
   core.logs vs datomic — https://groups.google.com/forum/?fromgroups=#!searchin/clojure/datalog/clojure/NPW0C6XqucU/tPmNAufNDpMJ
   pattern matching vs destructuring — http://blog.fogus.me/2011/01/14/pattern-matching-vs-destructuring-electric-boogaloo/
