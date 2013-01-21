@@ -138,6 +138,8 @@ Workspace:
   ✔ migrate from noir to compojure @done (13-01-13 18:30)
   ☐ use pretty print!
   ☐ add marginalia docs
+  ☐ TDD:
+    ☐ add performance tests
 Research:
   ☐ finding patterns via kibit (https://github.com/jonase/kibit/)
   matchure vs core.unify vs core.logic vs datalog vs core.match
