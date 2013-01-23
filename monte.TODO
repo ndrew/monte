@@ -75,6 +75,7 @@ Visualizations:
     ☐ chord diagram — http://bl.ocks.org/4062006 [show directed relationships among a group of entities]
     ☐ dendrogram — http://bl.ocks.org/4063570
     and much more — https://github.com/mbostock/d3/wiki/Gallery
+  ☐ c2 — http://keminglabs.com/c2/
   ☐ ? http://sigmajs.org/examples/parse_data.html
   ☐ some kind of timeline
     ☐ ? https://github.com/VeriteCo/TimelineJS
@@ -101,6 +102,8 @@ Visualizations:
       Analyze text:
        ☐ word tree — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Treemap_for_Comparisons.html
        ☐ tag cloud — http://www-958.ibm.com/software/data/cognos/manyeyes/page/Tag_Cloud.html
+   ☐ Decomplect( via Grammar)
+       ☐ Data/Geometry/Aesthetic mappings/Statistics/Groupings/Scales 
 Workspace:
   storing:
     http://www.javacodegeeks.com/2013/01/clojure-reading-and-writing-a-reasonably-sized-file.html
@@ -139,7 +142,11 @@ Workspace:
   ☐ use pretty print!
   ☐ add marginalia docs
   ☐ TDD:
-    ☐ add performance tests
+    ☐ performance tests
+      ✔ added dummy test @done (13-01-23 07:19)
+    ☐ review testing frameworks
+      ☐ middje
+      
 Research:
   ☐ finding patterns via kibit (https://github.com/jonase/kibit/)
   matchure vs core.unify vs core.logic vs datalog vs core.match
