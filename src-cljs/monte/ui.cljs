@@ -39,9 +39,9 @@
 ;; vis stuff
 (def graph (atom nil))
 
-(def vis-data-entities ["fffuuu!" "barrrr" "bazzzzz" "ffffuuuuzzzz"]) ;todo: remove
+;(def vis-data-entities ["fffuuu!" "barrrr" "bazzzzz" "ffffuuuuzzzz"]) ;todo: remove
+;(def vis-data-connections [])
 
-(def vis-data-connections [])
 
 (def wnd-height (atom 0))
 
@@ -75,7 +75,6 @@
       (contains? id :title) (.push (.set r) (.text r x y (:title id)))
       (contains? id :msg) (.push (.set r) (.text r x y (:msg id)))
       (contains? id :file) (.push (.set r) (.text r x y (:file id)))
-      
       
        
       ;(contains? id :msg) (.push (.set r) (.text r x y (:title id))) 
@@ -133,7 +132,6 @@
   (.text ($ ".status") (reduce str (first body) (rest body))))
 
 
-
 (defn list-projects [projects]
   (.empty ($ dom-projects))
   (doseq [p projects] 
@@ -144,8 +142,16 @@
                   (:name p)]
               [:span "..."]])))) ; todo: add last modified time here
   
-  	  (.append ($ dom-projects) 
-             (html [:li {:class "new"} [:a {:href "#"} lbl-add]])))
+  (let [el (html [:li {:class "new"} [:a {:href "#"} lbl-add]])]
+    (.append ($ dom-projects) el)
+
+    (.click ($ (str dom-projects " .new" )) (fn[e] (js/alert "TBD")))
+
+  )
+  	  
+      
+  
+  )
 
 
 (defn list-miners[miners]
@@ -251,7 +257,8 @@
         (let [el (.-srcElement e)
               id (str "#" (.-id el))]
           (when-not (clojure.string/blank? (.-href (.-srcElement e)))
-            (select-project-view id)))))
+            (select-project-view id))
+          )))
 
     (.hide views)
 
@@ -387,6 +394,7 @@
 
 (defn run-miners[]
   "launches data mining in backend"
+  
   (fm/rpc (run-miners (:hash @proj)) []))
 
 
