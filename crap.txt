@@ -1,0 +1,73 @@
+
+(comment
+  
+  
+(defminer Testo      
+  (f [this]
+     (let [cfg (.config this)]
+       (:data cfg)))
+  
+  (get-schema[this] 
+    {:data :everything}}))
+
+  
+(defprotocol Miner
+  (dummy[x])
+  (moar[x])
+)
+
+  
+
+(defprotocol Miner
+  "Miner abstraction"
+  (f [this] "run miner")
+  (get-schema[this] "return a scheme(empty configuration) for miner"))
+
+
+
+(defminer DummyMiner
+  (get-schema[this]
+    {:data :everything})
+  
+  (f [this]
+     (let [cfg (.config this)]
+       (:data cfg))))
+
+(defminer GitMiner
+  
+  (get-schema[this]
+    {:git-url :path})
+  
+  (f [this]
+     (let [cfg (.config this)]
+       "GitMiner!"
+       )))
+)
+
+
+
+(def tweet "This is an example tweet talking about clojure and emacs.")
+(def regex (re-pattern (apply str (interpose "|" ["clojure" "logic" "compojure" "emacs" "macros"]))))
+(re-seq regex tweet) ; Gives me the actual matches instead of just true/false
+
+
+(def tweet "This is an example tweet talking about clojure and emacs.")
+(def is-word? (set ["clojure" "logic" "compojure" "emacs" "macros"]))
+(not (nil? (some is-word? (.split tweet " ")))) ; Returns true/false
+
+(def file-text (slurp "data.txt")) ; Reads the whole file
+
+partition-by - для кластеризації
+
+
+(clojure.xml/parse "http://search.twitter.com/search.atom?&q=clojure")
+
+(reduce max [14 35 -7 46 98])
+(reduce min [14 35 -7 46 98])
+;; Now both together
+((juxt #(reduce max %) #(reduce min %)) [14 35 -7 46 98]) ; Returns [98 -7]
+
+9. Parallel Processing
+
+;; Assuming process-line to be a CPU intensive function that operates on a line
+(pmap process-line lines) ; Note the "p" in front of map
