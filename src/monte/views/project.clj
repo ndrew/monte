@@ -9,7 +9,7 @@
 
 (defn project-view[project] ; project – hash
 
-  (common/layout 
+  (common/layout nil
     [:article {:id "project"}
       [:div {:class "status"} "STATUS HERE"]
       [:nav 

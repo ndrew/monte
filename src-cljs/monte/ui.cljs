@@ -406,16 +406,35 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;
-;; main
-(jq/document-ready 
-  (fn [] 
-    (ui-init)
-    (.click ($ "#redraw") (fn[e] (redraw-vis)))
-    (.click ($ "#run_miners") (fn[e] (run-miners)))
+(defn call-recursive[props obj]
+  "iterates through js object by props list and executes last func from props"
+  (if (seq (rest props))
+    (call-recursive (rest props)
+                    (aget obj (first props)))      
+    ((aget obj (first props))))) 
 
-    (load-data)
-    (reset! repeat-handle 
-	          (infinite-loop fetch-interval 
+(defn call-func[name] 
+  (let [s (.split name #"\.") 
+        obj (aget js/window (first s))
+        props (rest s)]
+            (call-recursive props obj)))
+
+;;;;;;;;;;;;;;;;;;;
+;; main 
+(jq/document-ready 
+  (fn []
+    (if-let [view (.-view js/window)] ; hack for telling frontend which view to load
+      (call-func view)
+      (do 
+        ;(js/alert "No view was specified!")  
+
+        (ui-init)
+        (.click ($ "#redraw") (fn[e] (redraw-vis)))
+        (.click ($ "#run_miners") (fn[e] (run-miners)))
+
+        (load-data)
+        (reset! repeat-handle 
+            (infinite-loop fetch-interval 
               (fn [] 
-					      (refresh @latest-update))))))
+                (refresh @latest-update))))        
+        ))))

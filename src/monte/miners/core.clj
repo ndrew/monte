@@ -47,6 +47,7 @@
 
 (defn load-extern-miners[path]
   "loads miners from file path"
+  ;; WARNING: not secure. Use on your own risk
   (binding [*ns* (find-ns 'monte.miners.core)] (load-file path))) 
 
 ;;;;;;;;;;;;

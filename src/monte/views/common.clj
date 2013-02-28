@@ -4,7 +4,7 @@
         [hiccup.page :only [include-css include-js html5]]
         [hiccup.element :only [javascript-tag]]))
 
-(defn layout [& content]
+(defn layout [on-ready & content]
   (html5 
     [:head 
       [:meta {:http-equiv "Content-Type" :content "text/html;charset=utf-8"}]

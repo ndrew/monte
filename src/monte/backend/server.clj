@@ -3,6 +3,8 @@
   (:use compojure.core
   		monte.views.index
   		monte.views.project
+      monte.views.settings
+      monte.views.ui-tests
   		monte.backend.api
   	   [ring.adapter.jetty :only [run-jetty]])
   
@@ -13,7 +15,9 @@
  
 (defroutes monte-routes
   (GET "/" [] (intro-view))
+  (GET "/settings" [] (settings-view))
   (GET "/project/:hash" [hash] (project-view hash))
+  (GET "/ui-tests" [] (ui-tests-view))
   (route/files "/" {:root "resources/public"})
   (route/not-found "<h1>Page not found</h1>"))
  
