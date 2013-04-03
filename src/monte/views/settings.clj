@@ -15,7 +15,7 @@
   
         ]]
       
-
+      ; todo: refactor this
       (javascript-tag "var view = \"monte.settings_ui.init\" ;")        
     )
   )

@@ -4,9 +4,9 @@
   		monte.views.index
   		monte.views.project
       monte.views.settings
-      monte.views.ui-tests
+      
   		monte.backend.api
-  	   [ring.adapter.jetty :only [run-jetty]])
+  	  [ring.adapter.jetty :only [run-jetty]])
   
   (:require [compojure.route :as route]
             [compojure.handler :as handler]
@@ -17,7 +17,9 @@
   (GET "/" [] (intro-view))
   (GET "/settings" [] (settings-view))
   (GET "/project/:hash" [hash] (project-view hash))
-  (GET "/ui-tests" [] (ui-tests-view))
+  
+  (GET "/ui-tests" [] (monte.views.common/gen-html :ui-test "UI Test" []))
+  
   (route/files "/" {:root "resources/public"})
   (route/not-found "<h1>Page not found</h1>"))
  

@@ -25,6 +25,6 @@
         
     ; just some info for debugging
     [:pre {:id "debug"}]
-    
+    ; todo: refactor
     (javascript-tag "monte.ui.intro_view = true;")
   ))

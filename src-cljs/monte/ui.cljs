@@ -1,7 +1,9 @@
 (ns monte.ui  
   "Monte user interface"
   (:require-macros [shoreleave.remotes.macros :as fm])
-  (:require [jayq.core :as jq]
+  (:require [cljs.reader :as reader]
+            [jayq.core :as jq]
+            [crate.core :as crate]
             [shoreleave.remotes.http-rpc :as rpc])
   (:use [jayq.util :only [log wait]]
         [jayq.core :only [$ append]]
@@ -421,8 +423,14 @@
 
 ;;;;;;;;;;;;;;;;;;;
 ;; main 
+(comment 
 (jq/document-ready 
   (fn []
+    (if-let [edn (.-MonteInitCfg js/window)]
+      (log (reader/read-string edn))
+      )
+    
+    
     (if-let [view (.-view js/window)] ; hack for telling frontend which view to load
       (call-func view)
       (do 
@@ -438,3 +446,5 @@
               (fn [] 
                 (refresh @latest-update))))        
         ))))
+
+)

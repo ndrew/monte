@@ -13,7 +13,9 @@
                  [compojure             "1.1.3"]
                  [lib-noir              "0.3.3"]
                  [org.clojure/tools.cli "0.2.2"]
-                 [crate                 "0.2.3"]
+                 [crate                 "0.2.4"]
+                 ; avaiting better times
+                 ;[prismatic/dommy       "0.0.2"]
                  [jayq                  "2.0.0"]
                  [shoreleave            "0.2.2"]
                  [com.cemerick/shoreleave-remote-ring "0.0.2"]]
