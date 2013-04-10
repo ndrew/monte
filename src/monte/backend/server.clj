@@ -1,26 +1,25 @@
 (ns monte.backend.server
   "Monte server routines"
   (:use compojure.core
-  		monte.views.index
-  		monte.views.project
-      monte.views.settings
-      
-  		monte.backend.api
-  	  [ring.adapter.jetty :only [run-jetty]])
-  
-  (:require [compojure.route :as route]
+  		  [monte.views.common :as common]
+        [monte.logger :only [dbg err]]
+  	    [ring.adapter.jetty :only [run-jetty]])
+  (:require [monte.views.index :as view]
+            [compojure.route :as route]
             [compojure.handler :as handler]
             [cemerick.shoreleave.rpc :as rpc]))
 
  
 (defroutes monte-routes
-  (GET "/" [] (intro-view))
-  (GET "/settings" [] (settings-view))
-  (GET "/project/:hash" [hash] (project-view hash))
   
-  (GET "/ui-tests" [] (monte.views.common/gen-html :ui-test "UI Test" []))
+  (GET "/" [] (common/gen-html :ui-test "It's alive!" []))
   
-  (route/files "/" {:root "resources/public"})
+  ;(GET "/" [] (view/intro-view))
+  ;(GET "/settings" [] (settings-view))
+  ;(GET "/project/:hash" [hash] (project-view hash))
+  ;(GET "/ui-tests" [] (common/gen-html :ui-test "UI Test" []))
+  
+  (route/files "/" {:root "public"})
   (route/not-found "<h1>Page not found</h1>"))
  
  
@@ -31,9 +30,7 @@
   
 (defn start [port]
   (try  
-  	(print "Starting server..")	
+  	(dbg "Starting server..")	
   	(run-jetty #'monte-routing {:port port})
   	(catch Exception e 
-      (do
-         (println "ERROR! Stacktrace:" )
-         (.printStackTrace e)))))
+      (err e))))
