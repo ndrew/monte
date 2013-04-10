@@ -5,7 +5,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   
-  :dependencies [[org.clojure/clojure "1.4.0"]
+  :dependencies [[org.clojure/clojure "1.5.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
                  [org.clojure/core.logic "0.7.5"]
                  [datalog               "0.1.1"]
@@ -29,13 +29,19 @@
         :jar true
 		    :source-path "src-cljs"
         :compiler {
-            :output-to "resources/public/js/js.js"
+            :output-to "public/js/js.js"
             :optimizations :whitespace
-            :externs ["resources/public/extern/raphael-min.js"
-                      "resources/public/extern/dracula_graph.js"
-                      "resources/public/extern/dracula_graffle.js"
-                      "resources/public/extern/dracula_algorithms.js"
-                      ]
+            :externs ["public/extern/raphael-min.js"
+                      "public/extern/dracula_graph.js"
+                      "public/extern/dracula_graffle.js"
+                      "public/extern/dracula_algorithms.js"]
+
+;            :output-to "resources/public/js/js.js"
+;            :optimizations :whitespace
+;            :externs ["resources/public/extern/raphael-min.js"
+;                      "resources/public/extern/dracula_graph.js"
+;                      "resources/public/extern/dracula_graffle.js"
+;                      "resources/public/extern/dracula_algorithms.js"]
             :pretty-print true}
     }]}
 
@@ -50,7 +56,9 @@
                  :auto-refresh true}
 
   :main monte.launcher
-
+  :javac-options     ["-target" "1.6" "-source" "1.6"]
+  :jvm-opts ["-Xms64m", "-Xmx1025m"]
+  
   :profiles {
     :dev { :main ^{:skip-aot true} monte.launcher}
     :deploy {:main ^{:skip-aot false} monte.launcher :aot [monte.launcher]}}
