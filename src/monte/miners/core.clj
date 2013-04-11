@@ -3,7 +3,8 @@
         [monte.logger :only [dbg err]])
   (:require [monte.dummies :as dummies]
             [clojure.reflect :as r])
-  (:gen-class))
+  ;(:gen-class)
+  )
 
 
 (def miner-init-cfg {}) ; init data for miners TBD configured later
@@ -28,9 +29,16 @@
 (defmacro defminer[miner-name & body]
   "defines a miner"
   `(from-ns 'monte.miners.impl
-      (deftype ~miner-name [~'config] )   
-      (extend-type ~miner-name Miner ~@body)))
+      (deftype ~miner-name [~'config])   
+      (extend-type ~miner-name Miner ~@body))
+  )
 
+(defmacro defminer-map[miner-name & body]
+  "defines a miner"
+    `(defminer ~miner-name 
+       (~'f [~'this]          #(do ((~@body ~':f) %)))
+       (~'get-schema [~'this] #(do ((~@body ~':get-schema) %)))))      
+  
 
 (defmacro list-types-implementing[protocol] ; macro as I thought it would find test namespace
   "list all types that implement specified protocol in miner-ns" ; todo: refactor
@@ -79,17 +87,35 @@
 ;;;;;;;;;;;;
 ; miner impls
 
-(defminer DummyMiner      
-  (f [this]     
-     (let [cfg (.config this)] ; use cfg later
-       :dummy))
+#_(println 
+  (macroexpand '(defminer-map DummyMiner      
+  {:f (fn [this]     
+        (let [cfg (.config this)] ; use cfg later
+          :dummy))
   
-  (get-schema [this] 
-    {:schema :yep}))
+  :get-schema (fn [this] 
+    {:schema :yep})
+  })))
 
- (comment 
- 
-(defminer JIRAMiner
+
+
+(defminer-map DummyMiner      
+  {:f (fn [this]     
+        (let [cfg (.config this)] ; use cfg later
+          :dummy))
+  
+  :get-schema (fn [this] 
+    {:schema :yep})
+  })
+
+
+(defminer DummyMiner1
+  (f [this] (let [cfg (.config this)] ; use cfg later
+                  monte.dummies/tasks))
+  (get-schema [this] {}))
+  
+
+#_(defminer JIRAMiner
   (f [this]     
      (let [cfg (.config this)] ; use cfg later
        monte.dummies/tasks))
@@ -97,8 +123,7 @@
   (get-schema [this] 
     {})) ; tbd
 
-
-(defminer VCSMiner
+#_(defminer VCSMiner
   (f [this]     
      (let [cfg (.config this)] ; use cfg later
        monte.dummies/commits))
@@ -107,12 +132,10 @@
     {})) ; tbd
 
 
-(defminer SRCMiner
+#_(defminer SRCMiner
   (f [this]     
      (let [cfg (.config this)] ; use cfg later
        monte.dummies/src-analysis-data))
   
   (get-schema [this] 
     {})) ; tbd
-
-)
