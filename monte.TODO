@@ -144,6 +144,8 @@ Workspace:
   ☐ logging
     ✔ add logger @done (13-04-12 00:58)
     ☐ log to file
+      (defmacro redir [filename & body]
+  `(binding [*out* (writer ~filename)] ~@body))
     ☐ color logging
     ☐ add time to logs
     ✔ supress logging if needed @done (13-04-12 00:59)
