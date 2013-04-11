@@ -141,7 +141,13 @@ Workspace:
   ☐ lein-reload
   ☐ remove cljsbuild from :hooks and reconfigure lein profiles and hooks
   ✔ migrate from noir to compojure @done (13-01-13 18:30)
-  ☐ use pretty print!
+  ☐ logging
+    ✔ add logger @done (13-04-12 00:58)
+    ☐ log to file
+    ☐ color logging
+    ☐ add time to logs
+    ✔ supress logging if needed @done (13-04-12 00:59)
+    ☐ use pretty print!
   ☐ add marginalia docs
   ☐ TDD:
     ☐ performance tests

@@ -1,6 +1,7 @@
 (ns monte.core
 	"Monte core stuff"
-  (:use [clojure.string :only [split]]))
+  (:use [clojure.string :only [split]]
+        [monte.logger :only [dbg]]))
 
 (def data {
   :tasks [
@@ -143,7 +144,7 @@
   
 (defn- access-single-property[data property]
   (let [prop (keyword property)]
-    ;(println (str "access-single-property: " prop))
+    (dbg "access-single-property: " prop)
     (cond
       (map? data) (get data prop)
       (vector? data) (vec(map #(access-single-property % prop) data))
@@ -273,7 +274,7 @@
         e1 (parse-expression s1)
         e2 (parse-expression s2)]
 
-         ;(println "FIRST ENTITY")
+        ;(println "FIRST ENTITY")
         ;(println (pr-str e1))
         ;(println (pr-str e2))
 

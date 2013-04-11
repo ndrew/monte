@@ -2,7 +2,7 @@
   "Launcher and updater for Monte"
   (:gen-class :main true)
   (:use [clojure.tools.cli :only [cli]]
-        [monte.logger :only [debug dbg err]])
+        [monte.logger :only [dbg err]])
   (:require 
     [monte.runtime :as runtime]
     [monte.backend.server :as server]
@@ -27,12 +27,19 @@
       (read-string (slurp settings-loc)) default-settings) opts)))
 
 
+(defn- print-logo[]
+  (println (rand-nth monte.logger/logos))) 
+
+  
 (defn -main [& args]
+  (print-logo)
+  
   (let [[opts args banner]
         (cli args
           ["-p" "--port" "Port to listen on"  :default 8899 :parse-fn #(Integer. %)]
           ["-a" "--[no-]auto-open"            :default false :flag true]
-          ["-d" "--debug"                     :default false :flag true]
+          ["-c" "--[no-]color"                :default false :flag true]
+          ["-d" "--[no-]debug"                :default false :flag true]
           ["-h" "--help" "Show help"          :default false :flag true])]
       
       (init opts)
@@ -41,8 +48,8 @@
         (println banner)
         (System/exit 0))
       
-      (when-let [new-debug (:debug opts)] 
-        (alter-var-root (var debug) (constantly new-debug)))
+      (alter-var-root #'monte.logger/*color* (constantly (:color opts)))
+      (alter-var-root #'monte.logger/*debug* (constantly (:debug opts)))
               
       (when-not (= 0.0 (:version @settings))
         (throw (Exception. "Fetching from server not implemented yet!"))) ; todo: fetch new version from server

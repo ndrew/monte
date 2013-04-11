@@ -11,7 +11,7 @@
   #_(let [before (select-keys a (keys b))
         after  (select-keys b (keys a))]
     (when-not (empty? before)
-      (println (str before "(" a ") will be replaced with " after "( " b ")")))
+      (dgb before "(" a ") will be replaced with " after "( " b ")"))
   )
   (merge a b))
 
@@ -26,8 +26,8 @@
 
 (add-watch changes :watch-change 
   (fn [key _changes old-val new-val]
-  ; (println (str "new change!: key= " key "; old=" old-val "; new=" new-val))
-  ; todo: merge change to workspace
+    (dbg "new change!: key= " key "; old=" old-val "; new=" new-val)
+    ; todo: merge change to workspace
   ))
 
 
@@ -65,8 +65,10 @@
 
 
 (defn get-miner-schemas []
-  (miners/list-miners #(vector 
-                 (.getName %1) %1 (miners/get-schema %2))))
+  (miners/list-miners #(do
+                         (dbg %1 %2)
+                         (vector 
+                 (.getName %1) %1 (miners/get-schema %2)))))
 
 
 
@@ -111,7 +113,7 @@
   "initializes workspace to its initial state" 
   (reset! workspace 
           {
-           :projects (list-projects)
+           ;:projects (list-projects)
            :miners (get-miner-schemas)
           })
   @workspace)
