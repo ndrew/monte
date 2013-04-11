@@ -1,5 +1,6 @@
 (ns monte.miners.impl
-  (:gen-class))
+  ;(:gen-class)
+  )
 
 ; here go auto-generated miners from (defminer)
  

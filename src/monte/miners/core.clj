@@ -36,8 +36,8 @@
 (defmacro defminer-map[miner-name & body]
   "defines a miner"
     `(defminer ~miner-name 
-       (~'f [~'this]          #(do ((~@body ~':f) %)))
-       (~'get-schema [~'this] #(do ((~@body ~':get-schema) %)))))      
+       (~'f [~'x] ((~@(get (eval `'~@body) :f)) ~'x ))
+       (~'get-schema [~'x] ((~@(get (eval `'~@body) :get-schema)) ~'x )))) 
   
 
 (defmacro list-types-implementing[protocol] ; macro as I thought it would find test namespace
@@ -87,15 +87,16 @@
 ;;;;;;;;;;;;
 ; miner impls
 
-#_(println 
-  (macroexpand '(defminer-map DummyMiner      
+(dbg 
+  (macroexpand-1 '(defminer-map DummyMiner      
   {:f (fn [this]     
         (let [cfg (.config this)] ; use cfg later
           :dummy))
   
   :get-schema (fn [this] 
     {:schema :yep})
-  })))
+  }))) 
+(dbg " ")
 
 
 
@@ -115,6 +116,16 @@
   (get-schema [this] {}))
   
 
+  
+(def m (monte.miners.impl.DummyMiner. {:dummy :config}))      (dbg m)
+(def m1 (monte.miners.impl.DummyMiner1. {:dummy :config}))    (dbg m1)
+
+(dbg "m.f() = "(f m))
+(dbg "m1.f()=" (f m1))
+  
+(System/exit 0)
+  
+  
 #_(defminer JIRAMiner
   (f [this]     
      (let [cfg (.config this)] ; use cfg later
