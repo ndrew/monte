@@ -1,14 +1,12 @@
 (ns monte.views.index "Monte '/' page"
   (:require 
-  	[monte.views.common :as common]
-    [monte.runtime :as runtime])
+  	[monte.views.common :as common])
   (:use 
     [hiccup.element :only [javascript-tag]]))
 
+;tdb migrate to gen-html
 
 (defn intro-view[]
-  (runtime/to-initial-state) 
-
   (common/layout nil
     [:article {:id "intro"}
       [:h1 {:class "proj-name"} "Monte"]
@@ -26,5 +24,4 @@
     ; just some info for debugging
     [:pre {:id "debug"}]
     ; todo: refactor
-    (javascript-tag "monte.ui.intro_view = true;")
-  ))
+    (javascript-tag "monte.ui.intro_view = true;")))
