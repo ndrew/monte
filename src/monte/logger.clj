@@ -2,9 +2,18 @@
 
 (def debug false)
 
+(def tab-num (atom 0))
+(def tab-prev (atom 0))
+
 (defn dbg[& args]
   (when debug
-    (println (str "DBG: "(pr-str args)))))
+    (let [tabs @tab-num]
+      (reset! tab-num (+ 1 tabs))
+      (println (str (if-not (= tabs @tab-prev) "\n") 
+                  (apply str (repeat tabs "\t"))
+                  "DBG: "(pr-str args)))
+      (reset! tab-prev tabs)
+      (reset! tab-num (- @tab-num 1 )))))
 
 (defmulti err class)
 
