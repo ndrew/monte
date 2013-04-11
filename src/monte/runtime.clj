@@ -2,18 +2,17 @@
   "Monte runtime engine — holds session and a list of workspace changes"
   (:require [monte.miners.core :as miners]
             [monte.core :as core])
-  (:use [clojure.data :only [diff]]))
+  (:use [clojure.data :only [diff]]
+        [monte.logger :only [dbg err]]))
 
 
 ; wrapper around merge
 (defn merge-data [a b]
-  (let [before (select-keys a (keys b))
-        after  (select-keys b (keys a)) 
-        ]
-    ;(when-not (empty? before)
-    ;  (println (str before "(" a ") will be replaced with " after "( " b ")")))
-    
-    )
+  #_(let [before (select-keys a (keys b))
+        after  (select-keys b (keys a))]
+    (when-not (empty? before)
+      (println (str before "(" a ") will be replaced with " after "( " b ")")))
+  )
   (merge a b))
 
 
@@ -39,25 +38,6 @@
 ;;;;;;
 ; data handling routines
 
-(defn get-miner-schemas[cfg]
-  (doall
-    (map (fn[x] 
-      (let [[miner-type constructor] x
-             miner (constructor cfg)] ; todo: loading config
-              [(.getName miner-type) miner-type (miners/get-schema miner)]))
-              (miners/list-all-miners))))
-
-
-(defn miners-for-project[cfg]
-   (doall (map 
-      (fn[x] 
-        (let [[miner-type constructor] x
-               miner (constructor cfg)]
-                [(last (clojure.string/split (.getName miner-type) #"\.")) 
-                 miner-type 
-                 (miners/get-schema miner)]))
-      (miners/list-all-miners))))
-
 
 (defn entities-for-project[]
   ["tasks=(JIRAMiner)" ; display: id
@@ -82,6 +62,18 @@
   [["REPO-URL" :url "https://github.com/ndrew/monte.git"]
    ["WORK-DIR" :path "Users/ndrw/monte/"]
    ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]])
+
+
+(defn get-miner-schemas []
+  (miners/list-miners #(vector 
+                 (.getName %1) %1 (miners/get-schema %2))))
+
+
+
+(defn miners-for-project[vars]
+  (miners/list-miners #(vector 
+                 (last (clojure.string/split (.getName %1) #"\.")) %1 (miners/get-schema %2))))
+
 
 
 (defn- monte-proj[]
@@ -113,20 +105,26 @@
      proj))
 
 
+
+
 (defn init []
   "initializes workspace to its initial state" 
   (reset! workspace 
-          {:projects (list-projects)
-           :miners (get-miner-schemas {}) ; load vars
-          }) 
+          {
+           :projects (list-projects)
+           :miners (get-miner-schemas)
+          })
   @workspace)
 
 
 (defn to-initial-state []
   "resets all changes"
-  (println "Workspace had been reset to initial state.")
-  (reset! changes 
-          (conj [] [(- (System/currentTimeMillis) 1000) (init)])))
+  ;(dbg "Workspace had been reset to initial state.")
+  (let [change (init)]
+    (dbg "New change " change)
+    (reset! changes 
+            (conj [] 
+                  [(- (System/currentTimeMillis) 1000) change]))))
 
 
 (defn merge-changes [c1 c2]
@@ -161,8 +159,9 @@
   (workspace-diff timestamp))
 
 
+
 ; uncomment for development 
-(to-initial-state)
+;(to-initial-state)
 
 
 (defn run-miners[project-id]
