@@ -53,6 +53,8 @@ Miners:
   ✔ sample data miner, @in-progress @done (13-01-12 06:36)
   ✔ macros_test.clj -> miners.core, @done (13-01-12 18:03)
   ☐ ?caching for miners?
+  ☐ storing metadata for miners — get rid of get-schema and put it in metadata instead
+  ☐ initializing miner via map(as in extend function)
   ☐ git miner, @P2
     ☐ ?github api (via https://github.com/Raynes/clj-github)
     ☐ some insites from ttt
