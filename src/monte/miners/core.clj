@@ -28,7 +28,7 @@
 (defmacro defminer[miner-name & body]
   "defines a miner"
   `(from-ns 'monte.miners.impl
-      (deftype ~miner-name [~'config] Miner ~@body)   
+      (deftype ~miner-name [~'config] )   
       (extend-type ~miner-name Miner ~@body)))
 
 
