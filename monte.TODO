@@ -220,6 +220,8 @@ even more research:
       lamina vis!
   web servers:
     aleph — https://github.com/ztellman/aleph/
+    ☐ http://http-kit.org/ — seems good enough
+    ☐ pedestal.io
   pipelines:
     http://stuartsierra.com/2012/05/16/syntactic-pipelines
   finger trees:
