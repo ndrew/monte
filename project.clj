@@ -20,6 +20,7 @@
                  [shoreleave            "0.2.2"]
                  [com.cemerick/shoreleave-remote-ring "0.0.2"]
                  [myguidingstar/clansi "1.3.0"]
+                 [sandbar/sandbar "0.4.0-SNAPSHOT"]
                  ]
   :plugins [[lein-cljsbuild   "0.2.10"]
             [lein-ring        "0.7.1"]]
