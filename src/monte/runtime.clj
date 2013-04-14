@@ -5,6 +5,8 @@
   (:use [clojure.data :only [diff]]
         [monte.logger :only [dbg err]]))
 
+;(defrecord Runtime )
+
 
 ; wrapper around merge
 (defn merge-data [a b]
@@ -64,17 +66,14 @@
    ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]])
 
 
-(defn get-miner-schemas []
-  (miners/list-miners #(do
-                         (dbg %1 %2)
-                         (vector 
-                 (.getName %1) %1 (miners/get-schema %2)))))
+(defn get-miners []
+  (miners/list-all-miners))
 
 
 
 (defn miners-for-project[vars]
   (miners/list-miners #(vector 
-                 (last (clojure.string/split (.getName %1) #"\.")) %1 (miners/get-schema %2))))
+                 (last (clojure.string/split (.getName %1) #"\.")) %1 %2)))
 
 
 
@@ -99,22 +98,18 @@
   (let [proj (first(filter (fn [x] 
                 (= (:hash x) hash)) 
                 (:projects @workspace)))]
-     (reset! changes 
-          (conj @changes 
-                [(System/currentTimeMillis) 
-                 {:current proj
-                  :projects []}]))
+     (swap! changes conj  
+                [(System/currentTimeMillis) {:current proj
+                                             :projects []}])
      proj))
-
-
 
 
 (defn init []
   "initializes workspace to its initial state" 
   (reset! workspace 
           {
-           ;:projects (list-projects)
-           :miners (get-miner-schemas)
+           :projects (list-projects)
+           :miners (get-miners)
           })
   @workspace)
 
@@ -123,7 +118,7 @@
   "resets all changes"
   ;(dbg "Workspace had been reset to initial state.")
   (let [change (init)]
-    (dbg "New change " change)
+    (dbg "Initial " change)
     (reset! changes 
             (conj [] 
                   [(- (System/currentTimeMillis) 1000) change]))))
@@ -166,32 +161,35 @@
 ;(to-initial-state)
 
 
+(defn run-miners-proj[proj]
+  (let [miners (:miners proj)
+        entities (:entities proj)]
+        ;(println "==============================")
+        
+        
+        ;(map #(conj miners (core/parse-entity %1)) entities)
+        
+        (comment 
+          (def result (doall
+          (pmap 
+             #(let[[d m] %1
+                   r (core/process-entity-new d m)]
+                  
+                  ;(println (first d))
+                  ;(println (pr-str r))
+                  {(first d) r})
+          (doall (map #(conj miners (core/parse-entity %1)) entities)))))
+                  
+        
+        (swap! changes conj [(System/currentTimeMillis) {:data result
+                                                         :connections (map core/process-connections 
+                                                                           (:connections proj))}])
+        result)))
+
 (defn run-miners[project-id]
   "runs all miners"
   (println (str "running miners for project=" project-id))
   (when-let [proj (first(filter (fn [x] 
                 (= (:hash x) project-id)) 
                 (:projects @workspace)))]
- 
-    ;(println (pr-str proj))
-    
-    (let [miners (:miners proj)
-          entities (:entities proj)]
-
-          ;(println "==============================")
-          (def result (doall
-            (pmap 
-               #(let[[d m] %1
-                     r (core/process-entity-new d m)]
-                    ;(println (first d))
-                    ;(println (pr-str r))
-                    {(first d) r})
-            (doall (map #(conj miners (core/parse-entity %1)) entities)))))
-                    
-          
-          (reset! changes 
-            (conj @changes [(System/currentTimeMillis) 
-                            {:data result
-                             :connections (map core/process-connections (:connections proj))
-                             }]))
-          result)))
+    (run-miners-proj proj)))

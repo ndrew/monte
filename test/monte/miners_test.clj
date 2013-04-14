@@ -1,70 +1,41 @@
 (ns monte.miners-test
   (:use clojure.test
+        monte.logger
        	monte.miners.core))
 
-(defminer TestForMinerCreation      
-  (f[x] 
-    :f) 
-  (get-schema[x] 
-    :schema))
+(defminer TestForMinerCreation []   
+  (f[x] :f))
 
 
 (deftest miner-defining
  	(is (not (nil? monte.miners.impl.TestForMinerCreation)))
- 	(let [miner (monte.miners.impl.TestForMinerCreation. {})
-          result (f miner)
-          schema (get-schema miner)]
+ 	(let [miner (monte.miners.impl.TestForMinerCreation. [:config] {:miner :schema})
+        result (f miner)
+        schema (m-meta miner)]
+    
+        (is (= [:config] (.config miner)))
+	    	(is (= [] schema))
+        (is (= {:miner :schema} (.meta miner)))
+        (is (= :f result))))
 
-        (is (= result :f))
-	    	(is (= schema :schema))))
 
-(comment 
-(dbg 
-  (macroexpand-1 '(defminer-map DummyMiner      
+
+(defminer-map DummyMiner {}
   {:f (fn [this]     
         (let [cfg (.config this)] ; use cfg later
-          :dummy))
-  
-  :get-schema (fn [this] 
-    {:schema :yep})
-  }))) 
-(dbg " ")
+          :dummy))})
 
 
 
-(defminer-map DummyMiner      
-  {:f (fn [this]     
-        (let [cfg (.config this)] ; use cfg later
-          :dummy))
-  
-  :get-schema (fn [this] 
-    {:schema :yep})
-  })
-
-
-(defminer DummyMiner1
+(defminer DummyMiner1 {}
   (f [this] (let [cfg (.config this)] ; use cfg later
-                  monte.dummies/tasks))
-  (get-schema [this] {}))
+                  monte.dummies/tasks)))
   
 
+(defminer DummyMiner2 [:testo :pesto]
+  (f [this] :f2))
   
-(def m (monte.miners.impl.DummyMiner. {:dummy :config}))      (dbg m)
-(def m1 (monte.miners.impl.DummyMiner1. {:dummy :config}))    (dbg m1)
-
-(dbg "m.f() = "(f m))
-(dbg "m1.f()=" (f m1))
   
-;#_(System/exit 0)
-)
-
-;(def dummy-miner (monte.miners.impl.DummyMiner. {:data :DUMMY}))
-;
-;(deftest dummy-miner-tests
-;    (let [result (f dummy-miner)]
-;      (is (= result :DUMMY))))
-
-
 (deftest external-miners
   (load-extern-miners "test/monte/extern-miners.clj")) 
 
@@ -73,10 +44,12 @@
   (let [miner-fns (list-all-miners)]
     (is (not (empty? miner-fns)))
       (doall(map (fn[x] 
-        (let [[k constructor] x]
+        (let [[k constructor schema] x]
            ;(println "creating " (.getName k))
            ;(println (str "result: " (pr-str (f (v {})))))
            (is (class? k))
            (is (var? constructor))
+           (is (or (map? schema) 
+                 (vector? schema)))
            
            )) miner-fns))))
