@@ -31,6 +31,7 @@
   `(from-ns 'monte.miners.impl
       (deftype ~miner-name [~'config])   
       (extend-type ~miner-name Miner ~@body))
+      ; tbd: (import 'monte.miners.impl + miner-name) ?
   )
 
 (defmacro defminer-map[miner-name & body]
@@ -69,11 +70,7 @@
 (defn get-miner-impl [type]
   (when-not (@miners-impls type) 
     (when-let [miner (first (filter #(= (first %) type) (list-all-miners)))]
-      (reset! miners-impls
-              (merge @miners-impls 
-                   { 
-                    type ((miner 1) miner-init-cfg)
-                     }))))
+      (swap! miners-impls merge { type ((miner 1) miner-init-cfg) })))
   (@miners-impls type))
 
 
