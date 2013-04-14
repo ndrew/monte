@@ -22,13 +22,13 @@
      (fs/mkdir home)
      (spit settings-loc (pr-str default-settings)))
   
-  (reset! settings
-    (merge (if (fs/exists? settings-loc) 
-      (read-string (slurp settings-loc)) default-settings) opts)))
+  (swap! settings
+    (fn[_](merge (if (fs/exists? settings-loc) 
+      (read-string (slurp settings-loc)) default-settings) opts))))
 
 
 (defn- print-logo[]
-  (println (rand-nth monte.logger/logos))) 
+  (io! (println (rand-nth monte.logger/logos)))) 
 
   
 (defn -main [& args]

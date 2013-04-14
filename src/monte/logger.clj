@@ -24,12 +24,12 @@
 (defn dbg[& args]
   (when *debug*
     (let [tabs @tab-num]
-      (reset! tab-num (+ 1 tabs))
+      (swap! tab-num inc)
       (println (str (if-not (= tabs @tab-prev) "\n") 
                   (apply str (repeat tabs "\t"))
                   "DBG: "(pr-str args)))
       (reset! tab-prev tabs)
-      (reset! tab-num (- @tab-num 1 )))))
+      (swap! tab-num dec))))
 
 
 (defmulti err class)
