@@ -4,7 +4,8 @@
   (:require [cljs.reader :as reader]
             [jayq.core :as jq]
             [crate.core :as crate]
-            [shoreleave.remotes.http-rpc :as rpc])
+            [shoreleave.remotes.http-rpc :as rpc]
+            [monte.project-ui])
   (:use [jayq.util :only [log wait]]
         [jayq.core :only [$ append]]
         [crate.core :only [html]]))
@@ -19,15 +20,19 @@
 (defn init-ui![]
   "initializes RIA with data passed in html"
 
-  ;(log (pr-str(get-init-data)))  
-
   (let [{view :view cfg :cfg} (get-init-data)]
     ; do some global adjustments
-      ;
     ; initialize views
     (cond
-      (= :ui-test view) (.html ($ "#viewport") (monte.ui-test/init-dom))
-      :else (js/alert "Incorrect view!"))
+      (= :index-page view) (let [dom (monte.project-ui/init-dom cfg)]
+                             (doseq [d dom]
+                               (append ($ "#viewport") (html d)))
+                              
+                             (monte.project-ui/init-data cfg)
+                             
+                             )
+      
+      :else (js/alert "Wrong way!"))
     )
 )
 
