@@ -7,7 +7,7 @@
 (defn- include-edn [var-name init-cfg]
   (let [vname (clojure.lang.Compiler/munge var-name)
         value (pr-str init-cfg)]
-          (javascript-tag (str "var " vname " = \"" value "\";"))))
+          (javascript-tag (str "var " vname " = '" value "';"))))
 
 (def edn-storage-jsvar "MonteInitCfg")
 

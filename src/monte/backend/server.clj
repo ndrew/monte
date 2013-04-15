@@ -44,7 +44,8 @@
   ;(GET "/project/:hash" [hash] (project-view hash))
   ;(GET "/ui-tests" [] (common/gen-html :ui-test "UI Test" []))
   
-  (route/files "/" {:root "public"})
+  (route/resources "/" {:root "public"})
+  ;(route/files "/" {:root "public"})
   (route/not-found "<h1>Page not found</h1>"))
  
  

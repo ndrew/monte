@@ -18,7 +18,7 @@
                  ;[prismatic/dommy       "0.0.2"]
                  [jayq                  "2.0.0"]
                  [shoreleave            "0.2.2"]
-                 [com.cemerick/shoreleave-remote-ring "0.0.2"]
+                 [com.cemerick/shoreleave-remote-ring "0.0.2" ] ; 0.0.3
                  [myguidingstar/clansi "1.3.0"]
                  [sandbar/sandbar "0.4.0-SNAPSHOT"]
                  ]
@@ -32,12 +32,12 @@
         :jar true
 		    :source-path "src-cljs"
         :compiler {
-            :output-to "public/js/js.js"
+            :output-to "resources/public/js/js.js"
             :optimizations :whitespace
-            :externs ["public/extern/raphael-min.js"
-                      "public/extern/dracula_graph.js"
-                      "public/extern/dracula_graffle.js"
-                      "public/extern/dracula_algorithms.js"]
+            :externs ["resources/public/extern/raphael-min.js"
+                      "resources/public/extern/dracula_graph.js"
+                      "resources/public/extern/dracula_graffle.js"
+                      "resources/public/extern/dracula_algorithms.js"]
             :pretty-print true}
     }]}
 
