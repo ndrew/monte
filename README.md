@@ -8,6 +8,6 @@ TDB
 
 ## License
 
-Copyright © 2012, Andrew Sernyak
+Copyright © 2012-2013, Andrew Sernyak
 
 Distributed under the Eclipse Public License, the same as Clojure.
