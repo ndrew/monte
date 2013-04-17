@@ -156,7 +156,12 @@ Workspace:
       ✔ added dummy test @done (13-01-23 07:19)
     ☐ review testing frameworks
       ☐ middje
-      
+   
+  ☐ implementing miners in java — interface and RT.var("clojure.core", "require") and more
+  ☐ Kern 0.7.0 — github.com/blancas/kern — text parsing library
+  ☐ jvm.tools.analyzer – or use clojure one
+
+  ☐ use clojail for sandboxing miners! — https://github.com/flatland/clojaill — how to handle i/o calls? via separate type of miner?
 Research:
   ☐ finding patterns via kibit (https://github.com/jonase/kibit/)
   matchure vs core.unify vs core.logic vs datalog vs core.match
