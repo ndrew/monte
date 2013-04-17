@@ -66,26 +66,22 @@
    ["BUILD-SCRIPT-PATH" :path "Users/ndrw/monte/buildScript.sh"]])
 
 
-(defn get-miners []
-  (miners/list-all-miners))
-
-
-
-(defn miners-for-project[vars]
-  (miners/list-miners #(vector 
-                 (last (clojure.string/split (.getName %1) #"\.")) %1 %2)))
-
+(defn- miners-for-project [vars]
+  ; todo: use session here
+  (miners/m-list-meta))
 
 
 (defn- monte-proj[]
   ; todo: loading from fs
   (let [vars (vars-for-project)
-        miners (miners-for-project vars)]{
+        miners (miners-for-project vars)]
+        {
           :name "Monte"
           :vars vars
           :miners miners
           :entities (entities-for-project)
           :connections (connections-for-project)}))
+
 
 (defn list-projects []
   ; todo: retrieving from fs
@@ -109,7 +105,7 @@
   (reset! workspace 
           {
            :projects (list-projects)
-           :miners (get-miners)
+           :miners (miners/m-list-meta)
           })
   @workspace)
 

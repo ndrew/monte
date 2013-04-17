@@ -1,9 +1,6 @@
-(print "loading extenal miner...")
+(dbg "loading extenal miner...")
 
-(defminer ExternMiner []
-  (f [this]     
-     (let [cfg (.config this)]
-       (:data cfg))))
+(defminer ExternMiner [:dummy-meta]
+  (f [this] :f))
 
-(println "done")
-
+(dbg "done")
