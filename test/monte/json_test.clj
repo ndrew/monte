@@ -35,27 +35,21 @@
 
 
 
-(defn p-smart-merge[data initial-map]
-  "Uses core.reducers/fold to return a map that was merged(nubers are added, seqs are conjed) to initial-map with results."
-  (let [def-merge-f #(do 
-                   (println "def-merge-f " %1 %2)
-                   (cond 
-                   (number? %1) (+ %1 %2) 
-                   :else        (conj %1 %2))
-                   )]
-    (r/fold 
-      (r/monoid (partial merge-with def-merge-f) ; todo: check this out
-                (constantly initial-map))
-    (fn [memo item] 
-        ;(println "fn " memo item)
-        (reduce #(let [[k v] %2
-                       merge-f-id (keyword (str (name k) "-fn"))
-                       ]
-                  (if-let [merge-f (get %1 merge-f-id)]
-                    (merge-f memo item)
-                    memo)) 
-                  memo item))
-    data)))
+(defn p-smart-merge[data config]
+  "Uses core.reducers/fold to return a hash-map produced from data(list of hash-maps) that were merged 
+  with function(s) specified in config as {:key-fn (fn[resulting-map current-item])}"
+  (let [f (fn [memo item] ; merge function for reducers/fold
+              ;(println "fn " memo item)
+              (reduce #(let [ [k v] %2
+                              merge-f-id (keyword (str (name k) "-fn"))]
+                          (if-let [merge-f (get %1 merge-f-id)]
+                            (merge-f %1 item) %1)) 
+              memo item))
+        result (r/fold 
+                  (r/monoid f (constantly config)) f data)]
+    
+    (apply dissoc result (filter #(.endsWith (name %) "-fn") (keys config)))))
+    
 
 
 (defn merger-by-key[key-id]
@@ -70,11 +64,23 @@
 
 (defn aggregator-by-key[k monoid]
   "[{key-id value, ...}, {key-id value1, ...}] => {key-id (f value, value1 ...)}"
-  (fn [memo item] ; find a way to autogenerate it 
+  (fn [memo item] ; find a way to autogenerate it
      (let [item-v (get item k)]
-      (if-let [memo-v (get memo k)]
+
+           (println "aggregating " k  
+             (apply dissoc memo (filter #(.endsWith (name %) "-fn") (keys memo)))
+             " " item)
+
+       
+       (if-let [memo-v (get memo k)]
+         (do
+           (println "\tmonoidx2 " (monoid memo-v item-v))
           (assoc memo k (monoid memo-v item-v))
-          (assoc memo k (monoid))))))
+          )
+         (do
+           (println "\tmonoidx0 " (assoc memo k (monoid (monoid) item-v)))
+          (assoc memo k (monoid (monoid) item-v))
+            )))))
 
 
 
@@ -87,34 +93,47 @@
                 ]
                 ; inital
                 {; "metadata" here 
-                 :sql-fn (merger-by-key :sql)
-                          ;#_(fn[memo item] ; find a way to autogenerate it 
-                          ;  (let [k (get item :sql)
-                          ;        filtered-item (dissoc item :sql)]
-                          ;    (if-let [v (get memo k)]
-                          ;      (assoc memo k (conj v filtered-item))
-                          ;      (assoc memo k [filtered-item])
-                          ;   )))
-                 
-                 } 
-                )))
+                 :sql-fn (merger-by-key :sql) })))
 
 (println d)
+(println)(println)(println)(println)(println)(println)(println)
 
-(def d-new (apply dissoc d (filter #(do
-                                 (.endsWith (name %) "-fn")) (keys d))))
 
-(println)
+#_(def z (aggregator-by-key :crap (r/monoid conj (constantly []))))
+  
+#_(println 
+  
+  (z 
+    (z {} {:crap "Fuu"})
+    {:crap "Moar crap"}
+  )
+  
+)
+
+
+(def t (p-smart-merge [{:crap "Fuuu", :test true, :time 200}]
+               {:crap-fn (aggregator-by-key :crap (r/monoid
+                                                     conj
+                                                     (constantly [])))}))
+
+(dorun t)
+
+(println t)
+
 
 (def d1 (reduce #(let [[k v] %2
-                       new-v (p-smart-merge v {:time-fn (aggregator-by-key :time +)})
+                       new-v (p-smart-merge v {:time-fn (aggregator-by-key :time +)
+                                               :crap-fn (aggregator-by-key :crap (r/monoid 
+                                                                                   conj
+                                                                                   (constantly [])))
+                                               })
                        ] 
-                (println "processing " %1 %2)
                 (assoc %1 k new-v)
-                ) {} d-new))
+                ) {} d))
 
 (dorun d1)
 
+(println)
 (println d1)
 
 
