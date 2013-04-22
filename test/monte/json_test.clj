@@ -50,42 +50,43 @@
     
     (apply dissoc result (filter #(.endsWith (name %) "-fn") (keys config)))))
     
+  
+; awaiting better times
+; (defn p-sequential-smart-merge [data config] ; as vector )
+    
 
-
-(defn merger-by-key[key-id]
+(defn merger-by-key
   "[{key-id value, ...}, {key-id value1, ...}] => {key-id [{...}, {...}]}"
+  
+([key-id]
   (fn [memo item] ; find a way to autogenerate it 
      (let [k (get item key-id)
            filtered-item (dissoc item key-id)]
       (if-let [v (get memo k)]
           (assoc memo k (conj v filtered-item))
           (assoc memo k [filtered-item])))))
+([key-id f];ilter
+ (fn [memo item] ; find a way to autogenerate it 
+     (let [k (get item key-id)
+           filtered-item (f item)]
+      (if-let [v (get memo k)]
+          (assoc memo k (conj v filtered-item))
+          (assoc memo k [filtered-item])))))
+)
+
+
 
 
 (defn aggregator-by-key[k monoid]
   "[{key-id value, ...}, {key-id value1, ...}] => {key-id (f value, value1 ...)}"
   (fn [memo item] ; find a way to autogenerate it
      (let [item-v (get item k)]
-
-           (println "aggregating " k  
-             (apply dissoc memo (filter #(.endsWith (name %) "-fn") (keys memo)))
-             " " item)
-
-       
        (if-let [memo-v (get memo k)]
-         (do
-           (println "\tmonoidx2 " (monoid memo-v item-v))
           (assoc memo k (monoid memo-v item-v))
-          )
-         (do
-           (println "\tmonoidx0 " (assoc memo k (monoid (monoid) item-v)))
-          (assoc memo k (monoid (monoid) item-v))
-            )))))
+          (assoc memo k (monoid (monoid) item-v))))))
 
 
-
-
-(def d (time (p-smart-merge [{:time 100 :sql "sql1"}
+#_(def d (time (p-smart-merge [{:time 100 :sql "sql1"}
                 {:time 200 :sql "sql2" :crap "Fuuu" :test true}
                 {:time 700 :sql "sql1"}
                 {:time 1000 :sql "sql1" :crap "Bazz"}
@@ -95,33 +96,16 @@
                 {; "metadata" here 
                  :sql-fn (merger-by-key :sql) })))
 
-(println d)
-(println)(println)(println)(println)(println)(println)(println)
 
 
-#_(def z (aggregator-by-key :crap (r/monoid conj (constantly []))))
-  
-#_(println 
-  
-  (z 
-    (z {} {:crap "Fuu"})
-    {:crap "Moar crap"}
-  )
-  
-)
-
-
-(def t (p-smart-merge [{:crap "Fuuu", :test true, :time 200}]
+#_(def t (p-smart-merge [{:crap "Fuuu", :test true, :time 200}]
                {:crap-fn (aggregator-by-key :crap (r/monoid
                                                      conj
                                                      (constantly [])))}))
-
-(dorun t)
-
-(println t)
+;(dorun t);(println t)
 
 
-(def d1 (reduce #(let [[k v] %2
+#_(def d1 (reduce #(let [[k v] %2
                        new-v (p-smart-merge v {:time-fn (aggregator-by-key :time +)
                                                :crap-fn (aggregator-by-key :crap (r/monoid 
                                                                                    conj
@@ -131,10 +115,7 @@
                 (assoc %1 k new-v)
                 ) {} d))
 
-(dorun d1)
-
-(println)
-(println d1)
+;(dorun d1);(println d1)
 
 
 ; thanx to http://www.thebusby.com/2012/07/tips-tricks-with-clojure-reducers.html
@@ -185,7 +166,7 @@
 
 (def log-file "/Users/ndrw/monte/sqls.log")
 
-#_(with-open [rdr (time (clojure.java.io/reader log-file))]
+(with-open [rdr (time (clojure.java.io/reader log-file))]
     (let [raw-data (time (json/read rdr))]
       (let [sqls (time (get raw-data "sqls"))
             ;reducer (comp (r/filter #(> 1 (- (get % "end") (get % "start"))) )  
@@ -194,13 +175,31 @@
             
             
             ; good version
-            ;slow-sqls (time (r/filter #(> (- (get % "end") (get % "start")) slow-seconds ) sqls))
+            slow-sqls (r/filter #(> (- (get % "end") (get % "start")) slow-seconds ) sqls)
+            slow-vec (fold-into-vec slow-sqls)
+            
+            folded-by-sql (p-smart-merge 
+                            slow-vec 
+                            {:sql-fn (merger-by-key "sql"
+                                                    (fn [item]
+                                                       (assoc (dissoc item "sql" "result")
+                                                              :time (- (get item "end") (get item "start")))))})
+
+            
+            
+                        
             ;slow-map (time (rindex-by-fn #(get % "sql") slow-sqls))
-            ;slow-vec (fold-into-vec slow-sqls)
             ;report (time (fold-into-sorted-map-desc 
             ;         (map identity slow-map) ))
             
             ]
+              
+              
+              (doall (clojure.pprint/pprint folded-by-sql))
+              ;(println "==============================")
+              ;(doall (println (pr-str slow-sqls)))
+              ;(doall (println folded-by-sql))
+              
                      
               #_(doall (map #(let [[sql details] %]
                              
