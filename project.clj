@@ -5,9 +5,12 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   
-  :dependencies [[org.clojure/clojure "1.5.0"]
+  :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojure-contrib "1.2.0"]
                  [org.clojure/core.logic "0.7.5"]
+                 
+                 [org.clojure/data.json "0.2.2"]
+                 
                  [datalog               "0.1.1"]
                  [fs                    "1.2.0"]
                  [compojure             "1.1.3"]
@@ -21,6 +24,10 @@
                  [com.cemerick/shoreleave-remote-ring "0.0.2" ] ; 0.0.3
                  [myguidingstar/clansi "1.3.0"]
                  [sandbar/sandbar "0.4.0-SNAPSHOT"]
+                 [cheshire "5.1.1"]
+                 
+                 [org.clojure/tools.namespace "0.2.3"]
+                 [criterium "0.4.0"]
                  ]
   :plugins [[lein-cljsbuild   "0.2.10"]
             [lein-ring        "0.7.1"]]
@@ -53,7 +60,10 @@
 
   :main monte.launcher
   :javac-options     ["-target" "1.6" "-source" "1.6"]
-  :jvm-opts ["-Xms64m", "-Xmx1025m"]
+  :jvm-opts ["-Xms1024m", "-Xmx2048m", 
+             "-XX:-UseGCOverheadLimit", "-XX:+UseConcMarkSweepGC", "-XX:+CMSIncrementalMode",
+             "-XX:+DoEscapeAnalysis", "-XX:+UseBiasedLocking",
+             "-XX:PermSize=64M", "-XX:MaxPermSize=256M"]
   
   :profiles {
     :dev { :main ^{:skip-aot true} monte.launcher}
