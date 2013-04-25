@@ -41,7 +41,9 @@
     
 
 (defn merger-by-key
-  "[{key-id value, ...}, {key-id value1, ...}] => {key-id [{...}, {...}]}"
+  "merge function for monoid used to produce the following 
+    [{key-id value, ...}, {key-id value1, ...}] => {key-id [{...}, {...}]}, where {...} is result of (f value)
+    if f is not provided — default impl is provided that returns a hash-map without key-id"
   
 ([key-id]
   (fn [memo item] ; find a way to autogenerate it 
@@ -50,14 +52,14 @@
       (if-let [v (get memo k)]
           (assoc memo k (conj v filtered-item))
           (assoc memo k [filtered-item])))))
+
 ([key-id f];ilter
  (fn [memo item] ; find a way to autogenerate it 
      (let [k (get item key-id)
            filtered-item (f item)]
       (if-let [v (get memo k)]
           (assoc memo k (conj v filtered-item))
-          (assoc memo k [filtered-item])))))
-)
+          (assoc memo k [filtered-item]))))))
 
 
 (defn aggregator-by-key[k monoid]
