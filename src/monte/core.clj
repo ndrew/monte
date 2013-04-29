@@ -1,7 +1,8 @@
 (ns monte.core
 	"Monte core stuff"
   (:use [clojure.string :only [split]]
-        [monte.logger :only [dbg]]))
+        [monte.logger :only [dbg]])
+  (:require [monte.miners.core :as miners]))
 
 (def data {
   :tasks [
