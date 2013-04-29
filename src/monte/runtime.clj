@@ -5,7 +5,11 @@
   (:use [clojure.data :only [diff]]
         [monte.logger :only [dbg err]]))
 
-;(defrecord Runtime )
+
+(defn get-runtime-data []
+  "return ???"
+  {:projects [{:hash 12345 :name "Test"}]})
+
 
 
 ; wrapper around merge
@@ -181,6 +185,8 @@
                                                          :connections (map core/process-connections 
                                                                            (:connections proj))}])
         result)))
+
+
 
 (defn run-miners[project-id]
   "runs all miners"

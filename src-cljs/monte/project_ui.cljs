@@ -12,8 +12,8 @@
 
 ; TBD: refactor this so clicks will be handled properly
 
+
 (defn new-project[e]
-  
   (let [a  ($ (.-srcElement e))
         li (.parent a)]
     (.empty li)
@@ -24,7 +24,10 @@
     (.append li (html [:button.ok "ok"]))
     (.append li (html [:button.cancel "cancel"]))))
 
+
 (defn list-projects [projects]
+  (.log js/console (pr-str projects))
+  
   (.empty ($ dom-projects))
   (doseq [p projects] 
     (do 
@@ -36,8 +39,7 @@
   
   (let [el (html [:li {:class "new"} [:a {:href "#"} lbl-add]])]
     (.append ($ dom-projects) el)
-    (.click ($ (str dom-projects " .new" )) new-project)
-  ))
+    (.click ($ (str dom-projects " .new" )) new-project)))
 
 
 (defn init-dom [cfg]
@@ -47,5 +49,5 @@
 
 
 (defn init-data [cfg]
-    (list-projects [{:hash 12345 :name "Test"}])
-    )
+  (list-projects 
+    (get cfg :projects)))

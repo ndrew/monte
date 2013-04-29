@@ -3,6 +3,7 @@
   (:use compojure.core
   		  [monte.views.common :as common]
         [monte.logger :only [dbg err]]
+        [monte.runtime :only [get-runtime-data]]
   	    [ring.adapter.jetty :only [run-jetty]]
         sandbar.stateful-session
   )
@@ -12,20 +13,23 @@
             [cemerick.shoreleave.rpc :as rpc]))
 
 
+(defn data-for-ui [runtime]
+  "filters runtime"
+  ; tbd
+  @runtime)
+
+
 (defn index-page-handler[] 
   (when-not (session-get :runtime)
     ; init runtime
     (session-put! :user :default)
-    (session-put! :runtime nil)
-
-    
     (session-put! :current-view :index-page)
-    (session-put! :init-cfg ["testo pesto"])
-  )    
+
+    (session-put! :runtime (atom (get-runtime-data))))    
   
   (let [title "Monte"
         view-id  (session-get :current-view :index-page)
-        init-cfg (session-get :init-cfg)]
+        init-cfg (data-for-ui (session-get :runtime))]
   
     (common/gen-html view-id title init-cfg)))
  

@@ -12,10 +12,12 @@
 
 (def def-init-data {:view :index})
 
+
 (defn- get-init-data[] 
   (if-let [edn (.-MonteInitCfg js/window)]
     (reader/read-string edn)
     def-init-data))
+
 
 (defn init-ui![]
   "initializes RIA with data passed in html"
@@ -28,12 +30,9 @@
                              (doseq [d dom]
                                (append ($ "#viewport") (html d)))
                               
-                             (monte.project-ui/init-data cfg)
-                             
-                             )
+                             (monte.project-ui/init-data cfg))
       
-      :else (js/alert "Wrong way!"))
-    )
-)
+      :else (js/alert "Wrong way!"))))
 
-(->> init-ui! jq/document-ready)
+(->> init-ui! 
+      jq/document-ready)
