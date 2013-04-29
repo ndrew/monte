@@ -28,6 +28,8 @@
                  
                  [org.clojure/tools.namespace "0.2.3"]
                  [criterium "0.4.0"]
+                 
+                 [org.codehaus.jsr166-mirror/jsr166y "1.7.0"]
                  ]
   :plugins [[lein-cljsbuild   "0.2.10"]
             [lein-ring        "0.7.1"]]
