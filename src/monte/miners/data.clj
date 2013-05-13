@@ -8,7 +8,8 @@
 
 (defn fold-into-vec [coll]
   "Provided a reducer, concatenate into a vector.                                                                                                                                                                                                                                         
-   Note: same as (into [] coll), but parallel."
+   Note: same as (into [] coll), but parallel." ; TBD: does it really make sens?
+   ; <?> what is other, faster way of concatenation of vector
   (r/fold (r/monoid into vector) conj coll))
 
 

@@ -6,9 +6,16 @@
     [monte.miners.data :refer :all]))
 
 
-(def range-length 1000000)
+(def range-length 10000)
 
-(def ^:dynamic *test-performance* false)
+(def ^:dynamic *test-performance* true)
+
+
+(comment
+  "fold-into-vec can't run parallel as in examples below, as lazy-sequences
+  will use regular map."
+  "Parallel reducing will work with vectors(others? like hash-map?)")
+
 
 (defn- fold-into-vec-performance [] 
   (println "\n * * * performance of PARALLEL folding to vector: * * *\n")
@@ -16,7 +23,12 @@
   (time
     (c/quick-bench
       (dotimes [i 10]
-          (is (= range-length (count (fold-into-vec (take range-length (range)))))))))
+          (let [v (fold-into-vec (take range-length (range)))]
+            (is (= range-length (count v)))
+            (dotimes [j range-length]
+              (is (= j (v j)))
+              )
+          ))))
 
     
   (println "\n * * * performance of STANDARD folding to vector: * * *\n")
@@ -24,7 +36,11 @@
   (time
     (c/quick-bench
       (dotimes [i 10]
-          (is (= range-length (count (vec (take range-length (range))))))))))
+        (let [v (vec (take range-length (range)))]
+          (is (= range-length (count v)))
+          (dotimes [j range-length]
+            (is (= j (v j)))
+              ))))))
 
 
 (deftest fold-into-vec-test
@@ -33,6 +49,8 @@
 
   (if *test-performance*
     (fold-into-vec-performance)))
+
+
 
 
 (deftest merger-by-key-test
@@ -61,7 +79,14 @@
     
     (is (= {:k 10} (af {} {:k 10})))
     
-    (is (= {:k 25} (af {:k 10} {:k 15})))
-    
-    
-))
+    (is (= {:k 25} (af {:k 10} {:k 15})))))
+
+
+
+(deftest words-miner-test 
+  (let [words ["1" "2" "3" "4" "5" "6" "7" "8" "9" "10"] 
+        
+        
+        ])
+  
+  )
