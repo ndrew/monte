@@ -32,7 +32,7 @@ if you want to have jar do
 
 ## Versions
 
-Current: pre-alpha
+Current: pre-alpha, API and organizational structure are subject of change.
 
 ## License
 
