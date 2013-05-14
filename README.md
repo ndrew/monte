@@ -5,6 +5,10 @@
 
 A software visualization tool written in clojure for my master's degree thesis
 
+## Status
+
+[![Build Status](https://travis-ci.org/ndrew/monte.png)](https://travis-ci.org/ndrew/monte)
+
 ## Usage
 
 Clone the repo and do
@@ -25,10 +29,10 @@ if you want to have jar do
     -c, --no-color, --color          false                      
     -d, --no-debug, --debug          false                      
     -h, --no-help, --help            false    Show help  
- 
-## Status
 
-[![Build Status](https://travis-ci.org/ndrew/monte.png)](https://travis-ci.org/ndrew/monte)
+## Versions
+
+Current: pre-alpha
 
 ## License
 
