@@ -8,10 +8,13 @@ A software visualization tool written in clojure for my master's degree thesis
 ## Usage
 
 Clone the repo and do
-    lein run 
+
+       lein run 
+
 if you want to have jar do
-    lein uberjar
-    java -jar target/monte-0.0.0-SNAPSHOT-standalone.jar 
+
+       lein uberjar
+       java -jar target/monte-0.0.0-SNAPSHOT-standalone.jar 
 
 ## Command line switches
 
