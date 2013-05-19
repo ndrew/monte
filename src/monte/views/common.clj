@@ -39,7 +39,10 @@
       ;[:link {:rel "shortcut icon" :href "/i/favicon.ico" :type "image/x-icon"}] ; favicon
     ]
     [:body 
-      [:div {:id "viewport"}]]))
+      [:div {:id "logo"}]
+      [:div {:id "viewport"}]
+      [:div {:id "debug"}]
+      ]))
 
 
 (defn layout [on-ready & content]
@@ -55,6 +58,7 @@
       [:title "Monte"]
       (include-css "/css/jquery-ui.css")
       (include-css "/css/monte.css")
+      
       (include-js "/extern/jquery-1.7.2.min.js")
       (include-js "/extern/jquery-ui-1.9.1.js")
       (include-js "/extern/raphael-min.js")
@@ -63,6 +67,5 @@
       (include-js "/extern/dracula_graffle.js")
       (include-js "/extern/dracula_algorithms.js")    
     
-      (include-js "/js/js.js")
-    ]
+      (include-js "/js/js.js")]
     [:body [:div {:id "viewport"} content ]]))

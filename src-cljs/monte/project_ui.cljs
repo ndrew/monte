@@ -4,7 +4,7 @@
   (:require [jayq.core :as jq]
             [shoreleave.remotes.http-rpc :as rpc])
   (:use [jayq.util :only [log wait]]
-        [jayq.core :only [$ append ]]
+        [jayq.core :only [$ append empty]]
         [crate.core :only [html]]))
 
 (def dom-projects "ul.projects")
@@ -14,10 +14,11 @@
 
 
 (defn new-project[e]
-  (let [a  ($ (.-srcElement e))
+  #_(let [a  ($ (.-srcElement e))
         li (.parent a)]
-    (.empty li)
+    (.detach li)
     (.removeClass li "new")
+    
     (.click li log)
     (.append li (html [:span "new project name:"]))
     (.append li (html [:input {:type "text"} "testo"]))
@@ -25,19 +26,26 @@
     (.append li (html [:button.cancel "cancel"]))))
 
 
+(defn load-project-handler[& e]
+  (js/alert "піу!")
+  true)
+
 (defn list-projects [projects]
   (.log js/console (pr-str projects))
   
-  (.empty ($ dom-projects))
-  (doseq [p projects] 
-    (do 
-      (append ($ dom-projects) 
-        (html [:li 
-              [:a {:href (str "/project/" (:hash p))}
-                  (:name p)]
-              [:span "..."]])))) ; todo: add last modified time here
+  (empty ($ dom-projects))
   
-  (let [el (html [:li {:class "new"} [:a {:href "#"} lbl-add]])]
+  (doseq [p projects] 
+    (let [pr-url (str "/project/" (:hash p))
+          item   [:li 
+                    [:a {:href pr-url
+                         :onclick (fn[x] (js/alert "FFFFFF"))} (:name p)]
+                  [:span "..."]]
+          dom     (html item)] 
+      (.click ($ dom) load-project-handler)
+      (append ($ dom-projects) dom))) ; todo: add last modified time here
+  
+  #_(let [el (html [:li {:class "new"} [:a {:href "#"} lbl-add]])]
     (.append ($ dom-projects) el)
     (.click ($ (str dom-projects " .new" )) new-project)))
 
@@ -48,6 +56,7 @@
     [:ul.projects]))
 
 
-(defn init-data [cfg]
+(defn populate [data]
   (list-projects 
-    (get cfg :projects)))
+    (get data :projects)))
+

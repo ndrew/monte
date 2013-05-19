@@ -1,4 +1,5 @@
-(ns monte.views.project "Monte '/project' page"
+(ns monte.views.project 
+  "Monte '/project' page"
   (:require 
   	[monte.views.common :as common]
     [monte.runtime :as runtime])

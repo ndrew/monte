@@ -19,14 +19,19 @@
   @runtime)
 
 
-(defn index-page-handler[] 
+(defn update-session[data]
   (when-not (session-get :runtime)
     ; init runtime
     (session-put! :user :default)
-    (session-put! :current-view :index-page)
-
     (session-put! :runtime (atom (get-runtime-data))))    
-  
+
+  (doseq [kv data]
+    (session-put! (key kv) (val kv))))
+
+
+(defn index-page-handler[] 
+  (update-session {:current-view :index-page})
+
   (let [title "Monte"
         view-id  (session-get :current-view :index-page)
         init-cfg (data-for-ui (session-get :runtime))]
@@ -34,23 +39,38 @@
     (common/gen-html view-id title init-cfg)))
  
  
+(defn project-page-handler[hash]
+  (update-session {:current-view :project-page
+                   :hash hash})
+
+  (let [title "Project"
+        view-id  (session-get :current-view :init-cfg-page)
+        init-cfg (data-for-ui (session-get :runtime))]
+    
+    (common/gen-html view-id title init-cfg)))
+  
+ 
+(defn not-found-page-handler[]
+  (let [title "404!"
+        view-id  :error-page
+        init-cfg {:error 404
+                  :details "I guess it is not the page you are looking for."}]
+    (common/gen-html view-id title init-cfg))) 
+ 
+ 
 (defroutes monte-routes
   ; page routes
-  (GET "/"    [] (index-page-handler))
+  (GET "/"              [] (index-page-handler))
+  (GET "/project/:hash" [hash] (project-page-handler hash))
+  
+  
   ; api routes 
   (GET "/api" [] (do 
                    (dbg "TEST<br>")
                    "API"))
   
-  
-  ;(GET "/" [] (view/intro-view))
-  ;(GET "/settings" [] (settings-view))
-  ;(GET "/project/:hash" [hash] (project-view hash))
-  ;(GET "/ui-tests" [] (common/gen-html :ui-test "UI Test" []))
-  
   (route/resources "/" {:root "public"})
-  ;(route/files "/" {:root "public"})
-  (route/not-found "<h1>Page not found</h1>"))
+  (route/not-found (not-found-page-handler)))
  
  
 (def monte-routing (-> #'monte-routes
