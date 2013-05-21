@@ -8,7 +8,10 @@
 
 (defn get-runtime-data []
   "return ???"
-  {:projects [{:hash 12345 :name "Test"}]})
+  {:projects [{:hash 12345 
+               :name "Test, a very long one"
+               :last-opened (System/currentTimeMillis)
+               }]})
 
 
 

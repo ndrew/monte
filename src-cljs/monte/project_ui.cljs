@@ -48,6 +48,11 @@
   (js/alert "піу!")
   true)
 
+(defn from-time [t] 
+  (if (= 0 t)
+    "never"
+    (.fromNow (js/moment t))))
+
 (defn list-projects [projects]
   (.log js/console (pr-str projects))
   
@@ -56,7 +61,11 @@
     (let [pr-url (str "/project/" (:hash p))
           item   [:li 
                     [:a {:href pr-url} (:name p)]
-                  [:span "..."]]
+                  [:span 
+                    (str " (" (from-time 
+                                (:last-opened p 0)) ")")]]
+          
+          
           dom     (html item)] 
     
       (add-clickable-el dom dom-projects load-proj-handler))) 

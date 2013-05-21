@@ -23,15 +23,20 @@
       (include-css "/css/jquery-ui.css")
       (include-css "/css/monte.css")
       
+      
+      
       (include-js "/extern/jquery-1.7.2.min.js")
-      (include-js "/extern/jquery-ui-1.9.1.js")
+      ;(include-js "/extern/jquery-ui-1.9.1.js")
       
-      (include-js "/extern/raphael-min.js")
+      ;(include-js "/extern/raphael-min.js")
       
-      (include-js "/extern/dracula_graph.js")
-      (include-js "/extern/dracula_graffle.js")
-      (include-js "/extern/dracula_algorithms.js")      
+      ;(include-js "/extern/dracula_graph.js")
+      ;(include-js "/extern/dracula_graffle.js")
+      ;(include-js "/extern/dracula_algorithms.js")      
 
+      (include-js "/extern/moment.min.js")
+      
+      
       (include-edn edn-storage-jsvar {:view view-id 
                                       :cfg init-cfg})
       
