@@ -32,13 +32,16 @@
     (.append li (html [:input {:type "text"} "testo"]))
     (let [ok      (html [:button.ok "ok"])
           cancel  (html [:button.cancel "cancel"])
-          ok-handler #(do (js/alert "tbd"))
+          
           cancel-handler #(let [btn ($ (.-srcElement %))
                                 prnt  (.parent btn)
                                 li ($ (html new-li))]
                       
                             (add-new-btn li new-proj-handler)
-                            (.replaceWith prnt li))] 
+                            (.replaceWith prnt li))
+          
+          ok-handler #(do (js/alert "tbd")
+                          (cancel-handler %))] 
         
         (add-clickable-el ok     li ok-handler)
         (add-clickable-el cancel li cancel-handler))))
@@ -59,23 +62,16 @@
   (empty ($ dom-projects))
   (doseq [p projects] 
     (let [pr-url (str "/project/" (:hash p))
-          item   [:li 
-                    [:a {:href pr-url} (:name p)]
-                  [:span 
-                    (str " (" (from-time 
-                                (:last-opened p 0)) ")")]]
-          
-          
+          item   [:li [:a {:href pr-url} (:name p)]
+                  [:span (str " (" (from-time 
+                                     (:last-opened p 0)) ")")]]
           dom     (html item)] 
     
-      (add-clickable-el dom dom-projects load-proj-handler))) 
-      ; todo: add last modified time here
+    (add-clickable-el dom dom-projects load-proj-handler))) 
   
-  (let [li (.appendTo ($ (html new-li))
-                dom-projects)]
-    
-    (.log js/console li)
-                            
+  (let [li (.appendTo 
+             ($ (html new-li))
+             dom-projects)]
     
     (add-new-btn li new-proj-handler)))
 
