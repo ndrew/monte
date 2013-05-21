@@ -4,29 +4,47 @@
   (:require [jayq.core :as jq]
             [shoreleave.remotes.http-rpc :as rpc])
   (:use [jayq.util :only [log wait]]
-        [jayq.core :only [$ append empty]]
+        [jayq.core :only [$ append empty ]]
         [crate.core :only [html]]))
 
 (def dom-projects "ul.projects")
+
 (def lbl-add "add new")
 
-; TBD: refactor this so clicks will be handled properly
+(def new-li [:li {:class "new"}])
 
 
-(defn new-project[e]
-  #_(let [a  ($ (.-srcElement e))
+(defn add-clickable-el[el to handler]
+  (.appendTo (.click ($ el) handler)
+             ($ to)))
+
+(defn add-new-btn[li handler] 
+  (add-clickable-el (html [:a {:href "#"} lbl-add]) li handler))
+  
+ 
+(defn new-proj-handler[e]
+  (let [a  ($ (.-srcElement e))
         li (.parent a)]
-    (.detach li)
+    (.detach a)
     (.removeClass li "new")
-    
-    (.click li log)
+
     (.append li (html [:span "new project name:"]))
     (.append li (html [:input {:type "text"} "testo"]))
-    (.append li (html [:button.ok "ok"]))
-    (.append li (html [:button.cancel "cancel"]))))
+    (let [ok      (html [:button.ok "ok"])
+          cancel  (html [:button.cancel "cancel"])
+          ok-handler #(do (js/alert "tbd"))
+          cancel-handler #(let [btn ($ (.-srcElement %))
+                                prnt  (.parent btn)
+                                li ($ (html new-li))]
+                      
+                            (add-new-btn li new-proj-handler)
+                            (.replaceWith prnt li))] 
+        
+        (add-clickable-el ok     li ok-handler)
+        (add-clickable-el cancel li cancel-handler))))
 
 
-(defn load-project-handler[& e]
+(defn load-proj-handler[& e]
   (js/alert "піу!")
   true)
 
@@ -34,20 +52,23 @@
   (.log js/console (pr-str projects))
   
   (empty ($ dom-projects))
-  
   (doseq [p projects] 
     (let [pr-url (str "/project/" (:hash p))
           item   [:li 
-                    [:a {:href pr-url
-                         :onclick (fn[x] (js/alert "FFFFFF"))} (:name p)]
+                    [:a {:href pr-url} (:name p)]
                   [:span "..."]]
           dom     (html item)] 
-      (.click ($ dom) load-project-handler)
-      (append ($ dom-projects) dom))) ; todo: add last modified time here
+    
+      (add-clickable-el dom dom-projects load-proj-handler))) 
+      ; todo: add last modified time here
   
-  #_(let [el (html [:li {:class "new"} [:a {:href "#"} lbl-add]])]
-    (.append ($ dom-projects) el)
-    (.click ($ (str dom-projects " .new" )) new-project)))
+  (let [li (.appendTo ($ (html new-li))
+                dom-projects)]
+    
+    (.log js/console li)
+                            
+    
+    (add-new-btn li new-proj-handler)))
 
 
 (defn init-dom [cfg]
