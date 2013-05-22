@@ -31,12 +31,13 @@
 
 (defn index-page-handler[] 
   (update-session {:current-view :index-page})
-
+  
   (let [title "Monte"
         view-id  (session-get :current-view :index-page)
-        init-cfg (data-for-ui (session-get :runtime))]
-  
-    (common/gen-html view-id title init-cfg)))
+        data  (data-for-ui (session-get :runtime))]
+    
+    (common/gen-html {:view-id view-id 
+                      :title title } data)))
  
  
 (defn project-page-handler[hash]
@@ -49,7 +50,8 @@
         ; filter data for 
         init-cfg (:projects data)]
     
-    (common/gen-html view-id title init-cfg)))
+    (common/gen-html {:view-id view-id 
+                      :title title} init-cfg)))
   
  
 (defn not-found-page-handler[]
@@ -57,23 +59,29 @@
         view-id  :error-page
         init-cfg {:error 404
                   :details "I guess it is not the page you are looking for."}]
-    (common/gen-html view-id title init-cfg))) 
+    (common/gen-html {:view-id view-id 
+                      :title title } init-cfg))) 
  
  
 (defn settings-page-handler[]
   (let [title "Monte settings"
         view-id  :settings-page
         init-cfg {}]
-    (common/gen-html view-id title init-cfg))) 
+    (common/gen-html {:view-id view-id 
+                      :title title} init-cfg))) 
   
   
 (defn status-page-handler[]
   (let [title "Monte status"
         view-id  :status-page
         init-cfg {}]
-    (common/gen-html view-id title init-cfg))) 
+    (common/gen-html {:view-id view-id 
+                      :title title} init-cfg))) 
 
    
+(defn status-page-update-handler[timestamp] 
+  ; tbd
+  )
  
 (defroutes monte-routes
   ; page routes
@@ -86,7 +94,9 @@
   (GET "/api" [] (do 
                    (dbg "TEST<br>")
                    "API"))
-  
+
+  (POST "/status/:timestamp" [t] (status-page-update-handler))
+    
   (route/resources "/" {:root "public"})
   (route/not-found (not-found-page-handler)))
  

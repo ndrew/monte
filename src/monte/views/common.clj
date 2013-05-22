@@ -11,14 +11,14 @@
 
 (def edn-storage-jsvar "MonteInitCfg")
 
-(defn gen-html [view-id title init-cfg]
+(defn gen-html [cfg data]
   (html5 
     [:head 
       [:meta {:http-equiv "Content-Type" :content "text/html;charset=utf-8"}]
       [:meta {:name "description" :content "Monte: visualization tool"}]
       [:meta {:name "author"      :content "Andrew Sernyak"}]      
       
-      [:title title]
+      [:title (:title cfg "Monte")]
       
       (include-css "/css/jquery-ui.css")
       (include-css "/css/monte.css")
@@ -34,10 +34,8 @@
 
       (include-js "/extern/moment.min.js")
       
-      
-      (include-edn edn-storage-jsvar {:view view-id 
-                                      :cfg init-cfg})
-      
+      (include-edn edn-storage-jsvar {:view (:view-id cfg :index-page) 
+                                      :cfg data})
       (include-js "/js/js.js")
       ;[:link {:rel "shortcut icon" :href "/i/favicon.ico" :type "image/x-icon"}] ; favicon
     ]
