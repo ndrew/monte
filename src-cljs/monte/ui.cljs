@@ -1,5 +1,5 @@
 (ns monte.ui  
-  "Monte user interface"
+  "Monte user interface routines"
   (:require-macros [shoreleave.remotes.macros :as fm])
   (:require [cljs.reader :as reader]
             [jayq.core :as jq]
@@ -9,6 +9,24 @@
         [jayq.core :only [$ append]]
         [crate.core :only [html]]))
 
+
+(def lbl-add "add new")
+
+(def new-li [:li {:class "new"}])
+
+(defn li-el[] 
+  ($ (html new-li)))
+
+(defn add-clickable-el[el to handler]
+  (.appendTo (.click ($ el) handler)
+             ($ to)))
+
+(defn add-new-btn[li handler] 
+  (add-clickable-el (html [:a {:href "#"} lbl-add]) li handler))
+
+
+(comment 
+  "Old crap goes here "
 
 (def error (atom false)) ; todo: make use of it
 
@@ -148,12 +166,7 @@
     (.append ($ dom-projects) el)
 
     (.click ($ (str dom-projects " .new" )) (fn[e] (js/alert "TBD")))
-
-  )
-  	  
-      
-  
-  )
+  ))
 
 
 (defn list-miners[miners]
@@ -446,5 +459,4 @@
               (fn [] 
                 (refresh @latest-update))))        
         ))))
-
-)
+))

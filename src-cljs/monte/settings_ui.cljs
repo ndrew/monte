@@ -8,8 +8,18 @@
         [crate.core :only [html]]))
 
 
-(defn init []
-  
-  (js/alert "FOOO!")
-
+(defn list-settings[d]
+  ; I do nothing
   )
+
+
+(defn init-dom [cfg]
+  (list 
+    [:h3 "Settings"]
+    [:ul.settings]))
+
+
+(defn populate [data]
+  (list-settings 
+    (get data :settings)))
+

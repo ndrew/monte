@@ -22,9 +22,7 @@
       
       (include-css "/css/jquery-ui.css")
       (include-css "/css/monte.css")
-      
-      
-      
+
       (include-js "/extern/jquery-1.7.2.min.js")
       ;(include-js "/extern/jquery-ui-1.9.1.js")
       
@@ -45,11 +43,17 @@
     ]
     [:body 
       [:div {:id "logo"}]
+      [:div {:id "settings"} [:a {:href "/settings/"} "settings"]]
       [:div {:id "viewport"}]
       [:div {:id "debug"}]
       ]))
 
 
+
+
+
+
+; deprecated
 (defn layout [on-ready & content]
   (html5 
     [:head 

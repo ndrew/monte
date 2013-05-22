@@ -12,6 +12,11 @@ body {
   background-color: #fbfafa;
 }
 
+
+h1,h2,h3,h4 {
+  margin: 0.5em 0 0.5em 0; 
+  padding: 0;}
+
 article {
   background-color: rgba(255,255,128,0.6);
   margin: 0; padding: 0;}
@@ -31,26 +36,25 @@ ul {
   background-color: white; 
   list-style: none;
   display: inline-block;
-  padding-top: 1em; padding-bottom: 1em;
-  padding-left: 1em;
-  margin-left: 1em;}
+  padding: 0.5em 0 0.5em 0.5em;
+  margin: 0 0 0 0;}
 
 ul li {
   line-height: 200%;
   margin-right: 1em;}
 
 ul li span {
-  color: #ccc;}
+  color: #666;}
 
 ul li:hover {
-  background-color: rgba(255,0,128,0.5);}
+  background-color: rgba(222,222,244,0.5);}
 
 .new {
   border-top: 1px solid #ccc;
   text-align: right;}
 
 .ok {
-  background-color: rgba(0, 255, 0, 0.5);}
+  background-color: #9FFF87;}
 
 .cancel {
   background-color: rgba(255, 0, 0, 0.5);}
@@ -60,6 +64,10 @@ ul li:hover {
 
 .hint:hover {
   color: red; }
+
+.clear {
+  display: block;
+}
 
 .view {
   display: none;
@@ -78,7 +86,7 @@ ul li:hover {
   margin: 0.5em;}
 
 #viewport {
-  padding: 0.5em;
+  padding: 37px 0 0 2em;
   min-height: 100%; height: 100%;}
 
 #canvas {
@@ -139,8 +147,8 @@ label {
 
 pre {
   font-family: "Andale Mono", "Courier New", Courier, monospace;
+  margin: 0;
   padding-top: 0;
-  padding-bottom: 1.5em;
   font-size: 0.8em;
   overflow: auto;
   width: 100%;}
@@ -156,14 +164,41 @@ nav {
   padding-left: 5px;
 }
 
-
 #logo {
   position: absolute;
-  right: 0;
+  left: 5px;
   top: 0;
   display: inline-block;
   height: 37px;
   width: 100px;
   text-indent: -999em;
   text-decoration: none;
-  background: url(logo-small.gif) no-repeat;} 
+  background: url(logo-small.gif) no-repeat;
+} 
+
+#settings {
+  position: absolute;
+  right: 8px;
+  top: 0;
+  margin-left: 10px;
+  margin-top: 1px;
+  display: inline-block;
+}
+
+#settings a {  
+  font-size: 9pt;
+}
+
+
+
+.inline {
+  display: inline-block;
+}
+
+#intro {
+  display: inline-block;
+  vertical-align: top;
+  padding-left: 3em;
+  width: 50%;
+}
+

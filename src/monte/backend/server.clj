@@ -42,11 +42,21 @@
 (defn project-page-handler[hash]
   (update-session {:current-view :project-page
                    :hash hash})
-
-  (let [title "Project"
+  
+  (let [data (data-for-ui (session-get :runtime))
+        title (:name data "Project")
         view-id  (session-get :current-view :init-cfg-page)
-        init-cfg (data-for-ui (session-get :runtime))]
+        ; filter data for 
+        init-cfg (:projects data)]
     
+    (println (pr-str 
+               
+               (filter #(do
+                          (println (:hash %))
+                          
+                          true) init-cfg)
+               
+               ))
     (common/gen-html view-id title init-cfg)))
   
  
@@ -58,10 +68,21 @@
     (common/gen-html view-id title init-cfg))) 
  
  
+(defn settings-page-handler[]
+  (let [title "Monte settings"
+        view-id  :settings-page
+        init-cfg {:foo :bar}
+        ; tbd
+        ]
+    (common/gen-html view-id title init-cfg))) 
+  
+ 
+ 
 (defroutes monte-routes
   ; page routes
-  (GET "/"              [] (index-page-handler))
+  (GET "/"              []     (index-page-handler))
   (GET "/project/:hash" [hash] (project-page-handler hash))
+  (GET "/settings/"     []     (settings-page-handler))
   
   
   ; api routes 

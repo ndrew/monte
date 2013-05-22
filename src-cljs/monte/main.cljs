@@ -5,8 +5,10 @@
             [jayq.core :as jq]
             [crate.core :as crate]
             [shoreleave.remotes.http-rpc :as rpc]
-            [monte.project-ui :as pr-ui]
-            [monte.errors-ui :as err-ui])
+            [monte.menu-ui :as menu-ui]
+            [monte.project-ui :as proj-ui]
+            [monte.errors-ui :as err-ui]
+            [monte.settings-ui :as stngs-ui])
   (:use [jayq.util :only [log wait]]
         [jayq.core :only [$ append detach]]
         [crate.core :only [html]]))
@@ -34,23 +36,25 @@
   ; do some global adjustments
   (let [{view :view cfg :cfg} (get-init-data)]
 
-    (dbg (str "view:  " 
-              (pr-str view)
-              "\ncfg:"
-              (pr-str cfg)))
+    (dbg (str "view:  " (pr-str view)  "\ncfg:" (pr-str cfg)))
     
     (cond 
       (= :index-page view) 
         (do 
-          (fill-viewport (pr-ui/init-dom cfg))
-          (pr-ui/populate cfg)
+          (fill-viewport (menu-ui/init-dom cfg))
+          (menu-ui/populate cfg)
           )
       
       (= :project-page view)
         (do 
-          ; do nothing. yet
-          )
+          (fill-viewport (proj-ui/init-dom cfg))
+          (menu-ui/populate cfg))
       
+      (= :settings-page view)
+        (do
+          (fill-viewport (stngs-ui/init-dom cfg))
+          (stngs-ui/populate cfg))
+            
       (= :error-page view)
         (fill-viewport (err-ui/init-dom cfg))
         
