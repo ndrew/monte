@@ -43,7 +43,12 @@
     ]
     [:body 
       [:div {:id "logo"}]
-      [:div {:id "settings"} [:a {:href "/settings/"} "settings"]]
+      [:div {:id "settings"} 
+       
+       [:a {:href "/status/"} "status "]
+       [:a {:href "/settings/"} "settings"]
+       
+       ]
       [:div {:id "viewport"}]
       [:div {:id "debug"}]
       ]))

@@ -49,14 +49,6 @@
         ; filter data for 
         init-cfg (:projects data)]
     
-    (println (pr-str 
-               
-               (filter #(do
-                          (println (:hash %))
-                          
-                          true) init-cfg)
-               
-               ))
     (common/gen-html view-id title init-cfg)))
   
  
@@ -71,19 +63,24 @@
 (defn settings-page-handler[]
   (let [title "Monte settings"
         view-id  :settings-page
-        init-cfg {:foo :bar}
-        ; tbd
-        ]
+        init-cfg {}]
     (common/gen-html view-id title init-cfg))) 
   
- 
+  
+(defn status-page-handler[]
+  (let [title "Monte status"
+        view-id  :status-page
+        init-cfg {}]
+    (common/gen-html view-id title init-cfg))) 
+
+   
  
 (defroutes monte-routes
   ; page routes
   (GET "/"              []     (index-page-handler))
   (GET "/project/:hash" [hash] (project-page-handler hash))
   (GET "/settings/"     []     (settings-page-handler))
-  
+  (GET "/status/"       []     (status-page-handler))
   
   ; api routes 
   (GET "/api" [] (do 

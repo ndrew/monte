@@ -8,7 +8,8 @@
             [monte.menu-ui :as menu-ui]
             [monte.project-ui :as proj-ui]
             [monte.errors-ui :as err-ui]
-            [monte.settings-ui :as stngs-ui])
+            [monte.settings-ui :as stngs-ui]
+            [monte.status-ui :as status-ui])
   (:use [jayq.util :only [log wait]]
         [jayq.core :only [$ append detach]]
         [crate.core :only [html]]))
@@ -38,6 +39,8 @@
 
     (dbg (str "view:  " (pr-str view)  "\ncfg:" (pr-str cfg)))
     
+    ; tbd: implement better mapping
+    
     (cond 
       (= :index-page view) 
         (do 
@@ -54,6 +57,11 @@
         (do
           (fill-viewport (stngs-ui/init-dom cfg))
           (stngs-ui/populate cfg))
+       
+      (= :status-page view)
+        (do
+          (fill-viewport (status-ui/init-dom cfg))
+          (status-ui/populate cfg))
             
       (= :error-page view)
         (fill-viewport (err-ui/init-dom cfg))
