@@ -34,12 +34,15 @@
 
 (defn init-ui![]
   "initializes RIA with data passed with html"
+  
+  
   ; do some global adjustments
-  (let [{view :view cfg :cfg} (get-init-data)]
+  (let [init-data (get-init-data) 
+        {view :view 
+         cfg :cfg ; actually this is initial data
+         update-url :update-url} init-data]
 
-    (dbg (str "view:  " (pr-str view)  "\ncfg:" (pr-str cfg)))
-    
-    ; tbd: implement better mapping
+    (dbg (pr-str init-data))
     
     (cond 
       (= :index-page view) 
@@ -61,7 +64,7 @@
       (= :status-page view)
         (do
           (fill-viewport (status-ui/init-dom cfg))
-          (status-ui/populate cfg))
+          (status-ui/populate update-url cfg))
             
       (= :error-page view)
         (fill-viewport (err-ui/init-dom cfg))

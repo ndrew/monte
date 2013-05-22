@@ -35,6 +35,7 @@
       (include-js "/extern/moment.min.js")
       
       (include-edn edn-storage-jsvar {:view (:view-id cfg :index-page) 
+                                      :update-url (:update-url cfg)
                                       :cfg data})
       (include-js "/js/js.js")
       ;[:link {:rel "shortcut icon" :href "/i/favicon.ico" :type "image/x-icon"}] ; favicon

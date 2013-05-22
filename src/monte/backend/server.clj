@@ -72,11 +72,10 @@
   
   
 (defn status-page-handler[]
-  (let [title "Monte status"
-        view-id  :status-page
-        init-cfg {}]
-    (common/gen-html {:view-id view-id 
-                      :title title} init-cfg))) 
+  (let [init-cfg {}]
+    (common/gen-html {:view-id :status-page 
+                      :update-url "/status/" ; <?> is it enough?
+                      :title "Monte status"} init-cfg))) 
 
    
 (defn status-page-update-handler[timestamp] 

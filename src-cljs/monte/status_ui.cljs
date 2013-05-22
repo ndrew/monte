@@ -10,14 +10,16 @@
 
 
 (defn init-dom [cfg]
+  ; (.log js/console (pr-str cfg))
+  
   (list 
     [:h1 "Status"]
     [:div "to be done later..."]
     ))
 
-(defn populate [data]
-  ; do nothing. yet
-  )
+(defn populate [update-url data]
+  ; do something. later
+  (.log js/console (str "update url is: " update-url)))
 
 
 
