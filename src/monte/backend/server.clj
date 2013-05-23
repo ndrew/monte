@@ -1,13 +1,13 @@
 (ns monte.backend.server
   "Monte server routines"
   (:use compojure.core
-  		  [monte.views.common :as common]
-        [monte.logger :only [dbg err]]
-        [monte.runtime :only [get-runtime-data]]
-  	    [ring.adapter.jetty :only [run-jetty]]
-        sandbar.stateful-session
-  )
+        		  [monte.views.common :as common]
+              [monte.logger :only [dbg err]]
+              [monte.runtime :only [get-runtime-data]]
+        	    [ring.adapter.jetty :only [run-jetty]]
+               sandbar.stateful-session)
   (:require [monte.views.index :as view]
+            [monte.backend.api :refer :all]
             [compojure.route :as route]
             [compojure.handler :as handler]
             [cemerick.shoreleave.rpc :as rpc]))

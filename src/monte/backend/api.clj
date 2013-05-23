@@ -5,6 +5,12 @@
 			[monte.runtime :as runtime]   			  
 			[fs.core :as fs]))
 
+
+(defremote get-app-status [] 
+  (runtime/get-app-status))
+
+; tbd: introduce new api
+
 ;;;;;;;;;;;;;;;;;;;
 ; update routines
 

@@ -1,9 +1,11 @@
 (ns monte.runtime
   "Monte runtime engine — holds session and a list of workspace changes"
   (:require [monte.miners.core :as miners]
-            [monte.core :as core])
+            [monte.core :as core]
+            [sandbar.stateful-session :as session])
   (:use [clojure.data :only [diff]]
         [monte.logger :only [dbg err]]))
+
 
 
 (defn get-runtime-data []
@@ -198,3 +200,15 @@
                 (= (:hash x) project-id)) 
                 (:projects @workspace)))]
     (run-miners-proj proj)))
+
+
+
+
+;;;;;;
+
+(defn get-app-status [] 
+  {:workspace @workspace ; tbd: workspace is obsolete 
+   :changes   @changes
+   ;
+   ; :session   (session/session-get :runtime)
+   })

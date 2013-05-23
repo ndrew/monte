@@ -17,12 +17,19 @@
 (defn li-el[] 
   ($ (html new-li)))
 
+(defn clickable[el handler] 
+  (.click ($ el) handler))
+
 (defn add-clickable-el[el to handler]
-  (.appendTo (.click ($ el) handler)
+  (.appendTo (clickable el handler)
              ($ to)))
 
 (defn add-new-btn[li handler] 
   (add-clickable-el (html [:a {:href "#"} lbl-add]) li handler))
+
+
+
+
 
 
 (comment 
@@ -420,13 +427,13 @@
       (refresh)))
 
 
-
 (defn call-recursive[props obj]
   "iterates through js object by props list and executes last func from props"
   (if (seq (rest props))
     (call-recursive (rest props)
                     (aget obj (first props)))      
     ((aget obj (first props))))) 
+
 
 (defn call-func[name] 
   (let [s (.split name #"\.") 
