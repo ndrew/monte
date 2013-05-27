@@ -53,6 +53,12 @@
                             {:item-click-listener (fn [e]
                                                       ; tbd: loading project ui
                                                       false)
+                             
+                             :new-item-cfg {:items [[:span {:class "clear"} "Name:"]
+                                                    [:input {:type "text"} "Testo"]]
+                                            :f #(do (.log js/console "tbd")) ; tbd: how to pass data
+                                            }
+                             
                              :item-cfg #(let [pr-url (str "/project/" (:hash %))
                                               pr-name (:name %)
                                               update-time (utils/from-time (:last-opened % 0))

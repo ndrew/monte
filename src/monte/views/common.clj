@@ -14,46 +14,28 @@
 (defn gen-html [cfg data]
   (html5 
     [:head 
-      [:meta {:http-equiv "Content-Type" :content "text/html;charset=utf-8"}]
-      [:meta {:name "description" :content "Monte: visualization tool"}]
-      [:meta {:name "author"      :content "Andrew Sernyak"}]      
-      
-      [:title (:title cfg "Monte")]
-      
-      (include-css "/css/jquery-ui.css")
-      (include-css "/css/monte.css")
-
-      (include-js "/extern/jquery-1.7.2.min.js")
-      ;(include-js "/extern/jquery-ui-1.9.1.js")
-      
-      ;(include-js "/extern/raphael-min.js")
-      
-      ;(include-js "/extern/dracula_graph.js")
-      ;(include-js "/extern/dracula_graffle.js")
-      ;(include-js "/extern/dracula_algorithms.js")      
-
-      (include-js "/extern/moment.min.js")
-      
-      (include-edn edn-storage-jsvar {:view (:view-id cfg :index-page) 
-                                      :update-url (:update-url cfg)
-                                      :cfg data})
-      (include-js "/js/js.js")
-      ;[:link {:rel "shortcut icon" :href "/i/favicon.ico" :type "image/x-icon"}] ; favicon
-    ]
+     [:meta {:http-equiv "Content-Type" :content "text/html;charset=utf-8"}]
+     [:meta {:name "description" :content "Monte: visualization tool"}]
+     [:meta {:name "author"      :content "Andrew Sernyak"}]      
+     [:link {:rel "shortcut icon" :href "/css/favicon.ico" :type "image/x-icon"}]
+     [:title (:title cfg "Monte")]
+     
+     (include-css "/css/monte.css")
+     (include-js "/extern/jquery-1.7.2.min.js")
+     (include-js "/extern/moment.min.js")
+     
+     (include-edn edn-storage-jsvar {:view (:view-id cfg :index-page) 
+                                     :update-url (:update-url cfg)
+                                     :cfg data})
+     (include-js "/js/js.js")]
     [:body 
-      [:div {:id "logo"}]
-      [:div {:id "settings"} 
-       
-       [:a {:href "/status/"} "status "]
-       [:a {:href "/settings/"} "settings"]
-       
-       ]
-      [:div {:id "viewport"}]
-      [:div {:id "debug"}]
-      ]))
-
-
-
+     [:a {:id "logo" :href "/"}]
+     [:div {:id "settings"} 
+      [:a {:href "/status/"} "status "]
+      [:a {:href "/settings/"} "settings"]]
+     [:div {:id "viewport"}]
+     [:div {:id "debug"}]
+     ]))
 
 
 

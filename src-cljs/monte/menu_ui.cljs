@@ -25,9 +25,6 @@
 
     (doseq [i items]
       (.append li (html i)))
-    
-    ;(.append li (html [:span {:class "clear"} "Name:"]))
-    ;(.append li (html [:input {:type "text"} "testo"]))
 
     (let [ok      (html [:button.ok "ok"])
           cancel  (html [:button.cancel "cancel"])
@@ -77,9 +74,8 @@
   (list-projects 
     (get data :projects)
     (merge {:item-click-listener (constantly true) ; by default use url instead of js listener provided
-            :new-item-listener   (partial new-proj-handler {:items [[:span {:class "clear"} "Name:"]
-                                                                    [:input {:type "text"} "Testo"]]
-                                                            :f #(do (.log js/console "tbd"))})
+            :new-item-listener   (partial new-proj-handler (:new-item-cfg events {:items []
+                                                                                  :f #(.error js/console "No new handler provided")}) ) 
             :item-cfg            #(.error js/console "No item renderer function provided")}
            events)))
 
