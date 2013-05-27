@@ -13,3 +13,12 @@
   (if (= 0 t)
     "never"
     (.fromNow (js/moment t))))
+
+
+(defn infinite-loop [repeat-handle error ms func]
+  (js/setInterval 
+    (fn[] 
+      (cond 
+        (= true @error) (js/clearInterval @repeat-handle))
+        :else (func)
+      ) ms))
