@@ -5,6 +5,7 @@
             [jayq.core :as jq]
             [crate.core :as crate]
             [shoreleave.remotes.http-rpc :as rpc]
+            [monte.utils :as utils]
             [monte.menu-ui :as menu-ui]
             [monte.project-ui :as proj-ui]
             [monte.errors-ui :as err-ui]
@@ -48,8 +49,19 @@
       (= :index-page view) 
         (do 
           (fill-viewport (menu-ui/init-dom cfg))
-          (menu-ui/populate cfg)
-          )
+          (menu-ui/populate cfg 
+                            {:item-click-listener (fn [e]
+                                                      ; tbd: loading project ui
+                                                      false)
+                             :item-cfg #(let [pr-url (str "/project/" (:hash %))
+                                              pr-name (:name %)
+                                              update-time (utils/from-time (:last-opened % 0))
+                                              pr-time (str " (" update-time ")")]
+                                          [[:a {:data % ; todo: do we really need this
+                                                :href pr-url} pr-name]
+                                           [:span pr-time]]) 
+                             ; tbd: new form
+                             }))
       
       (= :project-page view)
         (do 

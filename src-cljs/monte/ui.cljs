@@ -14,8 +14,12 @@
 
 (def new-li [:li {:class "new"}])
 
-(defn li-el[] 
+(defn new-li-el[] 
   ($ (html new-li)))
+
+(defn li-el[child-els]
+  ($ (html (reduce conj [:li] child-els))))
+
 
 (defn clickable[el handler] 
   (.click ($ el) handler))

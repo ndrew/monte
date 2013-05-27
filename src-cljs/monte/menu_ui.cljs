@@ -8,61 +8,56 @@
         [jayq.core :only [$ append empty ]]
         [crate.core :only [html]]))
 
-(def dom-projects "ul.projects")
+(def dom "ul.projects")
 
-(defn new-proj-handler[e]
-  (let [a  ($ (.-srcElement e))
+
+;;; handlers 
+
+
+(defn new-proj-handler[cfg e]
+  (let [{f :f
+         items :items} cfg
+        a  ($ (.-srcElement e))
         li (.parent a)]
+    
     (.detach a)
     (.removeClass li "new")
 
-    (.append li (html [:span {:class "clear"} "Name:"]))
-    (.append li (html [:input {:type "text"} "testo"]))
+    (doseq [i items]
+      (.append li (html i)))
+    
+    ;(.append li (html [:span {:class "clear"} "Name:"]))
+    ;(.append li (html [:input {:type "text"} "testo"]))
 
     (let [ok      (html [:button.ok "ok"])
           cancel  (html [:button.cancel "cancel"])
           
           cancel-handler #(let [btn ($ (.-srcElement %))
                                 prnt  (.parent btn)
-                                li (ui/li-el)]
+                                li (ui/new-li-el)]
                       
-                            (ui/add-new-btn li new-proj-handler)
+                            (ui/add-new-btn li (partial new-proj-handler cfg))
                             (.replaceWith prnt li))
           
-          ok-handler #(do (js/alert "tbd")
+          ok-handler #(do (f %)
                           (cancel-handler %))] 
         
         (ui/add-clickable-el ok     li ok-handler)
         (ui/add-clickable-el cancel li cancel-handler))))
 
+;;;;
 
-(defn load-proj-handler[& e]
-  (js/alert "піу!")
-  true)
 
-(defn from-time [t] 
-  (if (= 0 t)
-    "never"
-    (.fromNow (js/moment t))))
-
-(defn list-projects [projects]
-  (.log js/console (pr-str projects))
-  
-  (empty ($ dom-projects))
-  (doseq [p projects] 
-    (let [pr-url (str "/project/" (:hash p))
-          item   [:li [:a {:href pr-url} (:name p)]
-                  [:span (str " (" (from-time 
-                                     (:last-opened p 0)) ")")]]
-          dom     (html item)] 
+(defn list-projects [projects events]
+  (empty ($ dom))
+  (let [{item-cfg :item-cfg
+         on-click :item-click-listener
+         on-new-item :new-item-listener} events]
+    (doseq [p projects] 
+      (ui/add-clickable-el (ui/li-el (item-cfg p)) dom on-click))
     
-    (ui/add-clickable-el dom dom-projects load-proj-handler))) 
-  
-  (let [li (.appendTo 
-             (ui/li-el)
-             dom-projects)]
-    
-    (ui/add-new-btn li new-proj-handler)))
+    (ui/add-new-btn 
+      (.appendTo (ui/new-li-el) dom) on-new-item)))
 
 
 (defn init-dom [cfg]
@@ -75,9 +70,18 @@
      "Монті – утилітка для програмістів, що будує інтерактивні візуалізації із коду програм й, можливо, з іншої супутньої інформації: тестів, систем контролю версій, баг-трекерів, логів, тощо."]))
 
 
-(defn populate [data]
+
+(defn populate [data events]
+  ;(.log js/console (pr-str projects))
+
   (list-projects 
-    (get data :projects)))
+    (get data :projects)
+    (merge {:item-click-listener (constantly true) ; by default use url instead of js listener provided
+            :new-item-listener   (partial new-proj-handler {:items [[:span {:class "clear"} "Name:"]
+                                                                    [:input {:type "text"} "Testo"]]
+                                                            :f #(do (.log js/console "tbd"))})
+            :item-cfg            #(.error js/console "No item renderer function provided")}
+           events)))
 
 
 
