@@ -22,13 +22,17 @@
   (. (new js/Date) getTime))
 
 
+(defn set-status [status]
+  (.log js/console (pr-str status)))
+
+
 ; tbd — more generic method of doing such requests
-(defn refresh[& last-updated]
+(defn refresh[last-updated callback]
   "pings backend for changes"
-  (fm/rpc (get-workspace (first last-updated)) [workspace] 
-          (when-not (nil? workspace)
-            (.log js/console (pr-str workspace))
-            (reset! latest-update (tick)))))
+  (fm/rpc (get-app-status last-updated) [status] 
+          (when-not (nil? status)
+            (set-status status)
+            (callback status))))
 
 
 (defn init-dom [cfg]
@@ -44,13 +48,11 @@
   (ui/clickable "#get-status-btn"
                 (fn[e]
                   (attr ($ "#get-status-btn") {:disabled true})
-                  (fm/rpc (get-app-status) [status] 
-                          (.log js/console (pr-str status))
-                    (attr ($ "#get-status-btn") {:disabled false}))))
+                  (refresh 0 #(attr ($ "#get-status-btn") {:disabled false}))))
   
   (let [handler (fn[] 
                   (.log js/console (tick))
-                  (refresh @latest-update))]
+                  (refresh @latest-update #(reset! latest-update (tick))))]
     ; updating awaits
-    (infinite-loop 1500 handler)
+    (infinite-loop 5000 handler)
     ))

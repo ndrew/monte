@@ -6,8 +6,10 @@
 			[fs.core :as fs]))
 
 
-(defremote get-app-status [] 
+(defremote get-app-status [last-changed]
+  ; tbd: use last-changes if there will be status versioning
   (runtime/get-app-status))
+
 
 ; tbd: introduce new api
 
