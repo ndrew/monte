@@ -13,6 +13,3 @@
   (if (= 0 t)
     "never"
     (.fromNow (js/moment t))))
-
-
-

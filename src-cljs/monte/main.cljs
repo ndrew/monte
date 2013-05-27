@@ -52,27 +52,30 @@
           (menu-ui/populate cfg 
                             {:item-click-listener (fn [e]
                                                       ; tbd: loading project ui
-                                                      false)
+                                                      true)
                              
                              :new-item-cfg {:items [[:span {:class "clear"} "Name:"]
-                                                    [:input {:type "text"} "Testo"]]
-                                            :f #(do (.log js/console "tbd")) ; tbd: how to pass data
+                                                    [:input {:type "text" :name "proj-name"} "Testo"]]
+                                            :f #(do ; tbd: api call to create a new project
+                                                  (.log js/console 
+                                                        (str "new project with data "
+                                                             (pr-str %))))
                                             }
                              
-                             :item-cfg #(let [pr-url (str "/project/" (:hash %))
-                                              pr-name (:name %)
-                                              update-time (utils/from-time (:last-opened % 0))
-                                              pr-time (str " (" update-time ")")]
-                                          [[:a {:data % ; todo: do we really need this
-                                                :href pr-url} pr-name]
-                                           [:span pr-time]]) 
-                             ; tbd: new form
+                             :item-render #(let [pr-url (str "/project/" (:hash %))
+                                                 pr-name (:name %)
+                                                 update-time (utils/from-time (:last-opened % 0))
+                                                 pr-time (str " (" update-time ")")]
+                                             [[:a {; :data %  tbd: do we really need this
+                                                   :href pr-url} pr-name]
+                                              [:span pr-time]]) 
                              }))
       
       (= :project-page view)
         (do 
           (fill-viewport (proj-ui/init-dom cfg))
-          (menu-ui/populate cfg))
+          ; (menu-ui/populate cfg )
+          )
       
       (= :settings-page view)
         (do

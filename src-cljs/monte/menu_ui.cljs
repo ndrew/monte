@@ -3,7 +3,8 @@
   (:require-macros [shoreleave.remotes.macros :as fm])
   (:require [jayq.core :as jq]
             [shoreleave.remotes.http-rpc :as rpc]
-            [monte.ui :as ui])
+            [monte.ui :as ui]
+            [monte.utils :as utils])
   (:use [jayq.util :only [log wait]]
         [jayq.core :only [$ append empty ]]
         [crate.core :only [html]]))
@@ -22,36 +23,43 @@
     
     (.detach a)
     (.removeClass li "new")
-
+    
+    ; tbd: add form here
+    
     (doseq [i items]
       (.append li (html i)))
-
-    (let [ok      (html [:button.ok "ok"])
-          cancel  (html [:button.cancel "cancel"])
-          
-          cancel-handler #(let [btn ($ (.-srcElement %))
-                                prnt  (.parent btn)
-                                li (ui/new-li-el)]
-                      
-                            (ui/add-new-btn li (partial new-proj-handler cfg))
-                            (.replaceWith prnt li))
-          
-          ok-handler #(do (f %)
-                          (cancel-handler %))] 
-        
-        (ui/add-clickable-el ok     li ok-handler)
-        (ui/add-clickable-el cancel li cancel-handler))))
+    (let [ok      (html [:button.ok {:type "button"} "ok"])
+          cancel  (html [:button.cancel {:type "button"} "cancel"])
+          clear-form #(let [btn ($ (.-srcElement %))
+                            prnt  (.parent btn)
+                            li (ui/new-li-el)]
+                        (ui/add-new-btn li (partial new-proj-handler cfg))
+                        (.replaceWith prnt li))
+          ok-handler #(let [btn ($ (.-srcElement %))
+                            prnt  (.parent btn)
+                            arr (.makeArray js/jQuery (.children prnt))
+                            values (areduce arr i ret {} 
+                                            (let [item (aget arr i)
+                                                  nm (.attr ($ item) "name")] ; the same approach as for forms  
+                                              (if nm
+                                                (assoc ret nm (.val ($ item)))
+                                                ret)))]                             
+                        (f values)
+                        (clear-form %))] 
+      (ui/add-clickable-el ok     li ok-handler)
+      (ui/add-clickable-el cancel li clear-form))))
+    
 
 ;;;;
 
 
 (defn list-projects [projects events]
   (empty ($ dom))
-  (let [{item-cfg :item-cfg
+  (let [{item-render :item-render
          on-click :item-click-listener
          on-new-item :new-item-listener} events]
     (doseq [p projects] 
-      (ui/add-clickable-el (ui/li-el (item-cfg p)) dom on-click))
+      (ui/add-clickable-el (ui/li-el (item-render p)) dom on-click))
     
     (ui/add-new-btn 
       (.appendTo (ui/new-li-el) dom) on-new-item)))
@@ -69,15 +77,14 @@
 
 
 (defn populate [data events]
-  ;(.log js/console (pr-str projects))
-
   (list-projects 
     (get data :projects)
     (merge {:item-click-listener (constantly true) ; by default use url instead of js listener provided
             :new-item-listener   (partial new-proj-handler (:new-item-cfg events {:items []
                                                                                   :f #(.error js/console "No new handler provided")}) ) 
-            :item-cfg            #(.error js/console "No item renderer function provided")}
-           events)))
+            :item-render         #(.error js/console "No item renderer function provided")}
+           (dissoc events
+                   :new-item-cfg))))
 
 
 
