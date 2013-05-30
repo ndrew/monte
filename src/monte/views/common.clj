@@ -23,6 +23,8 @@
      (include-css "/css/monte.css")
      (include-js "/extern/jquery-1.7.2.min.js")
      (include-js "/extern/moment.min.js")
+     (include-js "/extern/d3.js")
+     
      
      (include-edn edn-storage-jsvar {:view (:view-id cfg :index-page) 
                                      :update-url (:update-url cfg)

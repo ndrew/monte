@@ -29,6 +29,8 @@
                  [org.clojure/tools.namespace "0.2.3"]
                  [criterium "0.4.0"]
                  
+                 [net.drib/strokes "0.4.1"]
+                 
                  [org.codehaus.jsr166-mirror/jsr166y "1.7.0"]
                  ]
   :plugins [[lein-cljsbuild   "0.2.10"]
