@@ -1,6 +1,6 @@
 #FAQ
 
-Monte — is data processing and visualization web system for software developers. It can be launched locally or be used in separate environment as an addition to continious integration server.
+Monte — is data processing and visualization web system (currently for software developers). It can be launched locally or be used in separate environment as an addition to continious integration server.
 
 ##Data
 

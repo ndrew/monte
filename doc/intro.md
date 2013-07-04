@@ -1,3 +1,3 @@
 # Introduction to monte
 
-TODO: write [great documentation](http://jacobian.org/writing/great-documentation/what-to-write/)
+Monte is a data crunching toolkit that can do visualizations.
