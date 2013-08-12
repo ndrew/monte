@@ -8,7 +8,7 @@
 )
 
 (deftype SimpleDiff [a b t]
-  monte.sixt-test/Diffable
+  Diffable
     (to-human-format [x] 
         (cond
           (= :time t)
