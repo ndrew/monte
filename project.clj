@@ -12,7 +12,8 @@
                  [org.clojure/data.json "0.2.2"]
                  
                  [datalog               "0.1.1"]
-                 [fs                    "1.2.0"]
+                 ; use new version of it
+                 [me.raynes/fs          "1.4.4"]
                  [compojure             "1.1.3"]
                  [lib-noir              "0.3.3"]
                  [org.clojure/tools.cli "0.2.2"]
