@@ -1,7 +1,6 @@
 (ns monte.miners.data
 "Monte data handling routines"
-  (:require [clojure.data.json :as json]
-            [clojure.core.reducers :as r]
+  (:require [clojure.core.reducers :as r]
             [clojure.set :as s]))
 
 ; thanx to http://www.thebusby.com/2012/07/tips-tricks-with-clojure-reducers.html

@@ -3,7 +3,7 @@
 	(:use [cemerick.shoreleave.rpc :only [defremote]])
 	(:require 
 			[monte.runtime :as runtime]   			  
-			[fs.core :as fs]))
+			[me.raynes.fs :as fs]))
 
 
 (defremote get-app-status [last-changed]
@@ -30,3 +30,11 @@
 
 (defremote run-miners [project-hash]
   (runtime/run-miners project-hash))
+
+;;;;;;;;;;;;;;;;;;;;;;
+; 
+
+(defremote new-project [project-name]
+  (runtime/new-project project-name))
+    ;(let [proj (runtime/new-project project-name)]
+    ;    (runtime/set-project (:hash proj))))

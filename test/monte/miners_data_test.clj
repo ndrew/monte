@@ -43,7 +43,7 @@
               ))))))
 
 
-(deftest fold-into-vec-test
+#_(deftest fold-into-vec-test
   (is (= [0 1 2 3 4]
          (fold-into-vec (take 5 (range)))))
 
@@ -52,37 +52,42 @@
 
 
 
-
 (deftest merger-by-key-test
   (let [def-merger (merger-by-key :k)
         custom-merger (merger-by-key :k 
                                      (fn [item] 
-                                       item))] 
+                                       item))]
+    
+    ; maybe it's a stupid one 
     (is (fn? def-merger))
-    (is (= {:testo [{}]} (def-merger {} {:k :testo})))
-    (is (= {:testo [{}], :pesto [{}]} (def-merger {:testo [{}]} {:k :pesto})))
-    (is (= {:testo [{}], :pesto [{},{}]} (def-merger {:testo [{}], :pesto [{}]} {:k :pesto})))
+    (is (= {:testo [{}]}                    (def-merger {} {:k :testo})))
+    (is (= {:testo [{}], :pesto [{}]}       (def-merger {:testo [{}]} {:k :pesto})))
+    (is (= {:testo [{}], :pesto [{},{}]}    (def-merger {:testo [{}], :pesto [{}]} {:k :pesto})))
 
     
     (is (fn? custom-merger))
-    (is (= {:testo [{:k :testo}]}                       (custom-merger {} {:k :testo})))
-    (is (= {:testo [{:k :testo}], :pesto [{:k :pesto}]} (custom-merger {:testo [{:k :testo}]} {:k :pesto})))
+    (is (= {:testo [{:k :testo}]}                        (custom-merger {} {:k :testo})))
+    (is (= {:testo [{:k :testo}], :pesto [{:k :pesto}]}  (custom-merger {:testo [{:k :testo}]} {:k :pesto})))
     (is (= {:testo [{:k :testo}], :pesto [{:k :pesto},
-                                          {:k :pesto}]} (custom-merger {:testo [{:k :testo}], :pesto [{:k :pesto}]} {:k :pesto})))))
+                                          {:k :pesto}]}  (custom-merger {:testo [{:k :testo}], :pesto [{:k :pesto}]} {:k :pesto})))))
+
 
 
 (deftest agreggator-by-key-test
-  (let [af (aggregator-by-key :k
-                              +
-                              )]
-    (is (fn? af))
+  (let [agreggator (aggregator-by-key :k +)]
+    (is (fn? agreggator))
+    (is (= {:k 10} (agreggator {} {:k 10})))    
+    (is (= {:k 25} (agreggator {:k 10} {:k 15})))
     
-    (is (= {:k 10} (af {} {:k 10})))
     
-    (is (= {:k 25} (af {:k 10} {:k 15})))))
+    ;(is (= {:k 10} (agreggator {:k 10} {:foo 25})))
+))
 
 
+; TODO: composing merger and agreggator
 
+
+; TODO:
 (deftest words-miner-test 
   (let [words ["1" "2" "3" "4" "5" "6" "7" "8" "9" "10"] 
         

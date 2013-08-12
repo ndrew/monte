@@ -33,6 +33,16 @@
           (append ($ "#viewport")
                   (html d))))
 
+
+(defn new-project[name callback]
+  "pings backend for changes"
+  (fm/rpc (new-project name) [data] 
+          
+        (.log js/console data)
+        (when-not (nil? data)
+            (callback data))))
+
+
 (defn init-ui![]
   "initializes RIA with data passed with html"
   
@@ -57,9 +67,9 @@
                              :new-item-cfg {:items [[:span {:class "clear"} "Name:"]
                                                     [:input {:type "text" :name "proj-name"} "Testo"]]
                                             :f #(do ; tbd: api call to create a new project
-                                                  (.log js/console 
-                                                        (str "new project with data "
-                                                             (pr-str %))))
+                                                  (new-project (get % "proj-name") 
+                                                               (fn[x]
+                                                                    (.log js/console (str "project create " (pr-str x))))))
                                             }
                              
                              :item-render #(let [pr-url (str "/project/" (:hash %))

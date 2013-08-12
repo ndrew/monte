@@ -84,6 +84,7 @@
   (when-let [m-data (first (filter #(= (first %) (m-id id)) (list-types-implementing Miner)))]
     (second m-data)))
 
+; incorrect
 
 (defn m-impl [type]
   (let [id (m-id type)]
@@ -102,6 +103,18 @@
 
 ;;;;;;;;;;;;
 ; miner impls
+
+
+
+
+;(defminer ComposableMiner {:meta-data :here}
+;  (f [this]
+;     (let [cfg (.meta this)
+;           data (.data this)]
+;        
+;       nil
+;       )))
+
 
   
 (defminer JIRAMiner {}

@@ -9,6 +9,10 @@
 
 (def ^:dynamic *color* false)
 
+(def ^:dynamic *store-logs* true)
+
+(def ^:dynamic output (atom []))
+
 (add-watch #'monte.logger/*color* :watch-change 
   (fn [key _ _ new-val]
     (alter-var-root #'clansi.core/*use-ansi* (constantly new-val))
@@ -23,13 +27,22 @@
 
 (defn dbg[& args]
   (when *debug*
-    (let [tabs @tab-num]
-      (swap! tab-num inc)
-      (println (str (if-not (= tabs @tab-prev) "\n") 
-                  (apply str (repeat tabs "\t"))
-                  "DBG: "(pr-str args)))
-      (reset! tab-prev tabs)
-      (swap! tab-num dec))))
+    ;(let [tabs @tab-num]
+    ;  (swap! tab-num inc)
+      (let [msg (str (System/currentTimeMillis) ":"
+                     (.getName (Thread/currentThread))
+                     " "
+                     (pr-str args))]
+      (if-not *store-logs*
+        (println msg)  
+        (swap! output conj msg))
+      
+      ;(reset! tab-prev tabs)
+      ;(swap! tab-num dec))
+      )))
+
+(defn get-output[] 
+  @output)
 
 
 (defmulti err class)

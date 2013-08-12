@@ -2,6 +2,8 @@
   "Monte runtime engine — holds session and a list of workspace changes"
   (:require [monte.miners.core :as miners]
             [monte.core :as core]
+            [monte.project :as p]
+            
             [sandbar.stateful-session :as session])
   (:use [clojure.data :only [diff]]
         [monte.logger :only [dbg err]]))
@@ -9,21 +11,18 @@
 
 
 (defn get-runtime-data []
-  "return ???"
-  {:projects [{:hash 12345 
-               :name "Test, a very long one"
-               :last-opened (System/currentTimeMillis)
-               }]})
+  "return runtime data"
+  {:projects (into [] (p/list-projects))})
 
 
 
 ; wrapper around merge
 (defn merge-data [a b]
   #_(let [before (select-keys a (keys b))
-        after  (select-keys b (keys a))]
-    (when-not (empty? before)
-      (dgb before "(" a ") will be replaced with " after "( " b ")"))
-  )
+          after  (select-keys b (keys a))]
+      (when-not (empty? before)
+        (dgb before "(" a ") will be replaced with " after "( " b ")"))
+      )
   (merge a b))
 
 
@@ -36,10 +35,10 @@
 (def changes (atom []))
 
 (add-watch changes :watch-change 
-  (fn [key _changes old-val new-val]
-    (dbg "new change!: key= " key "; old=" old-val "; new=" new-val)
-    ; todo: merge change to workspace
-  ))
+           (fn [key _changes old-val new-val]
+             (dbg "new change!: key= " key "; old=" old-val "; new=" new-val)
+             ; todo: merge change to workspace
+             ))
 
 
 
@@ -84,38 +83,45 @@
   ; todo: loading from fs
   (let [vars (vars-for-project)
         miners (miners-for-project vars)]
-        {
-          :name "Monte"
-          :vars vars
-          :miners miners
-          :entities (entities-for-project)
-          :connections (connections-for-project)}))
+    {
+     :name "Monte"
+     :vars vars
+     :miners miners
+     :entities (entities-for-project)
+     :connections (connections-for-project)}))
 
 
-(defn list-projects []
+;(defn list-projects []
   ; todo: retrieving from fs
-  (map #(merge % {:hash (hash (:name %))})
-    [(monte-proj)]))
+;  (map #(merge % {:hash (hash (:name %))})
+;       [(monte-proj)]))
 
 
 (defn set-project [hash]
   "sets current project"
   (let [proj (first(filter (fn [x] 
-                (= (:hash x) hash)) 
-                (:projects @workspace)))]
-     (swap! changes conj  
-                [(System/currentTimeMillis) {:current proj
-                                             :projects []}])
-     proj))
+                             (= (:hash x) hash)) 
+                           (:projects @workspace)))]
+    (swap! changes conj  
+           [(System/currentTimeMillis) {:current proj
+                                        :projects []}])
+    proj))
+
+
+(defn new-project [name]
+  (let [proj (p/get-project name)]
+    (swap! changes conj [(System/currentTimeMillis) 
+                         {:projects [proj]}])
+    proj))
 
 
 (defn init []
   "initializes workspace to its initial state" 
   (reset! workspace 
           {
-           :projects (list-projects)
+           :projects (p/list-projects)
            :miners (miners/m-list-meta)
-          })
+           })
   @workspace)
 
 
@@ -132,23 +138,23 @@
 (defn merge-changes [c1 c2]
   (let [[t1 & data1] c1
         [t2 & data2] c2]
-
+    
     ; assume for now that data contains single change-set
     (let [a (first data1)
           b (first data2)]
-    [t2 (merge-data a b)])))
+      [t2 (merge-data a b)])))
 
 
 (defn workspace-diff [timestamp]
   (let [new-changes 
         (filter (fn [x] 
-            (let [[t & data] x]
-                ;(println (str "time is " t)) (println data) 
-              (>= t timestamp))) @changes)]
+                  (let [[t & data] x]
+                    ;(println (str "time is " t)) (println data) 
+                    (>= t timestamp))) @changes)]
     
     (when-not (empty? new-changes)
       (first(rest
-       (reduce merge-changes new-changes))))))
+              (reduce merge-changes new-changes))))))
 
 
 (defn full-refresh []
@@ -169,27 +175,27 @@
 (defn run-miners-proj[proj]
   (let [miners (:miners proj)
         entities (:entities proj)]
-        ;(println "==============================")
-        
-        
-        ;(map #(conj miners (core/parse-entity %1)) entities)
-        
-        (comment 
-          (def result (doall
-          (pmap 
-             #(let[[d m] %1
-                   r (core/process-entity-new d m)]
-                  
-                  ;(println (first d))
-                  ;(println (pr-str r))
-                  {(first d) r})
-          (doall (map #(conj miners (core/parse-entity %1)) entities)))))
-                  
-        
-        (swap! changes conj [(System/currentTimeMillis) {:data result
-                                                         :connections (map core/process-connections 
-                                                                           (:connections proj))}])
-        result)))
+    ;(println "==============================")
+    
+    
+    ;(map #(conj miners (core/parse-entity %1)) entities)
+    
+    (comment 
+      (def result (doall
+                    (pmap 
+                      #(let[[d m] %1
+                            r (core/process-entity-new d m)]
+                         
+                         ;(println (first d))
+                         ;(println (pr-str r))
+                         {(first d) r})
+                      (doall (map #(conj miners (core/parse-entity %1)) entities)))))
+      
+      
+      (swap! changes conj [(System/currentTimeMillis) {:data result
+                                                       :connections (map core/process-connections 
+                                                                         (:connections proj))}])
+      result)))
 
 
 
@@ -197,8 +203,8 @@
   "runs all miners"
   (println (str "running miners for project=" project-id))
   (when-let [proj (first(filter (fn [x] 
-                (= (:hash x) project-id)) 
-                (:projects @workspace)))]
+                                  (= (:hash x) project-id)) 
+                                (:projects @workspace)))]
     (run-miners-proj proj)))
 
 
@@ -219,10 +225,12 @@
      :total (/ total-mem mb)
      :max   (/ max-mem mb)}))
 
+
 (defn get-app-status [] 
-  {:workspace @workspace ; tbd: workspace is obsolete 
-   :changes   @changes
+  
+  
+  ;(dbg (session/session-get :runtime))
+  {;:workspace @workspace ; tbd: workspace is obsolete 
+   ;:changes   @changes
    :monte {:memory (get-memory-status)}
-   ;
-   ; :session   (session/session-get :runtime)
-   })
+   :miners (miners/m-list-meta)})

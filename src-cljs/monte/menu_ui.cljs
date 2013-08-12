@@ -43,14 +43,11 @@
                                                   nm (.attr ($ item) "name")] ; the same approach as for forms  
                                               (if nm
                                                 (assoc ret nm (.val ($ item)))
-                                                ret)))]                             
+                                                ret)))]  
                         (f values)
                         (clear-form %))] 
       (ui/add-clickable-el ok     li ok-handler)
       (ui/add-clickable-el cancel li clear-form))))
-    
-
-;;;;
 
 
 (defn list-projects [projects events]
