@@ -65,7 +65,7 @@
 
   :main monte.launcher
   :javac-options     ["-target" "1.6" "-source" "1.6"]
-  :jvm-opts ["-Xms2048m", "-Xmx2048m", 
+  :jvm-opts ["-Xms1024m", "-Xmx1024m", 
              ;"-XX:-UseGCOverheadLimit", "-XX:+UseConcMarkSweepGC", "-XX:+CMSIncrementalMode",
              ;"-XX:+DoEscapeAnalysis", "-XX:+UseBiasedLocking",
              "-XX:PermSize=64M", "-XX:MaxPermSize=256M"]
