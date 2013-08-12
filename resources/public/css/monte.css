@@ -202,3 +202,7 @@ nav {
   width: 50%;
 }
 
+
+#mem-graph svg {
+  background-color: rgba(128, 128, 182, 0.1);
+}
