@@ -1,4 +1,4 @@
-(defproject monte "0.0.0-SNAPSHOT"
+(defproject monte "0.0.1"
   :description "Monte is a software visualisation tool created as 
             	a part of Andrew Sernyak master degree' thesis"
   :url "https://github.com/ndrew/monte"
@@ -36,7 +36,7 @@
                  ]
   :plugins [[lein-cljsbuild   "0.2.10"]
             [lein-ring        "0.7.1"]]
-  :hooks [leiningen.cljsbuild]
+  ;:hooks [leiningen.cljsbuild]
   
   :cljsbuild {
     :builds [{
