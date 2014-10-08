@@ -1,4 +1,4 @@
-(defproject monte "0.0.1"
+(defproject monte "0.0.2"
   :description "Monte is a software visualisation tool created as 
             	a part of Andrew Sernyak master degree' thesis"
   :url "https://github.com/ndrew/monte"
