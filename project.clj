@@ -63,7 +63,7 @@
                  :auto-reload? true
                  :auto-refresh true}
 
-  :main monte.launcher
+  ; :main monte.launcher
   :javac-options     ["-target" "1.6" "-source" "1.6"]
   :jvm-opts ["-Xms1024m", "-Xmx1024m", 
              ;"-XX:-UseGCOverheadLimit", "-XX:+UseConcMarkSweepGC", "-XX:+CMSIncrementalMode",
@@ -71,7 +71,7 @@
              "-XX:PermSize=64M", "-XX:MaxPermSize=256M"]
   
   :profiles {
-    :dev { :main ^{:skip-aot true} monte.launcher}
+    ;:dev { :main ^{:skip-aot true} monte.launcher}
     ;:deploy {:main ^{:skip-aot false} monte.launcher :aot [monte.launcher]}
   }
 )

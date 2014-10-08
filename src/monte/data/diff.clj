@@ -7,6 +7,7 @@
   (is? [x pred])
 )
 
+(comment 
 (deftype SimpleDiff [a b t]
   Diffable
     (to-human-format [x] 
@@ -35,3 +36,4 @@
           ))
     
     (is? [x pred] true))
+)
