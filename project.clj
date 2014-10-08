@@ -72,5 +72,6 @@
   
   :profiles {
     :dev { :main ^{:skip-aot true} monte.launcher}
-    :deploy {:main ^{:skip-aot false} monte.launcher :aot [monte.launcher]}}
+    ;:deploy {:main ^{:skip-aot false} monte.launcher :aot [monte.launcher]}
+  }
 )
