@@ -24,7 +24,7 @@
                  [shoreleave            "0.2.2"]
                  [com.cemerick/shoreleave-remote-ring "0.0.2" ] ; 0.0.3
                  [myguidingstar/clansi "1.3.0"]
-                 [sandbar/sandbar "0.4.0-SNAPSHOT"]
+                 [sandbar/sandbar "0.3.3"]
                  [cheshire "5.1.1"]
                  
                  [org.clojure/tools.namespace "0.2.3"]
