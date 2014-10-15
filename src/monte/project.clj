@@ -1,6 +1,6 @@
 (ns monte.project
   "monte project handling routines"
-  (:require [me.raynes.fs.core :as fs]))
+  (:require [me.raynes.fs :as fs]))
 
 
 (def ^:dynamic *home* (str (System/getProperty "user.home") "/.monte"))

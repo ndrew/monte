@@ -24,7 +24,7 @@
 (def tab-num (atom 0))
 (def tab-prev (atom 0))
 
-
+;; todo
 (defn dbg[& args]
   (when *debug*
     ;(let [tabs @tab-num]
@@ -43,6 +43,13 @@
 
 (defn get-output[] 
   @output)
+
+
+#_(reduce (fn[a s]
+          (let [matcher (re-matcher #"(\d+):(.*)?\s\((.+)\)" s)
+                [_ timestamp thread text] (re-find matcher)]
+                (assoc a thread (assoc (get a thread (sorted-map)) timestamp text)))
+          ) (sorted-map) (monte.logger/get-output))
 
 
 (defmulti err class)
